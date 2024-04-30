@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/ally-petitt/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=ally-petitt/livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>How to Encrypt a Drive in Linux | Ally Petitt</title>
+<meta name="keywords" content="">
+<meta name="description" content="Introduction Hey everyone, this is a pretty quick article on LUKS drive encryption on Linux with the cryptsetup library. By following the steps outlined here, you will be able to encrypt a drive, decrypt it, and mount it. This was done in a Kali Linux VM and commands may vary for other distributions.
+Disclaimer: This is not an area that I have much experience in so if details are inaccurate, I apologize in advance.">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/ally-petitt/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/">
+<link crossorigin="anonymous" href="/ally-petitt/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/ally-petitt/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/ally-petitt/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/ally-petitt/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/ally-petitt/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/ally-petitt/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/ally-petitt/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/ally-petitt/" accesskey="h" title="Ally Petitt (Alt + H)">Ally Petitt</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      How to Encrypt a Drive in Linux
+    </h1>
+    <div class="post-meta"><span title='2023-05-05 00:00:00 +0000 UTC'>May 5, 2023</span>
+
+</div>
+  </header> 
+  <div class="post-content"><h2 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h2>
+<p>Hey everyone, this is a pretty quick article on LUKS drive encryption on Linux with the <code>cryptsetup</code> library. By following the steps outlined here, you will be able to encrypt a drive, decrypt it, and mount it. This was done in a Kali Linux VM and commands may vary for other distributions.</p>
+<p>Disclaimer: This is not an area that I have much experience in so if details are inaccurate, I apologize in advance.</p>
+<h2 id="creating-a-new-partition">Creating a new partition<a hidden class="anchor" aria-hidden="true" href="#creating-a-new-partition">#</a></h2>
+<p>I’m using a virtual machine with 2 virtual hard disks.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*ao7i4G4xZFiEXNb2nX2-bQ.png" alt=""  />
+
+<em>Demonstrating my disks with “lsblk -e7”</em></p>
+<p>I’ll be using a tool called <code>parted</code> to create a partition on <code>/dev/sdb</code>. Historically, when a system uses the Master Boot Record (MBR) partition table, <code>fdisk</code> is used to manage the partition. In this article, I’ll use <code>parted</code> because of its usability in scripting and automation.</p>
+<p>I’ll start by listing the information of the drives.</p>
+<pre tabindex="0"><code>parted -s /dev/sdb print all
+</code></pre><p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*5w3JBHztlFmtojmfpSwqAg.png" alt=""  />
+
+The output <code>msdos</code> under <code>/dev/sda</code>, indicates that <code>sda</code> is using the MBR partition table. Learn more about partition table types <a href="https://en.wikipedia.org/wiki/Disk_partitioning">here</a> and <a href="https://wiki.archlinux.org/title/Partitioning">here</a>.</p>
+<p>I’ll now create the GPT partition table on <code>/dev/sdb</code>. You’ll notice that after running the command, <code>/dev/sdb</code> now appears as a <code>gpt</code> partition table.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*tZM4UvgCMQXekmpmoDJumg.png" alt=""  />
+
+I then create a partition on the disk with the ext4 file system.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*dbuTKtvJcQZI4cFNANRylQ.png" alt=""  />
+
+The commands I used for this are below. The values for the start and ending offsets when creating the partitions can be expressed in both percentages and exact byte values. Reference the <a href="https://linux.die.net/man/8/parted">man page</a> for more details.</p>
+<pre tabindex="0"><code>parted -s /dev/sdb mklabel gpt  
+parted -s /dev/sdb mkpart primary ext4 0% 50MiB
+</code></pre><h2 id="encrypting-thedrive">Encrypting the Drive<a hidden class="anchor" aria-hidden="true" href="#encrypting-thedrive">#</a></h2>
+<p>This demonstrates how to encrypt file system using LUKS. It is important to remember the passphrase that you enter while encrypting the partition because it is a key piece of information when decrypting the drive.</p>
+<pre tabindex="0"><code>cryptsetup luksFormat /dev/sdb # encrypt /dev/sdb with luks
+</code></pre><h2 id="decrypting-thedrive">Decrypting the Drive<a hidden class="anchor" aria-hidden="true" href="#decrypting-thedrive">#</a></h2>
+<p>You’ll need to do this before you’re able to mount and use the partition on the drive.</p>
+<pre tabindex="0"><code>cryptsetup open /dev/sdb encrypted # open the encrypted drive as /dev/mapper/encrypted  
+mkfs.ext4 /dev/mapper/encrypted # create a filesystem on the device (only needed the first time you open the encrypted drive)
+</code></pre><h2 id="mounting-the-partition">Mounting the Partition<a hidden class="anchor" aria-hidden="true" href="#mounting-the-partition">#</a></h2>
+<p>In order to actually use the partition and the file system on it, we must mount it.</p>
+<pre tabindex="0"><code>mkdir -p /mnt/encrypted # prepare the mount point  
+mount /dev/mapper/encrypted /mnt/encrypted # mount the decrypted filesystem on /mnt/encrypted
+</code></pre><h2 id="unmounting-the-partition">Unmounting the Partition<a hidden class="anchor" aria-hidden="true" href="#unmounting-the-partition">#</a></h2>
+<p>When you’re done using the drive, you can unmount it.</p>
+<pre tabindex="0"><code>umount /mnt/encrypted 
+</code></pre><h2 id="closing-and-re-encrypting-the-partition">Closing and Re-encrypting the Partition<a hidden class="anchor" aria-hidden="true" href="#closing-and-re-encrypting-the-partition">#</a></h2>
+<p>In its unmounted state, it is still decrypted. To re-encrypt and close the drive, you can run the following command:</p>
+<pre tabindex="0"><code>cryptsetup close /dev/mapper/encrypted
+</code></pre><h1 id="digging-deeper">Digging Deeper<a hidden class="anchor" aria-hidden="true" href="#digging-deeper">#</a></h1>
+<p>Because I’m a curious person, I’ll share with you some commands that you can use to get more information on the file system that you just created and other findings that I thought were interesting.</p>
+<h2 id="file-systemmetadata">File System Metadata<a hidden class="anchor" aria-hidden="true" href="#file-systemmetadata">#</a></h2>
+<p>After decrypting the drive, you can view the metadata of your filesystem.</p>
+<pre tabindex="0"><code>cryptsetup --type luks open /dev/sdb encrypted
+</code></pre><p>These are some commands that will give you infromation.</p>
+<pre tabindex="0"><code>df -hT /dev/mapper/encrypted  
+tune2fs -l /dev/sdb
+</code></pre><p>As shown in the screenshots, you’re able to view the number of inodes, the block count, block size, filesystem magic number, and much more.</p>
+<h2 id="inodes"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*k6QJaeh0pBMsxnfbGk6Rog.png" alt=""  />
+
+<img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*BXNCkBoJaesaE0AfBZlOsQ.png" alt=""  />
+
+Inodes</h2>
+<p><a href="https://en.wikipedia.org/wiki/Inode">Inodes</a> are a data structure that contain information about files in the Linux filesystem. It contains metadata such as the block number that the file is located in on the hard drive, permissions, and file owner. In an ext4 filesystem, the number of inodes in is fixed, whereas in XFS and JFS, the number of inodes is dynamic. The result is that in ext4 filesystems where many inodes are used, such as in situations where many directories, symbolic links, and/or small files are made, an error message that the system is out of space may occur when there is plenty of space left. The reason for this is simply that the filesystem has no more available inodes to assign to new files. This is a relatively common occurence for mail servers that often hold many small files.</p>
+<p>The number of inodes on your system’s filesystems can be viewed with <code>df -hi</code>.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*_TgsDD7BK_fPitV0J31ywg.png" alt=""  />
+
+You can query the inode information on a specific file with the following command:</p>
+<pre tabindex="0"><code>ls -il file
+</code></pre><p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*nBvEce088HNvxUbcz1cF7w.png" alt=""  />
+
+The inode number is on the leftmost column of output. In this case, it is <code>131079</code>. Additionally, you can see the read, write, and execute permissions on the file with the owner and group associated with it.</p>
+<p>As an alternative, you can search for the file that is associated with a specific inode with this command:</p>
+<pre tabindex="0"><code>find / -inum 1234567 -ls
+</code></pre><p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*15DlndsZGVZ0Q9A3lAtXeg.png" alt=""  />
+
+I was able to find the file <code>/tmp/test.txt</code> that was associated with <code>131079</code>.</p>
+<h2 id="duplicating-the-encrypted-drive">Duplicating the Encrypted Drive<a hidden class="anchor" aria-hidden="true" href="#duplicating-the-encrypted-drive">#</a></h2>
+<p>This command can be used to create an exact duplicate of <code>/dev/sdb</code> in <code>/media/sdb.img</code>.</p>
+<pre tabindex="0"><code>dd if=/dev/sdb of=/media/sdb.img
+</code></pre><h1 id="next-steps"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*hzoKv4rgFMHTAQtFFIcaYQ.png" alt=""  />
+
+Next Steps</h1>
+<p>Moving forward, you can expand upon what was done in this article by implementing an added layer of abstraction and flexibility with <a href="https://linuxconfig.org/linux-lvm-logical-volume-manager">LVM</a>. You can also continue to experiment with different ways of encrypting partitions such as those outlined in <a href="https://www.baeldung.com/linux/encrypt-partition">this article</a>. There are many different ways to configure your system and I would encourage you to continue learning. Thank you for reading!</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2024 <a href="http://localhost:1313/ally-petitt/">Ally Petitt</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

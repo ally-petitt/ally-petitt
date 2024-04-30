@@ -1,4 +1,9 @@
-baseURL = 'https://example.org/'
+baseURL = 'https://ally-petitt.github.com/ally-petitt/'
 languageCode = 'en-us'
-title = 'My new blog site'
+title = 'Ally Petitt'
 theme = 'hugo-PaperMod'
+
+
+[params]
+  [params.contact]
+    email = 'allypetitt@proton.me'

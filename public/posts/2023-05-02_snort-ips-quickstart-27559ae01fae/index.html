@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/ally-petitt/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=ally-petitt/livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Snort IPS Quickstart | Ally Petitt</title>
+<meta name="keywords" content="">
+<meta name="description" content="Introduction Snort is an open source Intrusion Prevention System (IPS) that detects malicious network traffic by comparing the network packets to a set of rules, often created by Snort and the community. Snort can be used as a packet sniffer, packet logger, and intrusion prevention system.
+In this article, I’ll go over some of the first steps of installing, configuring, and running Snort so that new users have a place to branch off of.">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/ally-petitt/posts/2023-05-02_snort-ips-quickstart-27559ae01fae/">
+<link crossorigin="anonymous" href="/ally-petitt/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/ally-petitt/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/ally-petitt/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/ally-petitt/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/ally-petitt/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/ally-petitt/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/ally-petitt/posts/2023-05-02_snort-ips-quickstart-27559ae01fae/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/ally-petitt/" accesskey="h" title="Ally Petitt (Alt + H)">Ally Petitt</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Snort IPS Quickstart
+    </h1>
+    <div class="post-meta"><span title='2023-05-02 00:00:00 +0000 UTC'>May 2, 2023</span>
+
+</div>
+  </header> 
+  <div class="post-content"><h1 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h1>
+<p>Snort is an open source Intrusion Prevention System (IPS) that detects malicious network traffic by comparing the network packets to a set of rules, often created by Snort and the community. Snort can be used as a packet sniffer, packet logger, and intrusion prevention system.</p>
+<p>In this article, I’ll go over some of the first steps of installing, configuring, and running Snort so that new users have a place to branch off of.</p>
+<h1 id="quick-install">Quick Install<a hidden class="anchor" aria-hidden="true" href="#quick-install">#</a></h1>
+<p>You can install this on Ubuntu easily with the following command:</p>
+<pre tabindex="0"><code>$ sudo apt-get install snort
+</code></pre><h2 id="kali-linux">Kali Linux<a hidden class="anchor" aria-hidden="true" href="#kali-linux">#</a></h2>
+<p>For my Kali friends, you might get the message that you’re unable to locate the <code>snort</code> package when trying to install it. This happens because the repositories that your distribution looks into when searching for apt packages doesn’t contain <code>snort</code>. To fix this, you can try to append the following repos to your <code>/etc/apt/sources.list</code>.</p>
+<pre tabindex="0"><code>deb http://http.kali.org/kali kali-rolling main non-free contrib  
+deb http://http.kali.org/kali sana main non-free contrib  
+deb http://security.kali.org/kali-security sana/updates main contrib non-free  
+deb http://old.kali.org/kali moto main non-free contrib
+</code></pre><p>Let the changes take effect and install Snort.</p>
+<pre tabindex="0"><code>$ sudo apt-get update  
+$ sudo apt-get install snort
+</code></pre><h1 id="building-fromsource">Building From Source<a hidden class="anchor" aria-hidden="true" href="#building-fromsource">#</a></h1>
+<p>If you’re crazy enough to build Snort from the source code, this section is for you.</p>
+<h2 id="installing-dependencies">Installing Dependencies<a hidden class="anchor" aria-hidden="true" href="#installing-dependencies">#</a></h2>
+<p>Before you can build Snort, you must first install its dependencies. These are listed in their <a href="https://github.com/snort3/snort3#dependencies">README.md</a> on GitHub, but for the sake of brevity, I’ll put some of them here. Keep in mind that some of the dependencies have more dependencies which is why some appear below and not in the documentation.</p>
+<pre tabindex="0"><code>sudo apt update &amp;&amp; apt install -y gcc libpcre3-dev zlib1g-dev libluajit-5.1-dev   
+libpcap-dev openssl libssl-dev libnghttp2-dev libdumbnet-dev   
+bison flex libdnet autoconf libtool cmake
+</code></pre><h2 id="daq">DAQ<a hidden class="anchor" aria-hidden="true" href="#daq">#</a></h2>
+<p>Snort has another depenency called DAQ that needs to be installed. I’ll be downloading their latest release form GitHub and extracting it in a folder called <code>daq</code>.</p>
+<pre tabindex="0"><code>$ wget https://github.com/snort3/libdaq/archive/refs/tags/v3.0.11.zip  
+$ unzip v3.0.11.zip -d daq &amp;&amp; cd daq/libdaq-3.0.11
+</code></pre><p>After downloading and extracting it, I’ll run <code>bootstrap</code> to generate the configuration script and then proceed to install it.</p>
+<pre tabindex="0"><code>$ ./bootstrap  
+$ ./configure &amp;&amp; make &amp;&amp; sudo make install
+</code></pre><h2 id="hwloc">hwloc<a hidden class="anchor" aria-hidden="true" href="#hwloc">#</a></h2>
+<p>Another dependency is <code>hwloc</code>. You can find additional methods of installation on their <a href="https://github.com/open-mpi/hwloc">GitHub</a> and <a href="https://www.open-mpi.org/software/hwloc/v2.9/">website</a>. This is the way that I did it:</p>
+<pre tabindex="0"><code>$ git clone https://github.com/open-mpi/hwloc.git  
+$ cd hwloc &amp;&amp; ./autogen.sh  
+$ ./configure &amp;&amp; make &amp;&amp; sudo make install
+</code></pre><h2 id="openssl">OpenSSL<a hidden class="anchor" aria-hidden="true" href="#openssl">#</a></h2>
+<p>If you don’t already have <code>openssl</code> installed on your system, you could install it from source:</p>
+<pre tabindex="0"><code>$ git clone https://github.com/openssl/openssl.git &amp;&amp; cd openssl  
+$ ./Configure &amp;&amp; make &amp;&amp; make test
+</code></pre><p>It is also possible to install it through <code>apt</code>. You may still need to install some additional headers for Snort to work. For this, you can try</p>
+<pre tabindex="0"><code>$ sudo apt install libssl-dev openssl
+</code></pre><h2 id="snort-install">Snort Install<a hidden class="anchor" aria-hidden="true" href="#snort-install">#</a></h2>
+<p>Finally, we can start building Snort. I’ll be building directly from their source code on GitHub. Following the instructions on their README.md in <a href="https://github.com/snort3/snort3#readme">GitHub</a>, I clone their GitHub repository and run these commands:</p>
+<pre tabindex="0"><code>$ git clone https://github.com/snort3/snort3.git  
+$ cd snort3
+</code></pre><p>Then, I’ll build the program. You’ll need <code>cmake</code> among other packages in order to do this, so I’ve included the install command for those packages.</p>
+<pre tabindex="0"><code>$ sudo apt install -y gcc cmake libpcre3-dev zlib1g-dev libluajit-5.1-dev libpcap-dev openssl libssl-dev libnghttp2-dev libdumbnet-dev bison flex autoconf libtool  
+$ ./configure\_cmake.sh --prefix=$(pwd) --with-daq-libraries=/path/to/libdaq-3.0.11  
+$ cd build  
+$ make -j $(nproc) install
+</code></pre><h1 id="configuration">Configuration<a hidden class="anchor" aria-hidden="true" href="#configuration">#</a></h1>
+<h2 id="capturing-all-networktraffic">Capturing all Network Traffic<a hidden class="anchor" aria-hidden="true" href="#capturing-all-networktraffic">#</a></h2>
+<p>To start, we’ll set our network adapter to run in promiscuous mode. This means that it will capture all packets on the network rather than only the ones that were assigned to be captured by it. This can be done through WiFi settings or through the command line.</p>
+<pre tabindex="0"><code>$ sudo ip link set wlan0 promisc on
+</code></pre><h2 id="modifying-the-configuration-file">Modifying the Configuration File<a hidden class="anchor" aria-hidden="true" href="#modifying-the-configuration-file">#</a></h2>
+<p>Most configurations will go within <code>/etc/snort/snort.conf</code>.</p>
+<pre tabindex="0"><code>$ sudo vim /etc/snort/snort.conf
+</code></pre><p>There’s many configuration options within this file that are broken up into 9 sections. Most of our changes will be in section 1.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*pngRmEDDXcscoXuasWQFdQ.png" alt=""  />
+
+On line 45 of the configuration file, we’ll change the value of <code>HOME_NET</code> from <code>any</code> to be the network that you would like to monitor. In my case, it is <code>192.168.1.0/24</code>.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*uPIpmb3Q2AUJj3v3GkL2lQ.png" alt=""  />
+
+I would encourage you to go through the other variables in the configuration file to include the ports and hosts that are running various services so that Snort can detect them and apply the rules to them.</p>
+<p>Rules are included in step #7. The syntax for rule files is <code>include /path/to/rule.rules</code>. In this case, <code>$RULE_PATH</code> refers to <code>/etc/snort</code>. You can include multiple rule files and add your own under <code>/etc/snort/local.rules</code> or whichever file name that you configure for you own rules. This structure allows you to compartmentalize various rule sets and keep them organized.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*Pz6IDFwxqQwrMWmZS83kQg.png" alt=""  />
+
+As a side note, if you would like to download the latest community rules, you can find them at the <a href="https://www.snort.org/downloads#rules">official website</a>. You would extract the tarball and add the rule files to your <code>/etc/snort/snort.conf</code>.</p>
+<pre tabindex="0"><code>$ wget https://www.snort.org/downloads/community/snort3-community-rules.tar.gz  
+$ tar -xf snort3-community-rules.tar.gz
+</code></pre><h1 id="running-snort">Running Snort<a hidden class="anchor" aria-hidden="true" href="#running-snort">#</a></h1>
+<p>Once you have your configuration file created, you can test that everything works with the following command:</p>
+<pre tabindex="0"><code>$ sudo snort -T -i wlan0 -c /etc/snort/snort.conf
+</code></pre><p>You will get a lot of output. The most important pieces of information to be aware of in this output are the Snort rules. Here, you will be able to see how many were loaded in.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*4STD2kRrAx3xnRfCA7ALqA.png" alt=""  />
+
+To actually run Snort as a daemon, you would change the <code>-T</code> option to <code>-D</code>.</p>
+<pre tabindex="0"><code>$ sudo snort -D -i eth0 -c /etc/snort/snort.conf  
+Spawning daemon child...  
+My daemon child 197993 lives...  
+Daemon parent exiting (0)
+</code></pre><p>To verify that it is working, you can use <code>ps aux</code>.</p>
+<pre tabindex="0"><code>$ ps aux | grep snort  
+root 196973 0.0 0.3 450316 118644 ? Ssl 10:25 0:00 snort -D -i wlan0 -c /etc/snort/snort.conf
+</code></pre><p>All alerts from Snort will be sent to <code>/var/log/snort/alert</code> unless otherwise specified in a command line argument.</p>
+<h1 id="moving-forward">Moving Forward<a hidden class="anchor" aria-hidden="true" href="#moving-forward">#</a></h1>
+<p>For those who are interested in learning Snort on a deeper level, one recommendation is learning how to create your own rules and learning what the other configuration options are. It may be worth it to read their <code>man</code> page as well to be aware of options available on the CLI. You can also combine Snort with a SIEM such as Splunk and other solutions like pfSense.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2024 <a href="http://localhost:1313/ally-petitt/">Ally Petitt</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
