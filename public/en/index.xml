@@ -3235,9 +3235,7 @@ I had this installed previously, but since I deleted the files, I need to remove
       <link>http://localhost:1313/ally-petitt/en/posts/2023-04-09_how-to-create-and-deploy-your-own-cloud-server-with-nextcloud-345e185d602a/</link>
       <pubDate>Sun, 09 Apr 2023 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/ally-petitt/en/posts/2023-04-09_how-to-create-and-deploy-your-own-cloud-server-with-nextcloud-345e185d602a/</guid>
-      <description>&lt;p&gt;orial&amp;quot;]
-+++&lt;/p&gt;
-&lt;h1 id=&#34;why-create-a-cloudserver&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*-WVjY5h4EpphjjX7&#34; alt=&#34;&#34;  /&gt;
+      <description>&lt;h1 id=&#34;why-create-a-cloudserver&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*-WVjY5h4EpphjjX7&#34; alt=&#34;&#34;  /&gt;
 
 Why Create a Cloud Server?&lt;/h1&gt;
 &lt;p&gt;As many security-conscious people are aware, saving something in the cloud really means saving it on somebody else’s computer. When using cloud services, you don’t own the data that you upload, nor do you own the program that you’re using. Additionally, it is within the cloud service provider’s rights to delete your data or remove your access to it if they had technical issues, went bankrupt, or you missed a bill. Not all of them will do that, but there is no law protecting the customer from something like this happening. There aren’t any measures in place to prevent the government or corporations from looking through your data and using it for their own objectives (in the US).&lt;/p&gt;
@@ -3317,11 +3315,9 @@ Mobile&lt;/h2&gt;
 &lt;h1 id=&#34;conclusion&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*rXIb7WPys_Tqgbh_&#34; alt=&#34;&#34;  /&gt;
 
 Conclusion&lt;/h1&gt;
-&lt;p&gt;NextCloud allows for a tremendous amount of flexibility. There are many configurations that you can set including brute force protection, antivirus scanning, OAuth2, and more as shown in &lt;a href=&#34;https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/index.html&#34;&gt;their documentation&lt;/a&gt;. I hope that you got value out of this article and were inspired to take control o&lt;/p&gt;
+&lt;p&gt;NextCloud allows for a tremendous amount of flexibility. There are many configurations that you can set including brute force protection, antivirus scanning, OAuth2, and more as shown in &lt;a href=&#34;https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/index.html&#34;&gt;their documentation&lt;/a&gt;. I hope that you got value out of this article and were inspired to take control of your data.&lt;/p&gt;
 </description>
-      <content:encoded><![CDATA[<p>orial&quot;]
-+++</p>
-<h1 id="why-create-a-cloudserver"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*-WVjY5h4EpphjjX7" alt=""  />
+      <content:encoded><![CDATA[<h1 id="why-create-a-cloudserver"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*-WVjY5h4EpphjjX7" alt=""  />
 
 Why Create a Cloud Server?</h1>
 <p>As many security-conscious people are aware, saving something in the cloud really means saving it on somebody else’s computer. When using cloud services, you don’t own the data that you upload, nor do you own the program that you’re using. Additionally, it is within the cloud service provider’s rights to delete your data or remove your access to it if they had technical issues, went bankrupt, or you missed a bill. Not all of them will do that, but there is no law protecting the customer from something like this happening. There aren’t any measures in place to prevent the government or corporations from looking through your data and using it for their own objectives (in the US).</p>
@@ -3401,7 +3397,7 @@ Mobile</h2>
 <h1 id="conclusion"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*rXIb7WPys_Tqgbh_" alt=""  />
 
 Conclusion</h1>
-<p>NextCloud allows for a tremendous amount of flexibility. There are many configurations that you can set including brute force protection, antivirus scanning, OAuth2, and more as shown in <a href="https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/index.html">their documentation</a>. I hope that you got value out of this article and were inspired to take control o</p>
+<p>NextCloud allows for a tremendous amount of flexibility. There are many configurations that you can set including brute force protection, antivirus scanning, OAuth2, and more as shown in <a href="https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/index.html">their documentation</a>. I hope that you got value out of this article and were inspired to take control of your data.</p>
 ]]></content:encoded>
     </item>
     <item>
@@ -3409,9 +3405,7 @@ Conclusion</h1>
       <link>http://localhost:1313/ally-petitt/en/posts/2023-03-28_practical-demonstration--dns-spoofing---home-lab-f7294443fb23/</link>
       <pubDate>Tue, 28 Mar 2023 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/ally-petitt/en/posts/2023-03-28_practical-demonstration--dns-spoofing---home-lab-f7294443fb23/</guid>
-      <description>&lt;p&gt;orial&amp;quot;]
-+++&lt;/p&gt;
-&lt;h2 id=&#34;dns-cache-poisoning-on-home-lab-walkthrough&#34;&gt;DNS Cache Poisoning on Home Lab Walkthrough&lt;/h2&gt;
+      <description>&lt;h2 id=&#34;dns-cache-poisoning-on-home-lab-walkthrough&#34;&gt;DNS Cache Poisoning on Home Lab Walkthrough&lt;/h2&gt;
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*P3ZahJWqz8AFbk9s.png&#34; alt=&#34;Basic DNS cache poisoning attack&#34;  /&gt;
 
 &lt;em&gt;&lt;a href=&#34;https://www.okta.com/sites/default/files/media/image/2021-04/DNSPoisoning.png&#34;&gt;https://www.okta.com/sites/default/files/media/image/2021-04/DNSPoisoning.png&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
@@ -3542,11 +3536,9 @@ Remediation&lt;/h1&gt;
 &lt;li&gt;&lt;a href=&#34;https://cybersecurity.att.com/blogs/security-essentials/dns-poisoning&#34;&gt;https://cybersecurity.att.com/blogs/security-essentials/dns-poisoning&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://kinsta.com/blog/dns-poisoning/&#34;&gt;https://kinsta.com/blog/dns-poisoning/&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Thanks&lt;/p&gt;
+&lt;p&gt;Thanks for reading!&lt;/p&gt;
 </description>
-      <content:encoded><![CDATA[<p>orial&quot;]
-+++</p>
-<h2 id="dns-cache-poisoning-on-home-lab-walkthrough">DNS Cache Poisoning on Home Lab Walkthrough</h2>
+      <content:encoded><![CDATA[<h2 id="dns-cache-poisoning-on-home-lab-walkthrough">DNS Cache Poisoning on Home Lab Walkthrough</h2>
 <p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*P3ZahJWqz8AFbk9s.png" alt="Basic DNS cache poisoning attack"  />
 
 <em><a href="https://www.okta.com/sites/default/files/media/image/2021-04/DNSPoisoning.png">https://www.okta.com/sites/default/files/media/image/2021-04/DNSPoisoning.png</a></em></p>
@@ -3677,7 +3669,7 @@ Remediation</h1>
 <li><a href="https://cybersecurity.att.com/blogs/security-essentials/dns-poisoning">https://cybersecurity.att.com/blogs/security-essentials/dns-poisoning</a></li>
 <li><a href="https://kinsta.com/blog/dns-poisoning/">https://kinsta.com/blog/dns-poisoning/</a></li>
 </ul>
-<p>Thanks</p>
+<p>Thanks for reading!</p>
 ]]></content:encoded>
     </item>
     <item>
@@ -4611,8 +4603,7 @@ They also created a “Security Updates” page on their <a href="https://www.ub
       <link>http://localhost:1313/ally-petitt/en/posts/2022-06-08_pentester-s-guide-to-performing-file-transfers-3c1a6a38dfc8/</link>
       <pubDate>Wed, 08 Jun 2022 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/ally-petitt/en/posts/2022-06-08_pentester-s-guide-to-performing-file-transfers-3c1a6a38dfc8/</guid>
-      <description>&lt;p&gt;+++
-&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*HNC0lT4gPMDU8uH0fyjRyw.png&#34; alt=&#34;&#34;  /&gt;
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*HNC0lT4gPMDU8uH0fyjRyw.png&#34; alt=&#34;&#34;  /&gt;
 &lt;/p&gt;
 &lt;h1 id=&#34;foreword&#34;&gt;Foreword&lt;/h1&gt;
 &lt;p&gt;To avoid detection, it is best to use tools that are native to the victim’s computer.&lt;/p&gt;
@@ -4673,10 +4664,9 @@ File Transfer With an HTTP Server&lt;/h1&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The same commands can be used with RYSNC by simply replacing &lt;code&gt;scp&lt;/code&gt; with &lt;code&gt;rsync&lt;/code&gt; .&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;rsync &amp;lt;SOURCE&amp;gt; &amp;lt;DESTINATION&amp;gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
-&lt;p&gt;There are countless ways to transfer files between two computers. Among the most common methods are HTTP and FTP, but if those don’t work, there is a chance that some of the other options here will. Some honorable mentions that I didn’t go into detail on are SSHFS, SFTP, Winscp, and Samba. I hope that you were able to find value in this article and remember to never stop lear&lt;/p&gt;
+&lt;p&gt;There are countless ways to transfer files between two computers. Among the most common methods are HTTP and FTP, but if those don’t work, there is a chance that some of the other options here will. Some honorable mentions that I didn’t go into detail on are SSHFS, SFTP, Winscp, and Samba. I hope that you were able to find value in this article and remember to never stop learning.&lt;/p&gt;
 </description>
-      <content:encoded><![CDATA[<p>+++
-<img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*HNC0lT4gPMDU8uH0fyjRyw.png" alt=""  />
+      <content:encoded><![CDATA[<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*HNC0lT4gPMDU8uH0fyjRyw.png" alt=""  />
 </p>
 <h1 id="foreword">Foreword</h1>
 <p>To avoid detection, it is best to use tools that are native to the victim’s computer.</p>
@@ -4737,7 +4727,7 @@ File Transfer With an HTTP Server</h1>
 </span></span></code></pre></div><p>The same commands can be used with RYSNC by simply replacing <code>scp</code> with <code>rsync</code> .</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>rsync &lt;SOURCE&gt; &lt;DESTINATION&gt;
 </span></span></code></pre></div><h1 id="conclusion">Conclusion</h1>
-<p>There are countless ways to transfer files between two computers. Among the most common methods are HTTP and FTP, but if those don’t work, there is a chance that some of the other options here will. Some honorable mentions that I didn’t go into detail on are SSHFS, SFTP, Winscp, and Samba. I hope that you were able to find value in this article and remember to never stop lear</p>
+<p>There are countless ways to transfer files between two computers. Among the most common methods are HTTP and FTP, but if those don’t work, there is a chance that some of the other options here will. Some honorable mentions that I didn’t go into detail on are SSHFS, SFTP, Winscp, and Samba. I hope that you were able to find value in this article and remember to never stop learning.</p>
 ]]></content:encoded>
     </item>
     <item>
@@ -4745,9 +4735,7 @@ File Transfer With an HTTP Server</h1>
       <link>http://localhost:1313/ally-petitt/en/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/</link>
       <pubDate>Mon, 30 May 2022 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/ally-petitt/en/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/</guid>
-      <description>&lt;p&gt;orial&amp;quot;]
-+++
-&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*W1qjqIKKNMK9_QYWXGQzRw.png&#34; alt=&#34;picture of a bug&#34;  /&gt;
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*W1qjqIKKNMK9_QYWXGQzRw.png&#34; alt=&#34;picture of a bug&#34;  /&gt;
 &lt;/p&gt;
 &lt;h1 id=&#34;how-does-antivirus-software-actuallywork&#34;&gt;How Does Antivirus Software Actually Work?&lt;/h1&gt;
 &lt;p&gt;Antivirus software acts as a defense from trojans, viruses, ransomware, spyware, adware, and much more. There are 3 main ways that it detects malware: signature-based detection, heuristic-based detection, and anomaly-based detection.&lt;/p&gt;
@@ -4803,12 +4791,10 @@ Command-Line Tools&lt;/h2&gt;
 &lt;li&gt;&lt;a href=&#34;https://dmcxblue.gitbook.io/red-team-notes-2-0/red-team-techniques/defense-evasion&#34;&gt;Defense Evasion — Red Team Notes 2.0&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://youtu.be/V3_vc7BO9lU&#34;&gt;Malware Analysis Bootcamp - Extracting Strings&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://youtu.be/WmJcbDfy9L4&#34;&gt;ATT&amp;amp;CK Deep Dive: Defense Evasion&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;[Windows Red Team Defense Evasion Techniques](&lt;a href=&#34;https://www.linode.com/docs/guides/windows-red-team-defense-evasion-&#34;&gt;https://www.linode.com/docs/guides/windows-red-team-defense-evasion-&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.linode.com/docs/guides/windows-red-team-defense-evasion-techniques/&#34;&gt;Windows Red Team Defense Evasion Techniques&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </description>
-      <content:encoded><![CDATA[<p>orial&quot;]
-+++
-<img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*W1qjqIKKNMK9_QYWXGQzRw.png" alt="picture of a bug"  />
+      <content:encoded><![CDATA[<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*W1qjqIKKNMK9_QYWXGQzRw.png" alt="picture of a bug"  />
 </p>
 <h1 id="how-does-antivirus-software-actuallywork">How Does Antivirus Software Actually Work?</h1>
 <p>Antivirus software acts as a defense from trojans, viruses, ransomware, spyware, adware, and much more. There are 3 main ways that it detects malware: signature-based detection, heuristic-based detection, and anomaly-based detection.</p>
@@ -4864,7 +4850,7 @@ Command-Line Tools</h2>
 <li><a href="https://dmcxblue.gitbook.io/red-team-notes-2-0/red-team-techniques/defense-evasion">Defense Evasion — Red Team Notes 2.0</a></li>
 <li><a href="https://youtu.be/V3_vc7BO9lU">Malware Analysis Bootcamp - Extracting Strings</a></li>
 <li><a href="https://youtu.be/WmJcbDfy9L4">ATT&amp;CK Deep Dive: Defense Evasion</a></li>
-<li>[Windows Red Team Defense Evasion Techniques](<a href="https://www.linode.com/docs/guides/windows-red-team-defense-evasion-">https://www.linode.com/docs/guides/windows-red-team-defense-evasion-</a></li>
+<li><a href="https://www.linode.com/docs/guides/windows-red-team-defense-evasion-techniques/">Windows Red Team Defense Evasion Techniques</a></li>
 </ul>
 ]]></content:encoded>
     </item>

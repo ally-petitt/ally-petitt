@@ -1,4 +1,4 @@
-baseURL: "http://localhost:1313"
+baseURL: "https://ally-petitt.github.io/ally-petitt/"
 title: Ally Petitt
 paginate: 5
 theme: PaperMod
@@ -86,6 +86,7 @@ params:
 
   profileMode:
     enabled: false
+    title: Ally Petitt
 
   ShowFullTextinRSS: true
   rssLimit: 25
@@ -112,8 +113,6 @@ params:
 
   cover:
     linkFullImages: true
-
-
 
   assets:
     disableHLJS: true
