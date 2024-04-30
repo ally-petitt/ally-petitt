@@ -71,7 +71,7 @@ params:
 
   homeInfoParams:
     Title: Welcome to my blog!
-    Content: Testing information
+    Content: Currently Under Construction
   
   socialIcons:
     - name: github
@@ -86,8 +86,9 @@ params:
 
   profileMode:
     enabled: false
-  ShowFullTextinRSS: true
 
+  ShowFullTextinRSS: true
+  rssLimit: 25
 
   defaultTheme: dark # defaultTheme: light or dark
   disableThemeToggle: false

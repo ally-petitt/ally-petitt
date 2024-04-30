@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
 <title>VPN Troubleshooting: How to fix “Inactivity Timeout ( — ping-restart)” | Ally Petitt</title>
-<meta name="keywords" content="">
+<meta name="keywords" content="Troubleshooting, VPN">
 <meta name="description" content="If your VPN log looks something like this:
 I’m here to help. During my time working through the PEN-200 labs, I’ve faced the constant struggle of losing connection to the host every few minutes to seconds. I tried to troubleshoot this “Inactivity Timeout” error with an Offsec employee for 3 hours to no avail. Finally, I figured out the solution and I am here to share it with those of you who have the same struggle.">
 <meta name="author" content="Ally Petitt">
@@ -73,7 +73,7 @@ I’m here to help. During my time working through the PEN-200 labs, I’ve face
   "name": "VPN Troubleshooting: How to fix “Inactivity Timeout ( — ping-restart)”",
   "description": "If your VPN log looks something like this:\nI’m here to help. During my time working through the PEN-200 labs, I’ve faced the constant struggle of losing connection to the host every few minutes to seconds. I tried to troubleshoot this “Inactivity Timeout” error with an Offsec employee for 3 hours to no avail. Finally, I figured out the solution and I am here to share it with those of you who have the same struggle.",
   "keywords": [
-    
+    "Troubleshooting", "VPN"
   ],
   "articleBody": "If your VPN log looks something like this:\nI’m here to help. During my time working through the PEN-200 labs, I’ve faced the constant struggle of losing connection to the host every few minutes to seconds. I tried to troubleshoot this “Inactivity Timeout” error with an Offsec employee for 3 hours to no avail. Finally, I figured out the solution and I am here to share it with those of you who have the same struggle.\nCause of This Error In a successful OpenVPN connection, the VPN server will send pings to the client to ensure that the VPN connection is still active. If the ping is not received by the client, the server knows that the VPN is disconnected and attempts to reset the connection. This is when the message “Inactivity timeout ( — ping-restart)” appears in the VPN log.\nReason #1: Firewalls A potential cause for this error, which is often overlooked, is a running firewall. This was the primary reason that I was seeing the errors as I was unaware that my firewall was interfering with the VPN connection, and I had another firewall that I didn’t know was running. Linux users, you can check the firewall status with the following commands:\nsudo systemctl status ufw sudo systemctl status firewalld If the firewall is running, it is possible that this is the reason you are having VPN issues. To fix this, either disable the firewall or change its configuration to not interfere with your VPN connection.\nReason #2: Multiple VPN connections at once Another possible cause of this error is when running two openvpn clients with the same profile from different computers. Make sure that you’re not running the VPN in your virtual machine and host OS at the same time. If your setup looks something like this:\nThere’s a chance that this is the reason for your troubles. To solve this, pick one VM to work in and kill any of your other VPN connections. You can use this command in the terminal to ensure that openvpn is no longer running.\nkillall -e openvpn Reason #3: DNS Name Resolution Additionally, if running ping [www.google.com](http://www.google.como) results in the message:\nYou probably need to add a working nameserver to your **/etc/resolv.conf** file. For example, your /etc/resolve.con may look like this once you add the working nameservers:\nNote: 1.1.1.1 is the public DNS resolver from Cloudflare and 8.8.8.8 is from Google. For more details regarding configuration, look at this article.\nReasons #4–12 These are additional reasons that I found in this article.\nAddress or port of VPN server is incorrect VPN server is offline Network between your computer and the server dropped out The ping and ping-restart values are invalid or don’t match Configuration problems Your country may attempt to take down your VPN connection for censorship purposes NAT router that blocks your connection Firewall on your router Additional Reading https://www.sparklabs.com/support/kb/article/error-inactivity-timeout-ping-restart/ ",
   "wordCount" : "482",
@@ -242,6 +242,8 @@ Note: <code>1.1.1.1</code> is the public DNS resolver from Cloudflare and <code>
 
   <footer class="post-footer">
     <ul class="post-tags">
+      <li><a href="http://localhost:1313/ally-petitt/en/tags/troubleshooting/">Troubleshooting</a></li>
+      <li><a href="http://localhost:1313/ally-petitt/en/tags/vpn/">VPN</a></li>
     </ul>
 <nav class="paginav">
   <a class="prev" href="http://localhost:1313/ally-petitt/en/posts/2022-12-09_windows-remoting--difference-between-psexec--wmiexec--atexec---exec-bf7d1edb5986/">
@@ -260,7 +262,7 @@ Note: <code>1.1.1.1</code> is the public DNS resolver from Cloudflare and <code>
 <ul class="share-buttons">
     <li>
         <a target="_blank" rel="noopener noreferrer" aria-label="share VPN Troubleshooting: How to fix “Inactivity Timeout ( — ping-restart)” on x"
-            href="https://x.com/intent/tweet/?text=VPN%20Troubleshooting%3a%20How%20to%20fix%20%e2%80%9cInactivity%20Timeout%20%28%e2%80%8a%e2%80%94%e2%80%8aping-restart%29%e2%80%9d&amp;url=http%3a%2f%2flocalhost%3a1313%2fally-petitt%2fen%2fposts%2f2022-11-12_vpn-troubleshooting--inactivity-timeout-----ping-restart--a52791c24a50%2f&amp;hashtags=">
+            href="https://x.com/intent/tweet/?text=VPN%20Troubleshooting%3a%20How%20to%20fix%20%e2%80%9cInactivity%20Timeout%20%28%e2%80%8a%e2%80%94%e2%80%8aping-restart%29%e2%80%9d&amp;url=http%3a%2f%2flocalhost%3a1313%2fally-petitt%2fen%2fposts%2f2022-11-12_vpn-troubleshooting--inactivity-timeout-----ping-restart--a52791c24a50%2f&amp;hashtags=Troubleshooting%2cVPN">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />

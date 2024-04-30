@@ -3,6 +3,7 @@ title = 'Reverse Engineering — Analyzing Headers'
 date = 2023-07-13
 draft = false
 showtoc=true
+tags= ["Forensics", "Reverse Engineering"]
 +++
 
 `objdump` is a command line tool that can be used to gain insight into an executable binary. In this article, the tool will be used to dump all of the headers of the ELF binary `heapedit` with the command below. Then, we will analyze and explain each section of output from the top to the bottom.

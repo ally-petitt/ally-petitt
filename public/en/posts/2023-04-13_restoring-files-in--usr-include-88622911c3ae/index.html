@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
 <title>Restoring Files in /usr/include | Ally Petitt</title>
-<meta name="keywords" content="">
+<meta name="keywords" content="Troubleshooting, Tutorial">
 <meta name="description" content="Hi guys, I made a mistake. In my frustration trying to debug my C program, I inadvertently deleted all the files within my /usr/include folder. I didn’t realize at the time that this was a very important folder! As explained here, it stores the Linux kernel’s libc header files! Rookie mistake, but luckily for us, there’s ways to fix it.
 If your /usr/include folder is also looking more empty than the shelves during COVID, I come bearing the solution.">
 <meta name="author" content="Ally Petitt">
@@ -73,7 +73,7 @@ If your /usr/include folder is also looking more empty than the shelves during C
   "name": "Restoring Files in \/usr\/include",
   "description": "Hi guys, I made a mistake. In my frustration trying to debug my C program, I inadvertently deleted all the files within my /usr/include folder. I didn’t realize at the time that this was a very important folder! As explained here, it stores the Linux kernel’s libc header files! Rookie mistake, but luckily for us, there’s ways to fix it.\nIf your /usr/include folder is also looking more empty than the shelves during COVID, I come bearing the solution.",
   "keywords": [
-    
+    "Troubleshooting", "Tutorial"
   ],
   "articleBody": "Hi guys, I made a mistake. In my frustration trying to debug my C program, I inadvertently deleted all the files within my /usr/include folder. I didn’t realize at the time that this was a very important folder! As explained here, it stores the Linux kernel’s libc header files! Rookie mistake, but luckily for us, there’s ways to fix it.\nIf your /usr/include folder is also looking more empty than the shelves during COVID, I come bearing the solution.\nGetting Kernel Headers You’ll want to download the kernel install from here: https://www.kernel.org/. Choose the one that matches your Linux kernel version as close as possible. I’ll be using 6.2.10. From there, we’ll decompress the file and copy the contents of the include folder to /usr/include.\n# download the linux kernel files form kernel.org wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.2.10.tar.xz tar -xf linux-6.2.10.tar.xz # decompress the tarball # copy the contents of the include folder into /usr/include/ sudo cp -r ./linux-6.2.10.tar.xz/include/ /usr/include/ Restoring Additional Missing Files If you find that while compiling something, you still get errors, try this:\napt-file search /path/to/.h In my case, I was missing string.h, so I used apt-file search /usr/include/string.h to see that I was needing the libc6-dev library.\nI had this installed previously, but since I deleted the files, I need to remove the installation completely and reinstall it.\nsudo apt remove --purge libc6-dev sudo apt install libc6-dev I also had to do the same with linux-libc-dev:\nsudo apt remove --purge linux-libc-dev sudo apt install linux-libc-dev Continue on with this methodology until you’ve installed all your missing dependencies. With these two steps combined, you should be able to restore your /usr/include file. This worked for me. Best of luck!\n",
   "wordCount" : "280",
@@ -215,6 +215,8 @@ I had this installed previously, but since I deleted the files, I need to remove
 
   <footer class="post-footer">
     <ul class="post-tags">
+      <li><a href="http://localhost:1313/ally-petitt/en/tags/troubleshooting/">Troubleshooting</a></li>
+      <li><a href="http://localhost:1313/ally-petitt/en/tags/tutorial/">Tutorial</a></li>
     </ul>
 <nav class="paginav">
   <a class="prev" href="http://localhost:1313/ally-petitt/en/posts/2023-04-23_how-to-prevent-data-leaks-before-they-happen-3c53997b3744/">
@@ -233,7 +235,7 @@ I had this installed previously, but since I deleted the files, I need to remove
 <ul class="share-buttons">
     <li>
         <a target="_blank" rel="noopener noreferrer" aria-label="share Restoring Files in /usr/include on x"
-            href="https://x.com/intent/tweet/?text=Restoring%20Files%20in%20%2fusr%2finclude&amp;url=http%3a%2f%2flocalhost%3a1313%2fally-petitt%2fen%2fposts%2f2023-04-13_restoring-files-in--usr-include-88622911c3ae%2f&amp;hashtags=">
+            href="https://x.com/intent/tweet/?text=Restoring%20Files%20in%20%2fusr%2finclude&amp;url=http%3a%2f%2flocalhost%3a1313%2fally-petitt%2fen%2fposts%2f2023-04-13_restoring-files-in--usr-include-88622911c3ae%2f&amp;hashtags=Troubleshooting%2cTutorial">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />

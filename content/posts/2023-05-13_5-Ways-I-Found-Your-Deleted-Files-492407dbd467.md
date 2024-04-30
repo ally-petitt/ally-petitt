@@ -3,6 +3,7 @@ title = '5 Ways I Found Your Deleted Files'
 date = 2023-05-13
 draft = false
 showtoc=true
+tags= ["Tutorial", "Forensics", "CTF", "Linux"]
 +++
 
 Computer Forensics for File Recovery

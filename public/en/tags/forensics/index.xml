@@ -1,0 +1,994 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Forensics on Ally Petitt</title>
+    <link>http://localhost:1313/ally-petitt/en/tags/forensics/</link>
+    <description>Recent content in Forensics on Ally Petitt</description>
+    <generator>Hugo -- 0.125.4</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 13 Jul 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/ally-petitt/en/tags/forensics/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Reverse Engineering — Analyzing Headers</title>
+      <link>http://localhost:1313/ally-petitt/en/posts/2023-07-13_reverse-engineering---analyzing-headers-23dc84075cd/</link>
+      <pubDate>Thu, 13 Jul 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/en/posts/2023-07-13_reverse-engineering---analyzing-headers-23dc84075cd/</guid>
+      <description>&lt;p&gt;&lt;code&gt;objdump&lt;/code&gt; is a command line tool that can be used to gain insight into an executable binary. In this article, the tool will be used to dump all of the headers of the ELF binary &lt;code&gt;heapedit&lt;/code&gt; with the command below. Then, we will analyze and explain each section of output from the top to the bottom.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;objdump -x ./heapedit
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Executable and Linkable Format (ELF) files are a common file format for object files, executable binaries, core dumps, and shared libraries. It provides a standardized format for storing executable and object code, symbol information, and other metadata necessary for proper software execution. It may be helpful to first get an overview of an ELF file structure which can be seen in this image:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*1ro_BkQGlcyGrJmG.png&#34; alt=&#34;&#34;  /&gt;
+
+&lt;em&gt;&lt;a href=&#34;https://upload.wikimedia.org/wikipedia/commons/e/e4/ELF_Executable_and_Linkable_Format_diagram_by_Ange_Albertini.png&#34;&gt;https://upload.wikimedia.org/wikipedia/commons/e/e4/ELF_Executable_and_Linkable_Format_diagram_by_Ange_Albertini.png&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;file-header&#34;&gt;File Header&lt;/h2&gt;
+&lt;p&gt;The first segment of output displays information from the file header including its file format, architecture, and flags. I’ll sequentially describe what each section means.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;heapedit: file format elf64-x86-64  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;heapedit  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;architecture: i386:x86-64, flags 0x00000112:  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;EXEC\_P, HAS\_SYMS, D\_PAGED  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;start address 0x0000000000400720
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;file format-&lt;/strong&gt; &lt;code&gt;elf64-x86–64&lt;/code&gt; refers to an ELF file that was designed for 64-bit systems and compiled for the x86–64 architecture.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;architecture&lt;/strong&gt;- The architecture &lt;code&gt;i386:x86–64&lt;/code&gt; indicates that the program is compatible with the i386 and x86–64 architecture.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;flags 0x00000112&lt;/strong&gt;- These flags are Binary File Descriptors (&lt;a href=&#34;https://sourceware.org/binutils/docs-2.23.1/bfd/index.html&#34;&gt;BFDs&lt;/a&gt;). They come from the &lt;code&gt;binutils&lt;/code&gt; package which is built into &lt;code&gt;objdump&lt;/code&gt; and their meaning can be found in the documentation &lt;a href=&#34;http://sourceware.org/binutils/docs-2.23.1/bfd/BFD-front-end.html#BFD-front-end&#34;&gt;here&lt;/a&gt;. In this example, &lt;code&gt;EXEC_P&lt;/code&gt; means the program is directly executable, &lt;code&gt;HAS_SYMS&lt;/code&gt; means that the program has a symbol table which helps with debugging, and &lt;code&gt;D_PAGED&lt;/code&gt; means that the program’s memory is dynamically paged.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;start address&lt;/strong&gt;- The memory address at which the &lt;code&gt;.text&lt;/code&gt; section begins, which contains the assembly code of the program.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This information is obtained by analyzing the raw bytes at the beginning of the file. The specifications for which bits correspond with which pieces of information can be seen &lt;a href=&#34;https://en.wikipedia.org/wiki/Executable_and_Linkable_Format&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;program-headers&#34;&gt;Program Headers&lt;/h2&gt;
+&lt;p&gt;The program header (Phdr) is a section that contains necessary information for executing the binary.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Program Header:  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; PHDR off 0x0000000000000040 vaddr 0x0000000000400040 paddr 0x0000000000400040 align 2**3  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; filesz 0x00000000000001f8 memsz 0x00000000000001f8 flags r--  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; INTERP off 0x0000000000000238 vaddr 0x0000000000400238 paddr 0x0000000000400238 align 2**0  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; filesz 0x000000000000001c memsz 0x000000000000001c flags r--  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; LOAD off 0x0000000000000000 vaddr 0x0000000000400000 paddr 0x0000000000400000 align 2**21  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; filesz 0x0000000000000c98 memsz 0x0000000000000c98 flags r-x  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; LOAD off 0x0000000000000e00 vaddr 0x0000000000600e00 paddr 0x0000000000600e00 align 2**21  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; filesz 0x0000000000000278 memsz 0x0000000000000288 flags rw-  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; DYNAMIC off 0x0000000000000e10 vaddr 0x0000000000600e10 paddr 0x0000000000600e10 align 2**3  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; filesz 0x00000000000001e0 memsz 0x00000000000001e0 flags rw-  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; NOTE off 0x0000000000000254 vaddr 0x0000000000400254 paddr 0x0000000000400254 align 2**2  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; filesz 0x0000000000000044 memsz 0x0000000000000044 flags r--  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;EH\_FRAME off 0x0000000000000b58 vaddr 0x0000000000400b58 paddr 0x0000000000400b58 align 2**2  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; filesz 0x000000000000003c memsz 0x000000000000003c flags r--  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; STACK off 0x0000000000000000 vaddr 0x0000000000000000 paddr 0x0000000000000000 align 2**4  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; filesz 0x0000000000000000 memsz 0x0000000000000000 flags rw-  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; RELRO off 0x0000000000000e00 vaddr 0x0000000000600e00 paddr 0x0000000000600e00 align 2**0  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; filesz 0x0000000000000200 memsz 0x0000000000000200 flags r--
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Referencing the EL&lt;a href=&#34;https://man7.org/linux/man-pages/man5/elf.5.html&#34;&gt;F man page&lt;/a&gt;, the paraphrased meaning of the different program types (PTs) are below.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;PHDR&lt;/strong&gt;- specifies the location and size of the program header table itself.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;INTERP&lt;/strong&gt;- specifies the location and size of the program interpreter (dynamic linker) path.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;LOAD&lt;/strong&gt;- specifies the location and size of a loadable segment in the binary.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;DYNAMIC&lt;/strong&gt;- specifies the location and size of the dynamic linking information.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: specifies the location and size of the ELF note segment (ElfN_Nhdr).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;EH_FRAME&lt;/strong&gt;: specifies the location and size of the exception handling frame information.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;STACK&lt;/strong&gt;: represents the stack segment, but in this case, it has a size of 0, indicating that it doesn’t occupy any space in the binary.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;RELRO&lt;/strong&gt;: specifies the location and size of the Relocation Read-Only (RELRO) area.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Each program type has its corresponding attributes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;off&lt;/strong&gt;- offset from beginning of file to first byte of the segment&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;vaddr&lt;/strong&gt;- the virtual address that the first byte of the segment resides in memory&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;paddr&lt;/strong&gt;- the physical memory address of the first byte of the segment if relevant&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;filesz&lt;/strong&gt;- holds the number of bytes of the file image of the segment&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;memsz&lt;/strong&gt;- holds the number of bytes of the memory image of hte segment&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;flags&lt;/strong&gt;- holds a bitmask of flags describing the read, write, and execute permissions of the segment.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;align&lt;/strong&gt;- specifies the desired alignment of the segment or section in memory. It indicates the power of two that should be used as the alignment constraint.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This table gives an overview of the different sections in memory and where they can be found.&lt;/p&gt;
+&lt;h2 id=&#34;dynamic-section&#34;&gt;Dynamic Section&lt;/h2&gt;
+&lt;p&gt;This section contains information about the dynamic linking and runtime symbol resolution of the program. This allows for external libraries to be loaded from disk into memory during the execution of the program.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Dynamic Section:  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; NEEDED libc.so.6  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; RUNPATH ./  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; INIT 0x0000000000400650  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; FINI 0x0000000000400af4  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; INIT\_ARRAY 0x0000000000600e00  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; INIT\_ARRAYSZ 0x0000000000000008  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; FINI\_ARRAY 0x0000000000600e08  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; FINI\_ARRAYSZ 0x0000000000000008  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; GNU\_HASH 0x0000000000400298  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; STRTAB 0x0000000000400410  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; SYMTAB 0x00000000004002c0  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; STRSZ 0x00000000000000a8  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; SYMENT 0x0000000000000018  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; DEBUG 0x0000000000000000  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; PLTGOT 0x0000000000601000  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; PLTRELSZ 0x00000000000000f0  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; PLTREL 0x0000000000000007  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; JMPREL 0x0000000000400560  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; RELA 0x0000000000400518  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; RELASZ 0x0000000000000048  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; RELAENT 0x0000000000000018  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; VERNEED 0x00000000004004d8  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; VERNEEDNUM 0x0000000000000001  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; VERSYM 0x00000000004004b8
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In this example, the file &lt;code&gt;libc.so.6&lt;/code&gt; needs to be dynamically linked to the program. The ELF man page defines the meaning of the categories on the left column. The right column contains the memory address to store the sections indicated by the left column.&lt;/p&gt;
+&lt;p&gt;For example, the ELF man page defines &lt;code&gt;PLTGOT&lt;/code&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;DT_PLTGOT&lt;/strong&gt; Address of PLT and/or GOT&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;In the above code block, the address of the Procedure Linkage Table (PLT) and/or Global Offset Table (GOT) table would be stored at the memory address &lt;code&gt;0x0000000000601000&lt;/code&gt; as shown by the fact that they are in the same row and the values correspond.&lt;/p&gt;
+&lt;h2 id=&#34;version-references&#34;&gt;Version References&lt;/h2&gt;
+&lt;p&gt;This section lists the versions of the dynamically linked libraries that are required for the program to run.&lt;/p&gt;
+&lt;p&gt;These versions are determined by the linker and requiring them allows for the program to run properly since the library versions used will be compatible with the Application Binary Interface (ABI).&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Version References:  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; required from libc.so.6:  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0x0d696917 0x00 04 GLIBC\_2.7  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0x0d696914 0x00 03 GLIBC\_2.4  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0x09691a75 0x00 02 GLIBC\_2.2.5
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In this example, the output indicates that the binary depends on 3 different GLIBC versions: 2.7, 2.4, and 2.2.5.&lt;/p&gt;
+&lt;h2 id=&#34;sections&#34;&gt;Sections&lt;/h2&gt;
+&lt;p&gt;This segment of output contains information about the memory location and names of various different sections of the program. This information is useful to the linker since it helps with symbol resolution, relocation to ensure that they reference the correct addresses in memory, and more such as pointing to the program’s initialization and finalization routines.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Sections:  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Idx Name Size VMA LMA File off Algn  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0 .interp 0000001c 0000000000400238 0000000000400238 00000238 2**0  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, READONLY, DATA  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 1 .note.ABI-tag 00000020 0000000000400254 0000000000400254 00000254 2**2  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, READONLY, DATA  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 2 .note.gnu.build-id 00000024 0000000000400274 0000000000400274 00000274 2**2  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, READONLY, DATA  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 3 .gnu.hash 00000024 0000000000400298 0000000000400298 00000298 2**3  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, READONLY, DATA  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 4 .dynsym 00000150 00000000004002c0 00000000004002c0 000002c0 2**3  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, READONLY, DATA  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 5 .dynstr 000000a8 0000000000400410 0000000000400410 00000410 2**0  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, READONLY, DATA  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 6 .gnu.version 0000001c 00000000004004b8 00000000004004b8 000004b8 2**1  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, READONLY, DATA  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 7 .gnu.version\_r 00000040 00000000004004d8 00000000004004d8 000004d8 2**3  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, READONLY, DATA  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 8 .rela.dyn 00000048 0000000000400518 0000000000400518 00000518 2**3  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, READONLY, DATA  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 9 .rela.plt 000000f0 0000000000400560 0000000000400560 00000560 2**3  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, READONLY, DATA  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 10 .init 00000017 0000000000400650 0000000000400650 00000650 2**2  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, READONLY, CODE  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 11 .plt 000000b0 0000000000400670 0000000000400670 00000670 2**4  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, READONLY, CODE  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 12 .text 000003d2 0000000000400720 0000000000400720 00000720 2**4  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, READONLY, CODE  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 13 .fini 00000009 0000000000400af4 0000000000400af4 00000af4 2**2  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, READONLY, CODE  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 14 .rodata 00000057 0000000000400b00 0000000000400b00 00000b00 2**3  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, READONLY, DATA  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 15 .eh\_frame\_hdr 0000003c 0000000000400b58 0000000000400b58 00000b58 2**2  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, READONLY, DATA  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 16 .eh\_frame 00000100 0000000000400b98 0000000000400b98 00000b98 2**3  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, READONLY, DATA  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 17 .init\_array 00000008 0000000000600e00 0000000000600e00 00000e00 2**3  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, DATA  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 18 .fini\_array 00000008 0000000000600e08 0000000000600e08 00000e08 2**3  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, DATA  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 19 .dynamic 000001e0 0000000000600e10 0000000000600e10 00000e10 2**3  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, DATA  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 20 .got 00000010 0000000000600ff0 0000000000600ff0 00000ff0 2**3  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, DATA  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 21 .got.plt 00000068 0000000000601000 0000000000601000 00001000 2**3  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, DATA  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 22 .data 00000010 0000000000601068 0000000000601068 00001068 2**3  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, ALLOC, LOAD, DATA  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 23 .bss 00000010 0000000000601078 0000000000601078 00001078 2**3  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; ALLOC  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 24 .comment 00000029 0000000000000000 0000000000000000 00001078 2**0  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; CONTENTS, READONLY
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let’s break down the meaning of the new columns:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Size&lt;/strong&gt;: The size of the section in bytes&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;VMA&lt;/strong&gt;: The virtual memory address that the section will be loaded into during program execution&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;LMA&lt;/strong&gt;: The load memory address or the memory address that which the section will be loaded in physical memory&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Each of the sections listed in the output serves a particular purpose in the program. For instance, the &lt;code&gt;.bss&lt;/code&gt; section contains uninitiated global variables and &lt;code&gt;.gnu_hash&lt;/code&gt; is the hash table used for efficient symbol lookup in the dynamic linking process. The full meanings of the different sections can be found &lt;a href=&#34;https://refspecs.linuxbase.org/elf/gabi4+/ch4.sheader.html&#34;&gt;at this link&lt;/a&gt; towards the bottom of the page.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A note on terminology: the ELF file used by the linker are called “sections” and the parts used by the loader are called “segments”.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;symbol-table&#34;&gt;Symbol Table&lt;/h2&gt;
+&lt;p&gt;Finally, the symbol contains information useful for locating and relocating a program’s symbolic definitions and references. It helps in symbol resolution, linking, and debugging.&lt;/p&gt;
+&lt;p&gt;Symbols are segments of code or information such as functions and variables that can be reused by the program. A symbol table keeps track of the different symbols and their locations.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;SYMBOL TABLE:  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400238 l d .interp 0000000000000000 .interp  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400254 l d .note.ABI-tag 0000000000000000 .note.ABI-tag  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400274 l d .note.gnu.build-id 0000000000000000 .note.gnu.build-id  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400298 l d .gnu.hash 0000000000000000 .gnu.hash  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000000004002c0 l d .dynsym 0000000000000000 .dynsym  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400410 l d .dynstr 0000000000000000 .dynstr  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000000004004b8 l d .gnu.version 0000000000000000 .gnu.version  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000000004004d8 l d .gnu.version\_r 0000000000000000 .gnu.version\_r  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400518 l d .rela.dyn 0000000000000000 .rela.dyn  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400560 l d .rela.plt 0000000000000000 .rela.plt  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400650 l d .init 0000000000000000 .init  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400670 l d .plt 0000000000000000 .plt  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400720 l d .text 0000000000000000 .text  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400af4 l d .fini 0000000000000000 .fini  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400b00 l d .rodata 0000000000000000 .rodata  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400b58 l d .eh\_frame\_hdr 0000000000000000 .eh\_frame\_hdr  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400b98 l d .eh\_frame 0000000000000000 .eh\_frame  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000600e00 l d .init\_array 0000000000000000 .init\_array  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000600e08 l d .fini\_array 0000000000000000 .fini\_array  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000600e10 l d .dynamic 0000000000000000 .dynamic  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000600ff0 l d .got 0000000000000000 .got  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000601000 l d .got.plt 0000000000000000 .got.plt  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000601068 l d .data 0000000000000000 .data  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000601078 l d .bss 0000000000000000 .bss  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000000000 l d .comment 0000000000000000 .comment  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000000000 l df *ABS* 0000000000000000 crtstuff.c  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400760 l F .text 0000000000000000 deregister\_tm\_clones  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400790 l F .text 0000000000000000 register\_tm\_clones  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000000004007d0 l F .text 0000000000000000 \_\_do\_global\_dtors\_aux  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000601080 l O .bss 0000000000000001 completed.7698  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000600e08 l O .fini\_array 0000000000000000 \_\_do\_global\_dtors\_aux\_fini\_array\_entry  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400800 l F .text 0000000000000000 frame\_dummy  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000600e00 l O .init\_array 0000000000000000 \_\_frame\_dummy\_init\_array\_entry  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000000000 l df *ABS* 0000000000000000 heapedit.c  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000000000 l df *ABS* 0000000000000000 crtstuff.c  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400c94 l O .eh\_frame 0000000000000000 \_\_FRAME\_END\_\_  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000000000 l df *ABS* 0000000000000000   
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000600e08 l .init\_array 0000000000000000 \_\_init\_array\_end  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000600e10 l O .dynamic 0000000000000000 \_DYNAMIC  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000600e00 l .init\_array 0000000000000000 \_\_init\_array\_start  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400b58 l .eh\_frame\_hdr 0000000000000000 \_\_GNU\_EH\_FRAME\_HDR  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000601000 l O .got.plt 0000000000000000 \_GLOBAL\_OFFSET\_TABLE\_  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400af0 g F .text 0000000000000002 \_\_libc\_csu\_fini  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000000000 F *UND* 0000000000000000 free@@GLIBC\_2.2.5  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000601078 g O .bss 0000000000000008 stdout@@GLIBC\_2.2.5  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000601068 w .data 0000000000000000 data\_start  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000000000 F *UND* 0000000000000000 puts@@GLIBC\_2.2.5  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000601078 g .data 0000000000000000 \_edata  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400af4 g F .fini 0000000000000000 \_fini  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000000000 F *UND* 0000000000000000 \_\_stack\_chk\_fail@@GLIBC\_2.4  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000000000 F *UND* 0000000000000000 setbuf@@GLIBC\_2.2.5  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000000000 F *UND* 0000000000000000 printf@@GLIBC\_2.2.5  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000000000 F *UND* 0000000000000000 \_\_libc\_start\_main@@GLIBC\_2.2.5  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000000000 F *UND* 0000000000000000 fgets@@GLIBC\_2.2.5  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000601068 g .data 0000000000000000 \_\_data\_start  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000000000 w *UND* 0000000000000000 \_\_gmon\_start\_\_  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000601070 g O .data 0000000000000000 .hidden \_\_dso\_handle  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400b00 g O .rodata 0000000000000004 \_IO\_stdin\_used  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400a80 g F .text 0000000000000065 \_\_libc\_csu\_init  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000000000 F *UND* 0000000000000000 malloc@@GLIBC\_2.2.5  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000601088 g .bss 0000000000000000 \_end  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400750 g F .text 0000000000000002 .hidden \_dl\_relocate\_static\_pie  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400720 g F .text 000000000000002b \_start  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000601078 g .bss 0000000000000000 \_\_bss\_start  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400807 g F .text 0000000000000277 main  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000000000 F *UND* 0000000000000000 fopen@@GLIBC\_2.2.5  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000000000 F *UND* 0000000000000000 \_\_isoc99\_scanf@@GLIBC\_2.7  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000000000 F *UND* 0000000000000000 strcat@@GLIBC\_2.2.5  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000601078 g O .data 0000000000000000 .hidden \_\_TMC\_END\_\_  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;0000000000400650 g F .init 0000000000000000 \_init
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The leftmost column is the memory address of the symbol. The next section represents 7 types of flags that the program can have. For instance, the first row containing the symbol &lt;code&gt;.interpret&lt;/code&gt; has the flags “l” and “d”. The meaning of these can be found in the &lt;code&gt;objdump&lt;/code&gt; &lt;a href=&#34;https://linux.die.net/man/1/objdump&#34;&gt;man page&lt;/a&gt; in the &lt;code&gt;--syms&lt;/code&gt; section. For instance, the flags on &lt;code&gt;.interpret&lt;/code&gt; indicate that the symbol is &lt;strong&gt;l&lt;/strong&gt;ocal (only visible within the object file) and is a &lt;strong&gt;d&lt;/strong&gt;ebugging symbol.&lt;/p&gt;
+&lt;p&gt;The structure of each entry in the symbol table is defined in the header file &lt;code&gt;sys/elf.h&lt;/code&gt; or here:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;typedef struct {  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Elf32\_Word st\_name;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Elf32\_Addr st\_value;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Elf32\_Word st\_size;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; unsigned char st\_info;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; unsigned char st\_other;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Elf32\_Half st\_shndx;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;} Elf32\_Sym;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;typedef struct {  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Elf64\_Word st\_name;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; unsigned char st\_info;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; unsigned char st\_other;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Elf64\_Half st\_shndx;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Elf64\_Addr st\_value;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Elf64\_Xword st\_size;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;} Elf64\_Sym;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;The format of an ELF object file allows for reliable access to important details that aid in program execution such as dynamic linking and storing variables. Tools like &lt;code&gt;objdump&lt;/code&gt; aid in revealing and understanding these pieces of information and the connections between them.&lt;/p&gt;
+&lt;h1 id=&#34;more-reading&#34;&gt;More Reading&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-46512.html#scrolltoc&#34;&gt;Oracle Documentation&lt;/a&gt; on ELF object file format&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://linux.die.net/man/1/objdump&#34;&gt;Objdump Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://linux.die.net/man/1/elf&#34;&gt;Elf Man Page&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      <content:encoded><![CDATA[<p><code>objdump</code> is a command line tool that can be used to gain insight into an executable binary. In this article, the tool will be used to dump all of the headers of the ELF binary <code>heapedit</code> with the command below. Then, we will analyze and explain each section of output from the top to the bottom.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>objdump -x ./heapedit
+</span></span></code></pre></div><p>Executable and Linkable Format (ELF) files are a common file format for object files, executable binaries, core dumps, and shared libraries. It provides a standardized format for storing executable and object code, symbol information, and other metadata necessary for proper software execution. It may be helpful to first get an overview of an ELF file structure which can be seen in this image:</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*1ro_BkQGlcyGrJmG.png" alt=""  />
+
+<em><a href="https://upload.wikimedia.org/wikipedia/commons/e/e4/ELF_Executable_and_Linkable_Format_diagram_by_Ange_Albertini.png">https://upload.wikimedia.org/wikipedia/commons/e/e4/ELF_Executable_and_Linkable_Format_diagram_by_Ange_Albertini.png</a></em></p>
+<h2 id="file-header">File Header</h2>
+<p>The first segment of output displays information from the file header including its file format, architecture, and flags. I’ll sequentially describe what each section means.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>heapedit: file format elf64-x86-64  
+</span></span><span style="display:flex;"><span>heapedit  
+</span></span><span style="display:flex;"><span>architecture: i386:x86-64, flags 0x00000112:  
+</span></span><span style="display:flex;"><span>EXEC\_P, HAS\_SYMS, D\_PAGED  
+</span></span><span style="display:flex;"><span>start address 0x0000000000400720
+</span></span></code></pre></div><ul>
+<li><strong>file format-</strong> <code>elf64-x86–64</code> refers to an ELF file that was designed for 64-bit systems and compiled for the x86–64 architecture.</li>
+<li><strong>architecture</strong>- The architecture <code>i386:x86–64</code> indicates that the program is compatible with the i386 and x86–64 architecture.</li>
+<li><strong>flags 0x00000112</strong>- These flags are Binary File Descriptors (<a href="https://sourceware.org/binutils/docs-2.23.1/bfd/index.html">BFDs</a>). They come from the <code>binutils</code> package which is built into <code>objdump</code> and their meaning can be found in the documentation <a href="http://sourceware.org/binutils/docs-2.23.1/bfd/BFD-front-end.html#BFD-front-end">here</a>. In this example, <code>EXEC_P</code> means the program is directly executable, <code>HAS_SYMS</code> means that the program has a symbol table which helps with debugging, and <code>D_PAGED</code> means that the program’s memory is dynamically paged.</li>
+<li><strong>start address</strong>- The memory address at which the <code>.text</code> section begins, which contains the assembly code of the program.</li>
+</ul>
+<p>This information is obtained by analyzing the raw bytes at the beginning of the file. The specifications for which bits correspond with which pieces of information can be seen <a href="https://en.wikipedia.org/wiki/Executable_and_Linkable_Format">here</a>.</p>
+<h2 id="program-headers">Program Headers</h2>
+<p>The program header (Phdr) is a section that contains necessary information for executing the binary.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Program Header:  
+</span></span><span style="display:flex;"><span> PHDR off 0x0000000000000040 vaddr 0x0000000000400040 paddr 0x0000000000400040 align 2**3  
+</span></span><span style="display:flex;"><span> filesz 0x00000000000001f8 memsz 0x00000000000001f8 flags r--  
+</span></span><span style="display:flex;"><span> INTERP off 0x0000000000000238 vaddr 0x0000000000400238 paddr 0x0000000000400238 align 2**0  
+</span></span><span style="display:flex;"><span> filesz 0x000000000000001c memsz 0x000000000000001c flags r--  
+</span></span><span style="display:flex;"><span> LOAD off 0x0000000000000000 vaddr 0x0000000000400000 paddr 0x0000000000400000 align 2**21  
+</span></span><span style="display:flex;"><span> filesz 0x0000000000000c98 memsz 0x0000000000000c98 flags r-x  
+</span></span><span style="display:flex;"><span> LOAD off 0x0000000000000e00 vaddr 0x0000000000600e00 paddr 0x0000000000600e00 align 2**21  
+</span></span><span style="display:flex;"><span> filesz 0x0000000000000278 memsz 0x0000000000000288 flags rw-  
+</span></span><span style="display:flex;"><span> DYNAMIC off 0x0000000000000e10 vaddr 0x0000000000600e10 paddr 0x0000000000600e10 align 2**3  
+</span></span><span style="display:flex;"><span> filesz 0x00000000000001e0 memsz 0x00000000000001e0 flags rw-  
+</span></span><span style="display:flex;"><span> NOTE off 0x0000000000000254 vaddr 0x0000000000400254 paddr 0x0000000000400254 align 2**2  
+</span></span><span style="display:flex;"><span> filesz 0x0000000000000044 memsz 0x0000000000000044 flags r--  
+</span></span><span style="display:flex;"><span>EH\_FRAME off 0x0000000000000b58 vaddr 0x0000000000400b58 paddr 0x0000000000400b58 align 2**2  
+</span></span><span style="display:flex;"><span> filesz 0x000000000000003c memsz 0x000000000000003c flags r--  
+</span></span><span style="display:flex;"><span> STACK off 0x0000000000000000 vaddr 0x0000000000000000 paddr 0x0000000000000000 align 2**4  
+</span></span><span style="display:flex;"><span> filesz 0x0000000000000000 memsz 0x0000000000000000 flags rw-  
+</span></span><span style="display:flex;"><span> RELRO off 0x0000000000000e00 vaddr 0x0000000000600e00 paddr 0x0000000000600e00 align 2**0  
+</span></span><span style="display:flex;"><span> filesz 0x0000000000000200 memsz 0x0000000000000200 flags r--
+</span></span></code></pre></div><p>Referencing the EL<a href="https://man7.org/linux/man-pages/man5/elf.5.html">F man page</a>, the paraphrased meaning of the different program types (PTs) are below.</p>
+<ul>
+<li><strong>PHDR</strong>- specifies the location and size of the program header table itself.</li>
+<li><strong>INTERP</strong>- specifies the location and size of the program interpreter (dynamic linker) path.</li>
+<li><strong>LOAD</strong>- specifies the location and size of a loadable segment in the binary.</li>
+<li><strong>DYNAMIC</strong>- specifies the location and size of the dynamic linking information.</li>
+<li><strong>NOTE</strong>: specifies the location and size of the ELF note segment (ElfN_Nhdr).</li>
+<li><strong>EH_FRAME</strong>: specifies the location and size of the exception handling frame information.</li>
+<li><strong>STACK</strong>: represents the stack segment, but in this case, it has a size of 0, indicating that it doesn’t occupy any space in the binary.</li>
+<li><strong>RELRO</strong>: specifies the location and size of the Relocation Read-Only (RELRO) area.</li>
+</ul>
+<p>Each program type has its corresponding attributes:</p>
+<ul>
+<li><strong>off</strong>- offset from beginning of file to first byte of the segment</li>
+<li><strong>vaddr</strong>- the virtual address that the first byte of the segment resides in memory</li>
+<li><strong>paddr</strong>- the physical memory address of the first byte of the segment if relevant</li>
+<li><strong>filesz</strong>- holds the number of bytes of the file image of the segment</li>
+<li><strong>memsz</strong>- holds the number of bytes of the memory image of hte segment</li>
+<li><strong>flags</strong>- holds a bitmask of flags describing the read, write, and execute permissions of the segment.</li>
+<li><strong>align</strong>- specifies the desired alignment of the segment or section in memory. It indicates the power of two that should be used as the alignment constraint.</li>
+</ul>
+<p>This table gives an overview of the different sections in memory and where they can be found.</p>
+<h2 id="dynamic-section">Dynamic Section</h2>
+<p>This section contains information about the dynamic linking and runtime symbol resolution of the program. This allows for external libraries to be loaded from disk into memory during the execution of the program.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Dynamic Section:  
+</span></span><span style="display:flex;"><span> NEEDED libc.so.6  
+</span></span><span style="display:flex;"><span> RUNPATH ./  
+</span></span><span style="display:flex;"><span> INIT 0x0000000000400650  
+</span></span><span style="display:flex;"><span> FINI 0x0000000000400af4  
+</span></span><span style="display:flex;"><span> INIT\_ARRAY 0x0000000000600e00  
+</span></span><span style="display:flex;"><span> INIT\_ARRAYSZ 0x0000000000000008  
+</span></span><span style="display:flex;"><span> FINI\_ARRAY 0x0000000000600e08  
+</span></span><span style="display:flex;"><span> FINI\_ARRAYSZ 0x0000000000000008  
+</span></span><span style="display:flex;"><span> GNU\_HASH 0x0000000000400298  
+</span></span><span style="display:flex;"><span> STRTAB 0x0000000000400410  
+</span></span><span style="display:flex;"><span> SYMTAB 0x00000000004002c0  
+</span></span><span style="display:flex;"><span> STRSZ 0x00000000000000a8  
+</span></span><span style="display:flex;"><span> SYMENT 0x0000000000000018  
+</span></span><span style="display:flex;"><span> DEBUG 0x0000000000000000  
+</span></span><span style="display:flex;"><span> PLTGOT 0x0000000000601000  
+</span></span><span style="display:flex;"><span> PLTRELSZ 0x00000000000000f0  
+</span></span><span style="display:flex;"><span> PLTREL 0x0000000000000007  
+</span></span><span style="display:flex;"><span> JMPREL 0x0000000000400560  
+</span></span><span style="display:flex;"><span> RELA 0x0000000000400518  
+</span></span><span style="display:flex;"><span> RELASZ 0x0000000000000048  
+</span></span><span style="display:flex;"><span> RELAENT 0x0000000000000018  
+</span></span><span style="display:flex;"><span> VERNEED 0x00000000004004d8  
+</span></span><span style="display:flex;"><span> VERNEEDNUM 0x0000000000000001  
+</span></span><span style="display:flex;"><span> VERSYM 0x00000000004004b8
+</span></span></code></pre></div><p>In this example, the file <code>libc.so.6</code> needs to be dynamically linked to the program. The ELF man page defines the meaning of the categories on the left column. The right column contains the memory address to store the sections indicated by the left column.</p>
+<p>For example, the ELF man page defines <code>PLTGOT</code>:</p>
+<blockquote>
+<p><strong>DT_PLTGOT</strong> Address of PLT and/or GOT</p>
+</blockquote>
+<p>In the above code block, the address of the Procedure Linkage Table (PLT) and/or Global Offset Table (GOT) table would be stored at the memory address <code>0x0000000000601000</code> as shown by the fact that they are in the same row and the values correspond.</p>
+<h2 id="version-references">Version References</h2>
+<p>This section lists the versions of the dynamically linked libraries that are required for the program to run.</p>
+<p>These versions are determined by the linker and requiring them allows for the program to run properly since the library versions used will be compatible with the Application Binary Interface (ABI).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Version References:  
+</span></span><span style="display:flex;"><span> required from libc.so.6:  
+</span></span><span style="display:flex;"><span> 0x0d696917 0x00 04 GLIBC\_2.7  
+</span></span><span style="display:flex;"><span> 0x0d696914 0x00 03 GLIBC\_2.4  
+</span></span><span style="display:flex;"><span> 0x09691a75 0x00 02 GLIBC\_2.2.5
+</span></span></code></pre></div><p>In this example, the output indicates that the binary depends on 3 different GLIBC versions: 2.7, 2.4, and 2.2.5.</p>
+<h2 id="sections">Sections</h2>
+<p>This segment of output contains information about the memory location and names of various different sections of the program. This information is useful to the linker since it helps with symbol resolution, relocation to ensure that they reference the correct addresses in memory, and more such as pointing to the program’s initialization and finalization routines.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Sections:  
+</span></span><span style="display:flex;"><span>Idx Name Size VMA LMA File off Algn  
+</span></span><span style="display:flex;"><span> 0 .interp 0000001c 0000000000400238 0000000000400238 00000238 2**0  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, READONLY, DATA  
+</span></span><span style="display:flex;"><span> 1 .note.ABI-tag 00000020 0000000000400254 0000000000400254 00000254 2**2  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, READONLY, DATA  
+</span></span><span style="display:flex;"><span> 2 .note.gnu.build-id 00000024 0000000000400274 0000000000400274 00000274 2**2  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, READONLY, DATA  
+</span></span><span style="display:flex;"><span> 3 .gnu.hash 00000024 0000000000400298 0000000000400298 00000298 2**3  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, READONLY, DATA  
+</span></span><span style="display:flex;"><span> 4 .dynsym 00000150 00000000004002c0 00000000004002c0 000002c0 2**3  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, READONLY, DATA  
+</span></span><span style="display:flex;"><span> 5 .dynstr 000000a8 0000000000400410 0000000000400410 00000410 2**0  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, READONLY, DATA  
+</span></span><span style="display:flex;"><span> 6 .gnu.version 0000001c 00000000004004b8 00000000004004b8 000004b8 2**1  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, READONLY, DATA  
+</span></span><span style="display:flex;"><span> 7 .gnu.version\_r 00000040 00000000004004d8 00000000004004d8 000004d8 2**3  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, READONLY, DATA  
+</span></span><span style="display:flex;"><span> 8 .rela.dyn 00000048 0000000000400518 0000000000400518 00000518 2**3  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, READONLY, DATA  
+</span></span><span style="display:flex;"><span> 9 .rela.plt 000000f0 0000000000400560 0000000000400560 00000560 2**3  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, READONLY, DATA  
+</span></span><span style="display:flex;"><span> 10 .init 00000017 0000000000400650 0000000000400650 00000650 2**2  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, READONLY, CODE  
+</span></span><span style="display:flex;"><span> 11 .plt 000000b0 0000000000400670 0000000000400670 00000670 2**4  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, READONLY, CODE  
+</span></span><span style="display:flex;"><span> 12 .text 000003d2 0000000000400720 0000000000400720 00000720 2**4  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, READONLY, CODE  
+</span></span><span style="display:flex;"><span> 13 .fini 00000009 0000000000400af4 0000000000400af4 00000af4 2**2  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, READONLY, CODE  
+</span></span><span style="display:flex;"><span> 14 .rodata 00000057 0000000000400b00 0000000000400b00 00000b00 2**3  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, READONLY, DATA  
+</span></span><span style="display:flex;"><span> 15 .eh\_frame\_hdr 0000003c 0000000000400b58 0000000000400b58 00000b58 2**2  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, READONLY, DATA  
+</span></span><span style="display:flex;"><span> 16 .eh\_frame 00000100 0000000000400b98 0000000000400b98 00000b98 2**3  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, READONLY, DATA  
+</span></span><span style="display:flex;"><span> 17 .init\_array 00000008 0000000000600e00 0000000000600e00 00000e00 2**3  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, DATA  
+</span></span><span style="display:flex;"><span> 18 .fini\_array 00000008 0000000000600e08 0000000000600e08 00000e08 2**3  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, DATA  
+</span></span><span style="display:flex;"><span> 19 .dynamic 000001e0 0000000000600e10 0000000000600e10 00000e10 2**3  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, DATA  
+</span></span><span style="display:flex;"><span> 20 .got 00000010 0000000000600ff0 0000000000600ff0 00000ff0 2**3  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, DATA  
+</span></span><span style="display:flex;"><span> 21 .got.plt 00000068 0000000000601000 0000000000601000 00001000 2**3  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, DATA  
+</span></span><span style="display:flex;"><span> 22 .data 00000010 0000000000601068 0000000000601068 00001068 2**3  
+</span></span><span style="display:flex;"><span> CONTENTS, ALLOC, LOAD, DATA  
+</span></span><span style="display:flex;"><span> 23 .bss 00000010 0000000000601078 0000000000601078 00001078 2**3  
+</span></span><span style="display:flex;"><span> ALLOC  
+</span></span><span style="display:flex;"><span> 24 .comment 00000029 0000000000000000 0000000000000000 00001078 2**0  
+</span></span><span style="display:flex;"><span> CONTENTS, READONLY
+</span></span></code></pre></div><p>Let’s break down the meaning of the new columns:</p>
+<ul>
+<li><strong>Size</strong>: The size of the section in bytes</li>
+<li><strong>VMA</strong>: The virtual memory address that the section will be loaded into during program execution</li>
+<li><strong>LMA</strong>: The load memory address or the memory address that which the section will be loaded in physical memory</li>
+</ul>
+<p>Each of the sections listed in the output serves a particular purpose in the program. For instance, the <code>.bss</code> section contains uninitiated global variables and <code>.gnu_hash</code> is the hash table used for efficient symbol lookup in the dynamic linking process. The full meanings of the different sections can be found <a href="https://refspecs.linuxbase.org/elf/gabi4+/ch4.sheader.html">at this link</a> towards the bottom of the page.</p>
+<blockquote>
+<p>A note on terminology: the ELF file used by the linker are called “sections” and the parts used by the loader are called “segments”.</p>
+</blockquote>
+<h2 id="symbol-table">Symbol Table</h2>
+<p>Finally, the symbol contains information useful for locating and relocating a program’s symbolic definitions and references. It helps in symbol resolution, linking, and debugging.</p>
+<p>Symbols are segments of code or information such as functions and variables that can be reused by the program. A symbol table keeps track of the different symbols and their locations.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>SYMBOL TABLE:  
+</span></span><span style="display:flex;"><span>0000000000400238 l d .interp 0000000000000000 .interp  
+</span></span><span style="display:flex;"><span>0000000000400254 l d .note.ABI-tag 0000000000000000 .note.ABI-tag  
+</span></span><span style="display:flex;"><span>0000000000400274 l d .note.gnu.build-id 0000000000000000 .note.gnu.build-id  
+</span></span><span style="display:flex;"><span>0000000000400298 l d .gnu.hash 0000000000000000 .gnu.hash  
+</span></span><span style="display:flex;"><span>00000000004002c0 l d .dynsym 0000000000000000 .dynsym  
+</span></span><span style="display:flex;"><span>0000000000400410 l d .dynstr 0000000000000000 .dynstr  
+</span></span><span style="display:flex;"><span>00000000004004b8 l d .gnu.version 0000000000000000 .gnu.version  
+</span></span><span style="display:flex;"><span>00000000004004d8 l d .gnu.version\_r 0000000000000000 .gnu.version\_r  
+</span></span><span style="display:flex;"><span>0000000000400518 l d .rela.dyn 0000000000000000 .rela.dyn  
+</span></span><span style="display:flex;"><span>0000000000400560 l d .rela.plt 0000000000000000 .rela.plt  
+</span></span><span style="display:flex;"><span>0000000000400650 l d .init 0000000000000000 .init  
+</span></span><span style="display:flex;"><span>0000000000400670 l d .plt 0000000000000000 .plt  
+</span></span><span style="display:flex;"><span>0000000000400720 l d .text 0000000000000000 .text  
+</span></span><span style="display:flex;"><span>0000000000400af4 l d .fini 0000000000000000 .fini  
+</span></span><span style="display:flex;"><span>0000000000400b00 l d .rodata 0000000000000000 .rodata  
+</span></span><span style="display:flex;"><span>0000000000400b58 l d .eh\_frame\_hdr 0000000000000000 .eh\_frame\_hdr  
+</span></span><span style="display:flex;"><span>0000000000400b98 l d .eh\_frame 0000000000000000 .eh\_frame  
+</span></span><span style="display:flex;"><span>0000000000600e00 l d .init\_array 0000000000000000 .init\_array  
+</span></span><span style="display:flex;"><span>0000000000600e08 l d .fini\_array 0000000000000000 .fini\_array  
+</span></span><span style="display:flex;"><span>0000000000600e10 l d .dynamic 0000000000000000 .dynamic  
+</span></span><span style="display:flex;"><span>0000000000600ff0 l d .got 0000000000000000 .got  
+</span></span><span style="display:flex;"><span>0000000000601000 l d .got.plt 0000000000000000 .got.plt  
+</span></span><span style="display:flex;"><span>0000000000601068 l d .data 0000000000000000 .data  
+</span></span><span style="display:flex;"><span>0000000000601078 l d .bss 0000000000000000 .bss  
+</span></span><span style="display:flex;"><span>0000000000000000 l d .comment 0000000000000000 .comment  
+</span></span><span style="display:flex;"><span>0000000000000000 l df *ABS* 0000000000000000 crtstuff.c  
+</span></span><span style="display:flex;"><span>0000000000400760 l F .text 0000000000000000 deregister\_tm\_clones  
+</span></span><span style="display:flex;"><span>0000000000400790 l F .text 0000000000000000 register\_tm\_clones  
+</span></span><span style="display:flex;"><span>00000000004007d0 l F .text 0000000000000000 \_\_do\_global\_dtors\_aux  
+</span></span><span style="display:flex;"><span>0000000000601080 l O .bss 0000000000000001 completed.7698  
+</span></span><span style="display:flex;"><span>0000000000600e08 l O .fini\_array 0000000000000000 \_\_do\_global\_dtors\_aux\_fini\_array\_entry  
+</span></span><span style="display:flex;"><span>0000000000400800 l F .text 0000000000000000 frame\_dummy  
+</span></span><span style="display:flex;"><span>0000000000600e00 l O .init\_array 0000000000000000 \_\_frame\_dummy\_init\_array\_entry  
+</span></span><span style="display:flex;"><span>0000000000000000 l df *ABS* 0000000000000000 heapedit.c  
+</span></span><span style="display:flex;"><span>0000000000000000 l df *ABS* 0000000000000000 crtstuff.c  
+</span></span><span style="display:flex;"><span>0000000000400c94 l O .eh\_frame 0000000000000000 \_\_FRAME\_END\_\_  
+</span></span><span style="display:flex;"><span>0000000000000000 l df *ABS* 0000000000000000   
+</span></span><span style="display:flex;"><span>0000000000600e08 l .init\_array 0000000000000000 \_\_init\_array\_end  
+</span></span><span style="display:flex;"><span>0000000000600e10 l O .dynamic 0000000000000000 \_DYNAMIC  
+</span></span><span style="display:flex;"><span>0000000000600e00 l .init\_array 0000000000000000 \_\_init\_array\_start  
+</span></span><span style="display:flex;"><span>0000000000400b58 l .eh\_frame\_hdr 0000000000000000 \_\_GNU\_EH\_FRAME\_HDR  
+</span></span><span style="display:flex;"><span>0000000000601000 l O .got.plt 0000000000000000 \_GLOBAL\_OFFSET\_TABLE\_  
+</span></span><span style="display:flex;"><span>0000000000400af0 g F .text 0000000000000002 \_\_libc\_csu\_fini  
+</span></span><span style="display:flex;"><span>0000000000000000 F *UND* 0000000000000000 free@@GLIBC\_2.2.5  
+</span></span><span style="display:flex;"><span>0000000000601078 g O .bss 0000000000000008 stdout@@GLIBC\_2.2.5  
+</span></span><span style="display:flex;"><span>0000000000601068 w .data 0000000000000000 data\_start  
+</span></span><span style="display:flex;"><span>0000000000000000 F *UND* 0000000000000000 puts@@GLIBC\_2.2.5  
+</span></span><span style="display:flex;"><span>0000000000601078 g .data 0000000000000000 \_edata  
+</span></span><span style="display:flex;"><span>0000000000400af4 g F .fini 0000000000000000 \_fini  
+</span></span><span style="display:flex;"><span>0000000000000000 F *UND* 0000000000000000 \_\_stack\_chk\_fail@@GLIBC\_2.4  
+</span></span><span style="display:flex;"><span>0000000000000000 F *UND* 0000000000000000 setbuf@@GLIBC\_2.2.5  
+</span></span><span style="display:flex;"><span>0000000000000000 F *UND* 0000000000000000 printf@@GLIBC\_2.2.5  
+</span></span><span style="display:flex;"><span>0000000000000000 F *UND* 0000000000000000 \_\_libc\_start\_main@@GLIBC\_2.2.5  
+</span></span><span style="display:flex;"><span>0000000000000000 F *UND* 0000000000000000 fgets@@GLIBC\_2.2.5  
+</span></span><span style="display:flex;"><span>0000000000601068 g .data 0000000000000000 \_\_data\_start  
+</span></span><span style="display:flex;"><span>0000000000000000 w *UND* 0000000000000000 \_\_gmon\_start\_\_  
+</span></span><span style="display:flex;"><span>0000000000601070 g O .data 0000000000000000 .hidden \_\_dso\_handle  
+</span></span><span style="display:flex;"><span>0000000000400b00 g O .rodata 0000000000000004 \_IO\_stdin\_used  
+</span></span><span style="display:flex;"><span>0000000000400a80 g F .text 0000000000000065 \_\_libc\_csu\_init  
+</span></span><span style="display:flex;"><span>0000000000000000 F *UND* 0000000000000000 malloc@@GLIBC\_2.2.5  
+</span></span><span style="display:flex;"><span>0000000000601088 g .bss 0000000000000000 \_end  
+</span></span><span style="display:flex;"><span>0000000000400750 g F .text 0000000000000002 .hidden \_dl\_relocate\_static\_pie  
+</span></span><span style="display:flex;"><span>0000000000400720 g F .text 000000000000002b \_start  
+</span></span><span style="display:flex;"><span>0000000000601078 g .bss 0000000000000000 \_\_bss\_start  
+</span></span><span style="display:flex;"><span>0000000000400807 g F .text 0000000000000277 main  
+</span></span><span style="display:flex;"><span>0000000000000000 F *UND* 0000000000000000 fopen@@GLIBC\_2.2.5  
+</span></span><span style="display:flex;"><span>0000000000000000 F *UND* 0000000000000000 \_\_isoc99\_scanf@@GLIBC\_2.7  
+</span></span><span style="display:flex;"><span>0000000000000000 F *UND* 0000000000000000 strcat@@GLIBC\_2.2.5  
+</span></span><span style="display:flex;"><span>0000000000601078 g O .data 0000000000000000 .hidden \_\_TMC\_END\_\_  
+</span></span><span style="display:flex;"><span>0000000000400650 g F .init 0000000000000000 \_init
+</span></span></code></pre></div><p>The leftmost column is the memory address of the symbol. The next section represents 7 types of flags that the program can have. For instance, the first row containing the symbol <code>.interpret</code> has the flags “l” and “d”. The meaning of these can be found in the <code>objdump</code> <a href="https://linux.die.net/man/1/objdump">man page</a> in the <code>--syms</code> section. For instance, the flags on <code>.interpret</code> indicate that the symbol is <strong>l</strong>ocal (only visible within the object file) and is a <strong>d</strong>ebugging symbol.</p>
+<p>The structure of each entry in the symbol table is defined in the header file <code>sys/elf.h</code> or here:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>typedef struct {  
+</span></span><span style="display:flex;"><span> Elf32\_Word st\_name;  
+</span></span><span style="display:flex;"><span> Elf32\_Addr st\_value;  
+</span></span><span style="display:flex;"><span> Elf32\_Word st\_size;  
+</span></span><span style="display:flex;"><span> unsigned char st\_info;  
+</span></span><span style="display:flex;"><span> unsigned char st\_other;  
+</span></span><span style="display:flex;"><span> Elf32\_Half st\_shndx;  
+</span></span><span style="display:flex;"><span>} Elf32\_Sym;  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>typedef struct {  
+</span></span><span style="display:flex;"><span> Elf64\_Word st\_name;  
+</span></span><span style="display:flex;"><span> unsigned char st\_info;  
+</span></span><span style="display:flex;"><span> unsigned char st\_other;  
+</span></span><span style="display:flex;"><span> Elf64\_Half st\_shndx;  
+</span></span><span style="display:flex;"><span> Elf64\_Addr st\_value;  
+</span></span><span style="display:flex;"><span> Elf64\_Xword st\_size;  
+</span></span><span style="display:flex;"><span>} Elf64\_Sym;
+</span></span></code></pre></div><h2 id="conclusion">Conclusion</h2>
+<p>The format of an ELF object file allows for reliable access to important details that aid in program execution such as dynamic linking and storing variables. Tools like <code>objdump</code> aid in revealing and understanding these pieces of information and the connections between them.</p>
+<h1 id="more-reading">More Reading</h1>
+<ul>
+<li><a href="https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-46512.html#scrolltoc">Oracle Documentation</a> on ELF object file format</li>
+<li><a href="https://linux.die.net/man/1/objdump">Objdump Documentation</a></li>
+<li><a href="https://linux.die.net/man/1/elf">Elf Man Page</a></li>
+</ul>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>5 Ways I Found Your Deleted Files</title>
+      <link>http://localhost:1313/ally-petitt/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</link>
+      <pubDate>Sat, 13 May 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</guid>
+      <description>&lt;h2 id=&#34;computer-forensics-for-filerecovery&#34;&gt;Computer Forensics for File Recovery&lt;/h2&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*MnBiAcwiwaFGOOAe.jpg&#34; alt=&#34;&#34;  /&gt;
+
+&lt;em&gt;&lt;a href=&#34;https://edgy.app/wp-content/uploads/2018/04/dataleakhackerGorodenkoff-970x546.jpg&#34;&gt;https://edgy.app/wp-content/uploads/2018/04/dataleakhackerGorodenkoff-970x546.jpg&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;When a file is “deleted”, its contents aren’t typically erased from the storage device that it was stored on. More often than not, the blocks that stored the file are marked as unallocated and the filesystem pointers are removed from it. The implication is that the file still exists on the disk until it is overwritten.&lt;/p&gt;
+&lt;p&gt;There are many methods to recovering the raw, unallocated data. &lt;a href=&#34;https://forensics.wiki/tools_data_recovery/&#34;&gt;This website&lt;/a&gt; lists many tools that can be used for file recovery in different scenarios. In this article, I’ll be walking through 5 different tools that can be used to recover data.&lt;/p&gt;
+&lt;h1 id=&#34;setup&#34;&gt;Setup&lt;/h1&gt;
+&lt;p&gt;I’ll be using doing forensic analysis on a drive that I created and attached to my Kali Linux VM. To see how this is done, you can reference &lt;a href=&#34;https://opensource.com/article/19/4/create-filesystem-linux-partition&#34;&gt;this article&lt;/a&gt;. On this drive, I saved and then deleted an image file and text file.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*HRHkhSM5bBjI9ouCYNpU4w.png&#34; alt=&#34;Image of commands I used to set up file system for forensic analysis&#34;  /&gt;
+
+I’ll start by doing general enumeration on the disk image. Then, I’ll showcase a variety of file recovery techniques used by forensic analysts that allowed me to recover the deleted files. Many of the tools used will be from the &lt;a href=&#34;http://sleuthkit.org/sleuthkit&#34;&gt;Sleuth Kit&lt;/a&gt; (TSK).&lt;/p&gt;
+&lt;p&gt;Before starting, I’ll unmount the filesystem, create a duplicate of it, remove write permissions from the duplicate, and verify the integrity of the duplicate against the original hash of &lt;code&gt;/dev/sdb&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ cd ../ &amp;amp;&amp;amp; umount /mnt/secret # unmount /mnt/secret  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ dd if=/dev/sdb of=/home/kali/forensics/sdb.img # copy /dev/sdb into sdb.img  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;22286+0 records in  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;22286+0 records out  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;11410432 bytes (11 MB, 11 MiB) copied, 0.0412053 s, 277 MB/s  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ chmod a-w /home/kali/forensics/sdb.img # remove write access to the image  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ md5sum /home/kali/forensics/sdb.img /dev/sdb  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;6c49fb21916d59e0df69453959392e23 /home/kali/forensics/sdb.img  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;6c49fb21916d59e0df69453959392e23 /dev/sdb
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;enumeration&#34;&gt;Enumeration&lt;/h1&gt;
+&lt;h2 id=&#34;image-analysis&#34;&gt;Image Analysis&lt;/h2&gt;
+&lt;p&gt;Using the &lt;code&gt;file&lt;/code&gt; command reveals that the image uses an ext4 file system.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*4gowWgQfJ4J1FXwjFHjhQg.png&#34; alt=&#34;&#34;  /&gt;
+
+Furthermore, the &lt;code&gt;stat&lt;/code&gt; command displays information about the image such as its size, time stamps, and block details.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*_T8VXPuyfnuQ7Rm5WNIOsQ.png&#34; alt=&#34;output of the stat command&#34;  /&gt;
+
+With the information that the image uses ext4, the &lt;code&gt;fsstat&lt;/code&gt; command can be used to extract more detailed information about the file system, metadata, content data, and block groups.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ fsstat -f ext4 sdb.img   
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;FILE SYSTEM INFORMATION  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;--------------------------------------------  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;File System Type: Ext4  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Volume Name:   
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Volume ID: dc8a4fb36dce8eabee4c51cf01c2d52a  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Last Written at: 2023-05-09 22:35:31 (EDT)  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Last Checked at: 2023-05-09 22:23:26 (EDT)  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Last Mounted at: 2023-05-09 22:24:27 (EDT)  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Unmounted properly  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Last mounted on: /mnt/secret  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Source OS: Linux  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Dynamic Structure  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Compat Features: Journal, Ext Attributes, Resize Inode, Dir Index  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;InCompat Features: Filetype, Extents, 64bit, Flexible Block Groups,   
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Read Only Compat Features: Sparse Super, Large File, Huge File, Extra Inode Size  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Journal ID: 00  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Journal Inode: 8  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;METADATA INFORMATION  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;--------------------------------------------  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Inode Range: 1 - 2785  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Root Directory: 2  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Free Inodes: 2773  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Inode Size: 256  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;CONTENT INFORMATION  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;--------------------------------------------  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Block Groups Per Flex Group: 16  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Block Range: 0 - 11139  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Block Size: 1024  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Reserved Blocks Before Block Groups: 1  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Free Blocks: 9223  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;BLOCK GROUP INFORMATION  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;--------------------------------------------  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Number of Block Groups: 2  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Inodes per group: 1392  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Blocks per group: 8192  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Group: 0:  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Block Group Flags: [INODE\_ZEROED]   
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Inode Range: 1 - 1392  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Block Range: 1 - 8192  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Layout:  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Super Block: 1 - 1  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Group Descriptor Table: 2 - 2  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Group Descriptor Growth Blocks: 3 - 89  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Data bitmap: 90 - 90  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Inode bitmap: 92 - 92  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Inode Table: 94 - 441  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Uninit Data Bitmaps: 92 - 105  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Uninit Inode Bitmaps: 94 - 107  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Uninit Inode Table: 790 - 5661  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Data Blocks: 5690 - 8192  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Free Inodes: 1381 (99%)  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Free Blocks: 6365 (77%)  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Total Directories: 2  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Stored Checksum: 0x7DEB  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Group: 1:  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Block Group Flags: [INODE\_UNINIT, INODE\_ZEROED]   
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Inode Range: 1393 - 2784  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Block Range: 8193 - 11139  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Layout:  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Super Block: 8193 - 8193  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Group Descriptor Table: 8194 - 8194  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Group Descriptor Growth Blocks: 8195 - 8281  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Data bitmap: 91 - 91  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Inode bitmap: 93 - 93  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Inode Table: 442 - 789  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Data Blocks: 8282 - 11139  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Free Inodes: 1392 (100%)  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Free Blocks: 2858 (96%)  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Total Directories: 0  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; Stored Checksum: 0xDFA7
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Based on this output, it is clear that the block size is 1024 bits, there are 1113 total blocks, and there are 2785 inodes.&lt;/p&gt;
+&lt;p&gt;In addition, &lt;code&gt;parted&lt;/code&gt; can be used to find more information on the partition table, which can be useful when using scalpel.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*EAJIlLWQ5g3rEgqc5nPNbQ.png&#34; alt=&#34;&#34;  /&gt;
+
+Finally, running &lt;code&gt;strings&lt;/code&gt; on the image gives more insight as to what is in the filesystem. It appears that my &lt;code&gt;secret.txt&lt;/code&gt; file with the contents &lt;code&gt;Hello World&lt;/code&gt; is appearing from the &lt;code&gt;strings&lt;/code&gt; command in addition to a failed image download attempt.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*hINgjWeGy7ttVHl1qDs1EQ.png&#34; alt=&#34;&#34;  /&gt;
+
+In the command &lt;code&gt;strings -a --radix=d sdb.img&lt;/code&gt;, &lt;code&gt;-a&lt;/code&gt; is an option to scan the entire file and &lt;code&gt;--radix=d&lt;/code&gt; tells &lt;code&gt;strings&lt;/code&gt; to show the offset that the string was found at in base 10.&lt;/p&gt;
+&lt;h2 id=&#34;analyzing-thefiles&#34;&gt;Analyzing the Files&lt;/h2&gt;
+&lt;p&gt;This particular image does not have any files currently in it aside from deleted files, so there isn’t much information to gain from mounting it and analyzing the files. In cases where it is desireable to do so, the following command can be used:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ mount -o ro,loop,noexec,noatime sdb.img
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Below, I’ll explain what the options do:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-o&lt;/code&gt;: sets the options for mounting &lt;code&gt;sdb.img&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ro&lt;/strong&gt;: an option to mount the file system as being read-only&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;loop&lt;/strong&gt;: mount the file system on a loop device&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;noexec&lt;/strong&gt;: disallow execution&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;noatime&lt;/strong&gt;: don’t change the access time of the files&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;You can then continue to run &lt;code&gt;file&lt;/code&gt; on the files within the mounted loop device and save their md5 hashes to verify integrity.&lt;/p&gt;
+&lt;h1 id=&#34;recovering-thefiles&#34;&gt;Recovering the Files&lt;/h1&gt;
+&lt;h2 id=&#34;method-1-using-sleuthkithttpsleuthkitorgsleuthkit&#34;&gt;Method 1: Using &lt;a href=&#34;http://sleuthkit.org/sleuthkit/&#34;&gt;Sleuth Kit&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Often, if you have deleted files, they may be displayed with &lt;code&gt;fls sdb.img&lt;/code&gt;, enumerated with &lt;code&gt;istat -o &amp;lt;offset&amp;gt; sdb.img &amp;lt;inode_number&amp;gt;&lt;/code&gt;, and recovered with &lt;code&gt;icat -o &amp;lt;offset&amp;gt; sdb.img &amp;lt;inode_number&amp;gt;&lt;/code&gt;. An example of the latter 2 steps are shown in the screenshot below.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*mc44fgKV8os0qCVpYYZiJQ.png&#34; alt=&#34;&#34;  /&gt;
+
+&lt;em&gt;&lt;a href=&#34;https://www.therootuser.com/wp-content/uploads/2017/11/Screenshot-2017-11-07-17.27.58.png&#34;&gt;https://www.therootuser.com/wp-content/uploads/2017/11/Screenshot-2017-11-07-17.27.58.png&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;This does not appear to be the case for me, however. My deleted files are not appearing from the &lt;code&gt;fls&lt;/code&gt; command. Instead, I see a variable called &lt;code&gt;$OrphanFiles&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*hQXtm0cZ7wge3IgQlexR-Q.png&#34; alt=&#34;&#34;  /&gt;
+
+&lt;code&gt;$OrphanFiles&lt;/code&gt; are files that still exist in the image, but are no longer able to be accessed from the root directory. &lt;code&gt;$OrphanFiles&lt;/code&gt; is not an actual directory on the image, it is Sleuth Kit’s virtual way to demonstrate that the file metadata still exists (&lt;a href=&#34;https://wiki.sleuthkit.org/index.php?title=Orphan_Files&#34;&gt;read more&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;To recover these orphan files, I will attempt a few techniques starting with &lt;code&gt;extundelete&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;method-2-extundeletehttpsextundeletesourceforgenet&#34;&gt;Method 2: &lt;a href=&#34;https://extundelete.sourceforge.net/&#34;&gt;Extundelete&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;This tool can be used to recover files on ext3 and ext4 filesystems. I was having some difficulties with the build from &lt;code&gt;apt&lt;/code&gt;, so I build the program from source with the following commands to it working again:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;apt update &amp;amp;&amp;amp; apt install -y libext2fs-dev   
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git clone https://github.com/cherojeong/extundelete.git  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./configure  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;make  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;src/extundelete --restore-all /path/to/image.img
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;os &amp;lt;&amp;lt; “Directory ACL: “ &amp;lt;&amp;lt; inode.i_dir_acl &amp;lt;&amp;lt; std::endl;&lt;/code&gt; with &lt;code&gt;os &amp;lt;&amp;lt; “Directory ACL: “ &amp;lt;&amp;lt; inode.i_file_acl &amp;lt;&amp;lt; std::endl;&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The command &lt;code&gt;extundelete --restore-all sdb.img&lt;/code&gt; can be used to recover files.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*Ipv-ABMSCpXNtc6PZT5zqQ.png&#34; alt=&#34;&#34;  /&gt;
+
+As you can see in the screenshot above, the tool was unsuccessful in recovering the orphan files. This is still a viable option that can work in many scenarios which is why I decided to include it in this article.&lt;/p&gt;
+&lt;p&gt;I’m not giving up yet. We’ll try again!&lt;/p&gt;
+&lt;h2 id=&#34;method-3testdiskhttpswwwcgsecurityorgwikitestdisk&#34;&gt;Method 3: &lt;a href=&#34;https://www.cgsecurity.org/wiki/TestDisk&#34;&gt;TestDisk&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The &lt;code&gt;.tar.bz&lt;/code&gt; file can be downloaded &lt;a href=&#34;https://www.cgsecurity.org/wiki/TestDisk_Download&#34;&gt;here&lt;/a&gt;. I’m using version 7.2. Note that in order for &lt;code&gt;TestDisk&lt;/code&gt; to work, you must run it in the download directory. Otherwise you might get an error like &lt;code&gt;*** Error in &lt;/code&gt;/path/to/testdisk-7.2-WIP/photorec_static&amp;rsquo;: malloc(): memory corruption: 0x0000000002617d29 ***`.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;# extract and run the file  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tar -xf testdisk-7.2-WIP.linux26-x86\_64.tar.bz2  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cd testdisk-7.2-WIP  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./photorec\_static /path/to/sdb.img /log 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;A help menu will appear. I’ll first select the image that I want to work with.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*vEuqI7RnAWsvLfrH9n88Pw.png&#34; alt=&#34;&#34;  /&gt;
+
+Then, I select the option for the partition table for the media. Mine does not have one, so I choose “None”. I verified that this was the only option that was able to list files for me.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*c5iJeI2oyLMdmRu_bBD5Qg.png&#34; alt=&#34;&#34;  /&gt;
+
+After this, I navigate to the “List” option at the bottom of the terminal and press &lt;code&gt;Enter&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*jl17is949wOoNF0JEzBcIg.png&#34; alt=&#34;&#34;  /&gt;
+
+This leads me to the listing of the files on the image with the successfully recovered ones in &lt;strong&gt;red&lt;/strong&gt; text.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*yYQEslxR1RWkUbkEX743Bg.png&#34; alt=&#34;&#34;  /&gt;
+
+As you can see in the screenshot, there are no new files there listed in red. This means that &lt;code&gt;TestDisk&lt;/code&gt; was unsuccessful in recovering the deleted files.&lt;/p&gt;
+&lt;p&gt;It’s okay, I still got a few more tricks up my sleeve.&lt;/p&gt;
+&lt;h2 id=&#34;method-4foremosthttpssourceforgenetprojectsforemost&#34;&gt;Method 4: &lt;a href=&#34;https://sourceforge.net/projects/foremost/&#34;&gt;Foremost&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Foremost can be installed with &lt;code&gt;apt&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt install foremost
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This tool uses a technique known as &lt;strong&gt;file carving&lt;/strong&gt; which involves searching through the raw data on a disk and carving out the values between the header and/or footer of the file.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*ayacIY6WQdxAYksd_nwT8g.png&#34; alt=&#34;&#34;  /&gt;
+
+Alas, we were able to recover a deleted image file from the drive with &lt;code&gt;foremost -t jpeg -o recovered-files -i sdb.img&lt;/code&gt;. The recovered image renders as expected in the Image Viewer. What a pretty camp fire.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*kA2aubO7prDBFW9Xx0cGvQ.png&#34; alt=&#34;&#34;  /&gt;
+
+The fact that this worked while the previous 3 methods did not further demonstrates that different tools and techniques will be more effective at data recovery in different scenarios.&lt;/p&gt;
+&lt;p&gt;It’s also worth mentioning that you can edit the &lt;code&gt;/etc/foremost.conf&lt;/code&gt; file to contain your own custom headers and footers for the file you are looking for. Modifying these values will be explored in the next and final method.&lt;/p&gt;
+&lt;h2 id=&#34;method-5scalpelhttpsgithubcomsleuthkitscalpel&#34;&gt;Method 5: &lt;a href=&#34;https://github.com/sleuthkit/scalpel&#34;&gt;Scalpel&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Scalpel is much like Foremost with added flexibility. You are not as limited on the file types and headers, although there is a way to modify foremost to have the same customization that scalpel provides.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt install scalpel  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cp /etc/scalpel/scalpel.conf .  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;vim scalpel.conf
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;I’ll edit the config with the bit of background information that I have. I know that I’m attempting to recover a JPEG file and I also know that there was a text file that began with the word “Hello”. By using &lt;code&gt;xxd&lt;/code&gt;, I can determine the file headers for a &lt;code&gt;.txt&lt;/code&gt; file starting with the word “Hello”. In this case, it would be &lt;code&gt;\x48\x65\x6c\x6c\x6f&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ echo -n Hello | xxd   
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000000: 4865 6c6c 6f Hello.
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We will use this information to update the &lt;code&gt;scalpel.conf&lt;/code&gt; file in &lt;code&gt;vim&lt;/code&gt;. As explained in the comments at the top of the config file, the first column indicates the file extension. The second is whether the header and footer are case sensitive, the third is the header in hexadecimal bytes, the fourth column is an optional footer, and the fifth column is an optional parameter to search backwards from the header rather than just forward.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*Y6kTU1JxILxivTOYbHN5tQ.png&#34; alt=&#34;&#34;  /&gt;
+
+With these options set, &lt;code&gt;scalpel&lt;/code&gt; can now be ran to extract these files from the drive.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;scalpel -o recovered-files\_scalpel -c scalpel.conf sdb.img
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*O3huS4-S2BausvT-s2KiYw.png&#34; alt=&#34;&#34;  /&gt;
+
+It appears that the text file was successfully recovered.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*jASCyrkTBYVfhWQxZkk3lg.png&#34; alt=&#34;&#34;  /&gt;
+
+The image was recovered as well.&lt;/p&gt;
+&lt;h1 id=&#34;conclusion&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*5ixUUenRR50lIavpZ0oyIw.png&#34; alt=&#34;&#34;  /&gt;
+
+Conclusion&lt;/h1&gt;
+&lt;p&gt;There’s many ways to achieve the same outcome. The different tools showcased here have their specific applications where they perform best. Even though not all the methods outlined here worked for my particular situation, that doesn’t mean they won’t work for you. There are many factors that determine whether file recovery will be successful including the partitioning table type, how long it has been since they were deleted, the size of the file (smaller files are more likely to be recovered), the health of the storage device, and the operations that have been done on the drive since deleting the files such as reformatting the drive.&lt;/p&gt;
+&lt;p&gt;I hope that through reading this article, you were able to deepen your understanding of file recovery and gain practical knowledge that you can apply in the real world. Thanks for reading and I’ll see you next time.&lt;/p&gt;
+</description>
+      <content:encoded><![CDATA[<h2 id="computer-forensics-for-filerecovery">Computer Forensics for File Recovery</h2>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*MnBiAcwiwaFGOOAe.jpg" alt=""  />
+
+<em><a href="https://edgy.app/wp-content/uploads/2018/04/dataleakhackerGorodenkoff-970x546.jpg">https://edgy.app/wp-content/uploads/2018/04/dataleakhackerGorodenkoff-970x546.jpg</a></em></p>
+<h1 id="introduction">Introduction</h1>
+<p>When a file is “deleted”, its contents aren’t typically erased from the storage device that it was stored on. More often than not, the blocks that stored the file are marked as unallocated and the filesystem pointers are removed from it. The implication is that the file still exists on the disk until it is overwritten.</p>
+<p>There are many methods to recovering the raw, unallocated data. <a href="https://forensics.wiki/tools_data_recovery/">This website</a> lists many tools that can be used for file recovery in different scenarios. In this article, I’ll be walking through 5 different tools that can be used to recover data.</p>
+<h1 id="setup">Setup</h1>
+<p>I’ll be using doing forensic analysis on a drive that I created and attached to my Kali Linux VM. To see how this is done, you can reference <a href="https://opensource.com/article/19/4/create-filesystem-linux-partition">this article</a>. On this drive, I saved and then deleted an image file and text file.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*HRHkhSM5bBjI9ouCYNpU4w.png" alt="Image of commands I used to set up file system for forensic analysis"  />
+
+I’ll start by doing general enumeration on the disk image. Then, I’ll showcase a variety of file recovery techniques used by forensic analysts that allowed me to recover the deleted files. Many of the tools used will be from the <a href="http://sleuthkit.org/sleuthkit">Sleuth Kit</a> (TSK).</p>
+<p>Before starting, I’ll unmount the filesystem, create a duplicate of it, remove write permissions from the duplicate, and verify the integrity of the duplicate against the original hash of <code>/dev/sdb</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>$ cd ../ &amp;&amp; umount /mnt/secret # unmount /mnt/secret  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>$ dd if=/dev/sdb of=/home/kali/forensics/sdb.img # copy /dev/sdb into sdb.img  
+</span></span><span style="display:flex;"><span>22286+0 records in  
+</span></span><span style="display:flex;"><span>22286+0 records out  
+</span></span><span style="display:flex;"><span>11410432 bytes (11 MB, 11 MiB) copied, 0.0412053 s, 277 MB/s  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>$ chmod a-w /home/kali/forensics/sdb.img # remove write access to the image  
+</span></span><span style="display:flex;"><span>   
+</span></span><span style="display:flex;"><span>$ md5sum /home/kali/forensics/sdb.img /dev/sdb  
+</span></span><span style="display:flex;"><span>6c49fb21916d59e0df69453959392e23 /home/kali/forensics/sdb.img  
+</span></span><span style="display:flex;"><span>6c49fb21916d59e0df69453959392e23 /dev/sdb
+</span></span></code></pre></div><h1 id="enumeration">Enumeration</h1>
+<h2 id="image-analysis">Image Analysis</h2>
+<p>Using the <code>file</code> command reveals that the image uses an ext4 file system.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*4gowWgQfJ4J1FXwjFHjhQg.png" alt=""  />
+
+Furthermore, the <code>stat</code> command displays information about the image such as its size, time stamps, and block details.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*_T8VXPuyfnuQ7Rm5WNIOsQ.png" alt="output of the stat command"  />
+
+With the information that the image uses ext4, the <code>fsstat</code> command can be used to extract more detailed information about the file system, metadata, content data, and block groups.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>$ fsstat -f ext4 sdb.img   
+</span></span><span style="display:flex;"><span>FILE SYSTEM INFORMATION  
+</span></span><span style="display:flex;"><span>--------------------------------------------  
+</span></span><span style="display:flex;"><span>File System Type: Ext4  
+</span></span><span style="display:flex;"><span>Volume Name:   
+</span></span><span style="display:flex;"><span>Volume ID: dc8a4fb36dce8eabee4c51cf01c2d52a  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>Last Written at: 2023-05-09 22:35:31 (EDT)  
+</span></span><span style="display:flex;"><span>Last Checked at: 2023-05-09 22:23:26 (EDT)  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>Last Mounted at: 2023-05-09 22:24:27 (EDT)  
+</span></span><span style="display:flex;"><span>Unmounted properly  
+</span></span><span style="display:flex;"><span>Last mounted on: /mnt/secret  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>Source OS: Linux  
+</span></span><span style="display:flex;"><span>Dynamic Structure  
+</span></span><span style="display:flex;"><span>Compat Features: Journal, Ext Attributes, Resize Inode, Dir Index  
+</span></span><span style="display:flex;"><span>InCompat Features: Filetype, Extents, 64bit, Flexible Block Groups,   
+</span></span><span style="display:flex;"><span>Read Only Compat Features: Sparse Super, Large File, Huge File, Extra Inode Size  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>Journal ID: 00  
+</span></span><span style="display:flex;"><span>Journal Inode: 8  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>METADATA INFORMATION  
+</span></span><span style="display:flex;"><span>--------------------------------------------  
+</span></span><span style="display:flex;"><span>Inode Range: 1 - 2785  
+</span></span><span style="display:flex;"><span>Root Directory: 2  
+</span></span><span style="display:flex;"><span>Free Inodes: 2773  
+</span></span><span style="display:flex;"><span>Inode Size: 256  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>CONTENT INFORMATION  
+</span></span><span style="display:flex;"><span>--------------------------------------------  
+</span></span><span style="display:flex;"><span>Block Groups Per Flex Group: 16  
+</span></span><span style="display:flex;"><span>Block Range: 0 - 11139  
+</span></span><span style="display:flex;"><span>Block Size: 1024  
+</span></span><span style="display:flex;"><span>Reserved Blocks Before Block Groups: 1  
+</span></span><span style="display:flex;"><span>Free Blocks: 9223  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>BLOCK GROUP INFORMATION  
+</span></span><span style="display:flex;"><span>--------------------------------------------  
+</span></span><span style="display:flex;"><span>Number of Block Groups: 2  
+</span></span><span style="display:flex;"><span>Inodes per group: 1392  
+</span></span><span style="display:flex;"><span>Blocks per group: 8192  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>Group: 0:  
+</span></span><span style="display:flex;"><span> Block Group Flags: [INODE\_ZEROED]   
+</span></span><span style="display:flex;"><span> Inode Range: 1 - 1392  
+</span></span><span style="display:flex;"><span> Block Range: 1 - 8192  
+</span></span><span style="display:flex;"><span> Layout:  
+</span></span><span style="display:flex;"><span> Super Block: 1 - 1  
+</span></span><span style="display:flex;"><span> Group Descriptor Table: 2 - 2  
+</span></span><span style="display:flex;"><span> Group Descriptor Growth Blocks: 3 - 89  
+</span></span><span style="display:flex;"><span> Data bitmap: 90 - 90  
+</span></span><span style="display:flex;"><span> Inode bitmap: 92 - 92  
+</span></span><span style="display:flex;"><span> Inode Table: 94 - 441  
+</span></span><span style="display:flex;"><span> Uninit Data Bitmaps: 92 - 105  
+</span></span><span style="display:flex;"><span> Uninit Inode Bitmaps: 94 - 107  
+</span></span><span style="display:flex;"><span> Uninit Inode Table: 790 - 5661  
+</span></span><span style="display:flex;"><span> Data Blocks: 5690 - 8192  
+</span></span><span style="display:flex;"><span> Free Inodes: 1381 (99%)  
+</span></span><span style="display:flex;"><span> Free Blocks: 6365 (77%)  
+</span></span><span style="display:flex;"><span> Total Directories: 2  
+</span></span><span style="display:flex;"><span> Stored Checksum: 0x7DEB  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>Group: 1:  
+</span></span><span style="display:flex;"><span> Block Group Flags: [INODE\_UNINIT, INODE\_ZEROED]   
+</span></span><span style="display:flex;"><span> Inode Range: 1393 - 2784  
+</span></span><span style="display:flex;"><span> Block Range: 8193 - 11139  
+</span></span><span style="display:flex;"><span> Layout:  
+</span></span><span style="display:flex;"><span> Super Block: 8193 - 8193  
+</span></span><span style="display:flex;"><span> Group Descriptor Table: 8194 - 8194  
+</span></span><span style="display:flex;"><span> Group Descriptor Growth Blocks: 8195 - 8281  
+</span></span><span style="display:flex;"><span> Data bitmap: 91 - 91  
+</span></span><span style="display:flex;"><span> Inode bitmap: 93 - 93  
+</span></span><span style="display:flex;"><span> Inode Table: 442 - 789  
+</span></span><span style="display:flex;"><span> Data Blocks: 8282 - 11139  
+</span></span><span style="display:flex;"><span> Free Inodes: 1392 (100%)  
+</span></span><span style="display:flex;"><span> Free Blocks: 2858 (96%)  
+</span></span><span style="display:flex;"><span> Total Directories: 0  
+</span></span><span style="display:flex;"><span> Stored Checksum: 0xDFA7
+</span></span></code></pre></div><p>Based on this output, it is clear that the block size is 1024 bits, there are 1113 total blocks, and there are 2785 inodes.</p>
+<p>In addition, <code>parted</code> can be used to find more information on the partition table, which can be useful when using scalpel.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*EAJIlLWQ5g3rEgqc5nPNbQ.png" alt=""  />
+
+Finally, running <code>strings</code> on the image gives more insight as to what is in the filesystem. It appears that my <code>secret.txt</code> file with the contents <code>Hello World</code> is appearing from the <code>strings</code> command in addition to a failed image download attempt.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*hINgjWeGy7ttVHl1qDs1EQ.png" alt=""  />
+
+In the command <code>strings -a --radix=d sdb.img</code>, <code>-a</code> is an option to scan the entire file and <code>--radix=d</code> tells <code>strings</code> to show the offset that the string was found at in base 10.</p>
+<h2 id="analyzing-thefiles">Analyzing the Files</h2>
+<p>This particular image does not have any files currently in it aside from deleted files, so there isn’t much information to gain from mounting it and analyzing the files. In cases where it is desireable to do so, the following command can be used:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>$ mount -o ro,loop,noexec,noatime sdb.img
+</span></span></code></pre></div><p>Below, I’ll explain what the options do:</p>
+<ul>
+<li><code>-o</code>: sets the options for mounting <code>sdb.img</code>.</li>
+<li><strong>ro</strong>: an option to mount the file system as being read-only</li>
+<li><strong>loop</strong>: mount the file system on a loop device</li>
+<li><strong>noexec</strong>: disallow execution</li>
+<li><strong>noatime</strong>: don’t change the access time of the files</li>
+</ul>
+<p>You can then continue to run <code>file</code> on the files within the mounted loop device and save their md5 hashes to verify integrity.</p>
+<h1 id="recovering-thefiles">Recovering the Files</h1>
+<h2 id="method-1-using-sleuthkithttpsleuthkitorgsleuthkit">Method 1: Using <a href="http://sleuthkit.org/sleuthkit/">Sleuth Kit</a></h2>
+<p>Often, if you have deleted files, they may be displayed with <code>fls sdb.img</code>, enumerated with <code>istat -o &lt;offset&gt; sdb.img &lt;inode_number&gt;</code>, and recovered with <code>icat -o &lt;offset&gt; sdb.img &lt;inode_number&gt;</code>. An example of the latter 2 steps are shown in the screenshot below.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*mc44fgKV8os0qCVpYYZiJQ.png" alt=""  />
+
+<em><a href="https://www.therootuser.com/wp-content/uploads/2017/11/Screenshot-2017-11-07-17.27.58.png">https://www.therootuser.com/wp-content/uploads/2017/11/Screenshot-2017-11-07-17.27.58.png</a></em></p>
+<p>This does not appear to be the case for me, however. My deleted files are not appearing from the <code>fls</code> command. Instead, I see a variable called <code>$OrphanFiles</code>.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*hQXtm0cZ7wge3IgQlexR-Q.png" alt=""  />
+
+<code>$OrphanFiles</code> are files that still exist in the image, but are no longer able to be accessed from the root directory. <code>$OrphanFiles</code> is not an actual directory on the image, it is Sleuth Kit’s virtual way to demonstrate that the file metadata still exists (<a href="https://wiki.sleuthkit.org/index.php?title=Orphan_Files">read more</a>).</p>
+<p>To recover these orphan files, I will attempt a few techniques starting with <code>extundelete</code>.</p>
+<h2 id="method-2-extundeletehttpsextundeletesourceforgenet">Method 2: <a href="https://extundelete.sourceforge.net/">Extundelete</a></h2>
+<p>This tool can be used to recover files on ext3 and ext4 filesystems. I was having some difficulties with the build from <code>apt</code>, so I build the program from source with the following commands to it working again:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>apt update &amp;&amp; apt install -y libext2fs-dev   
+</span></span><span style="display:flex;"><span>git clone https://github.com/cherojeong/extundelete.git  
+</span></span><span style="display:flex;"><span>./configure  
+</span></span><span style="display:flex;"><span>make  
+</span></span><span style="display:flex;"><span>src/extundelete --restore-all /path/to/image.img
+</span></span></code></pre></div><p><code>os &lt;&lt; “Directory ACL: “ &lt;&lt; inode.i_dir_acl &lt;&lt; std::endl;</code> with <code>os &lt;&lt; “Directory ACL: “ &lt;&lt; inode.i_file_acl &lt;&lt; std::endl;</code>.</p>
+<p>The command <code>extundelete --restore-all sdb.img</code> can be used to recover files.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*Ipv-ABMSCpXNtc6PZT5zqQ.png" alt=""  />
+
+As you can see in the screenshot above, the tool was unsuccessful in recovering the orphan files. This is still a viable option that can work in many scenarios which is why I decided to include it in this article.</p>
+<p>I’m not giving up yet. We’ll try again!</p>
+<h2 id="method-3testdiskhttpswwwcgsecurityorgwikitestdisk">Method 3: <a href="https://www.cgsecurity.org/wiki/TestDisk">TestDisk</a></h2>
+<p>The <code>.tar.bz</code> file can be downloaded <a href="https://www.cgsecurity.org/wiki/TestDisk_Download">here</a>. I’m using version 7.2. Note that in order for <code>TestDisk</code> to work, you must run it in the download directory. Otherwise you might get an error like <code>*** Error in </code>/path/to/testdisk-7.2-WIP/photorec_static&rsquo;: malloc(): memory corruption: 0x0000000002617d29 ***`.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span># extract and run the file  
+</span></span><span style="display:flex;"><span>tar -xf testdisk-7.2-WIP.linux26-x86\_64.tar.bz2  
+</span></span><span style="display:flex;"><span>cd testdisk-7.2-WIP  
+</span></span><span style="display:flex;"><span>./photorec\_static /path/to/sdb.img /log 
+</span></span></code></pre></div><p>A help menu will appear. I’ll first select the image that I want to work with.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*vEuqI7RnAWsvLfrH9n88Pw.png" alt=""  />
+
+Then, I select the option for the partition table for the media. Mine does not have one, so I choose “None”. I verified that this was the only option that was able to list files for me.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*c5iJeI2oyLMdmRu_bBD5Qg.png" alt=""  />
+
+After this, I navigate to the “List” option at the bottom of the terminal and press <code>Enter</code>.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*jl17is949wOoNF0JEzBcIg.png" alt=""  />
+
+This leads me to the listing of the files on the image with the successfully recovered ones in <strong>red</strong> text.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*yYQEslxR1RWkUbkEX743Bg.png" alt=""  />
+
+As you can see in the screenshot, there are no new files there listed in red. This means that <code>TestDisk</code> was unsuccessful in recovering the deleted files.</p>
+<p>It’s okay, I still got a few more tricks up my sleeve.</p>
+<h2 id="method-4foremosthttpssourceforgenetprojectsforemost">Method 4: <a href="https://sourceforge.net/projects/foremost/">Foremost</a></h2>
+<p>Foremost can be installed with <code>apt</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>sudo apt install foremost
+</span></span></code></pre></div><p>This tool uses a technique known as <strong>file carving</strong> which involves searching through the raw data on a disk and carving out the values between the header and/or footer of the file.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*ayacIY6WQdxAYksd_nwT8g.png" alt=""  />
+
+Alas, we were able to recover a deleted image file from the drive with <code>foremost -t jpeg -o recovered-files -i sdb.img</code>. The recovered image renders as expected in the Image Viewer. What a pretty camp fire.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*kA2aubO7prDBFW9Xx0cGvQ.png" alt=""  />
+
+The fact that this worked while the previous 3 methods did not further demonstrates that different tools and techniques will be more effective at data recovery in different scenarios.</p>
+<p>It’s also worth mentioning that you can edit the <code>/etc/foremost.conf</code> file to contain your own custom headers and footers for the file you are looking for. Modifying these values will be explored in the next and final method.</p>
+<h2 id="method-5scalpelhttpsgithubcomsleuthkitscalpel">Method 5: <a href="https://github.com/sleuthkit/scalpel">Scalpel</a></h2>
+<p>Scalpel is much like Foremost with added flexibility. You are not as limited on the file types and headers, although there is a way to modify foremost to have the same customization that scalpel provides.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>sudo apt install scalpel  
+</span></span><span style="display:flex;"><span>cp /etc/scalpel/scalpel.conf .  
+</span></span><span style="display:flex;"><span>vim scalpel.conf
+</span></span></code></pre></div><p>I’ll edit the config with the bit of background information that I have. I know that I’m attempting to recover a JPEG file and I also know that there was a text file that began with the word “Hello”. By using <code>xxd</code>, I can determine the file headers for a <code>.txt</code> file starting with the word “Hello”. In this case, it would be <code>\x48\x65\x6c\x6c\x6f</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>$ echo -n Hello | xxd   
+</span></span><span style="display:flex;"><span>00000000: 4865 6c6c 6f Hello.
+</span></span></code></pre></div><p>We will use this information to update the <code>scalpel.conf</code> file in <code>vim</code>. As explained in the comments at the top of the config file, the first column indicates the file extension. The second is whether the header and footer are case sensitive, the third is the header in hexadecimal bytes, the fourth column is an optional footer, and the fifth column is an optional parameter to search backwards from the header rather than just forward.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*Y6kTU1JxILxivTOYbHN5tQ.png" alt=""  />
+
+With these options set, <code>scalpel</code> can now be ran to extract these files from the drive.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>scalpel -o recovered-files\_scalpel -c scalpel.conf sdb.img
+</span></span></code></pre></div><p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*O3huS4-S2BausvT-s2KiYw.png" alt=""  />
+
+It appears that the text file was successfully recovered.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*jASCyrkTBYVfhWQxZkk3lg.png" alt=""  />
+
+The image was recovered as well.</p>
+<h1 id="conclusion"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*5ixUUenRR50lIavpZ0oyIw.png" alt=""  />
+
+Conclusion</h1>
+<p>There’s many ways to achieve the same outcome. The different tools showcased here have their specific applications where they perform best. Even though not all the methods outlined here worked for my particular situation, that doesn’t mean they won’t work for you. There are many factors that determine whether file recovery will be successful including the partitioning table type, how long it has been since they were deleted, the size of the file (smaller files are more likely to be recovered), the health of the storage device, and the operations that have been done on the drive since deleting the files such as reformatting the drive.</p>
+<p>I hope that through reading this article, you were able to deepen your understanding of file recovery and gain practical knowledge that you can apply in the real world. Thanks for reading and I’ll see you next time.</p>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

@@ -3,6 +3,7 @@ title = 'Mustacchio Walkthrough | Try Hack Me | Ally Petitt'
 date = 2022-02-18
 draft = false
 showtoc=true
+tags= ["TryHackMe", "XXE", "CTF", "Tutorial"]
 +++
 ![](https://cdn-images-1.medium.com/max/800/1*F19asfqgh7o-jFDVwsTizA.png)
 

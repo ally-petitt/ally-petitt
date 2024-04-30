@@ -3,6 +3,7 @@ title = 'Antivirus Evasion: What it is and How to do it'
 date = 2022-05-30
 draft = false
 showtoc=true
+tags= ["Defense Evasion", "Tutorial"]
 +++
 ![picture of a bug](https://cdn-images-1.medium.com/max/800/1*W1qjqIKKNMK9_QYWXGQzRw.png)
 

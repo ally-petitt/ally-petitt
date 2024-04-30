@@ -3,6 +3,7 @@ title = '5 Ways I Bypassed Your Web Application Firewall (WAF)'
 date = 2023-06-01
 draft = false
 showtoc=true
+tags= ["WAF", "Defense Evasion"]
 +++
 
 Introduction

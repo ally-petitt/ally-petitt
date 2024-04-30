@@ -3,6 +3,7 @@ title = 'Windows Remoting: Difference between psexec, wmiexec, atexec, *exec'
 date = 2022-12-09
 draft = false
 showtoc=true
+tags= ["Tooling", "Pentesting", "CTF"]
 +++
 
 ![](https://cdn-images-1.medium.com/max/800/0*2pekupqLLWtBkgpl)

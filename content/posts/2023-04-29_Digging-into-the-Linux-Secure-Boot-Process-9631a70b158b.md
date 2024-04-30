@@ -3,6 +3,7 @@ title = 'Digging into the Linux Secure Boot Process'
 date = 2023-04-29
 draft = false
 showtoc=true
+tags= ["Secure Boot", "Linux"]
 +++
 
 ![](https://cdn-images-1.medium.com/max/800/0*6T29Pwj4dMhQiPRW.png)

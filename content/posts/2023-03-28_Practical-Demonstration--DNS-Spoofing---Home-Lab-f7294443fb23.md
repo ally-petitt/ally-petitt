@@ -3,6 +3,7 @@ title = 'Practical Demonstration: DNS Spoofing + Home Lab'
 date = 2023-03-28
 draft = false
 showtoc=true
+tags= ["Lab", "DNS Cache Poisoning", "Tutorial"]
 +++
 
 DNS Cache Poisoning on Home Lab Walkthrough

@@ -3,6 +3,7 @@ title = 'How to Encrypt a Drive in Linux'
 date = 2023-05-05
 draft = false
 showtoc=true
+tags= ["Linux", "Drive Encryption", "Tutorial"]
 +++
 
 Introduction

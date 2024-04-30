@@ -3,6 +3,7 @@ title = 'How I Found 3 CVEs in 2 Days'
 date = 2024-03-21
 draft = false
 showtoc=true
+tags= ["CVE", "Security Research", "Writeup", "GNU"]
 +++
 
 ![](https://cdn-images-1.medium.com/max/800/0*wGuRqNuBuFV5u69n.png)

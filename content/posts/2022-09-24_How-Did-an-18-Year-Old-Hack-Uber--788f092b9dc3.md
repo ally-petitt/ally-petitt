@@ -3,6 +3,7 @@ title = 'How Did an 18-Year-Old Hack Uber?'
 date = 2022-09-24
 draft = false
 showtoc=true
+tags= ["News"]
 +++
 
 ![](https://cdn-images-1.medium.com/max/800/0*p8HCs81YRFvhgaR3.jpg)

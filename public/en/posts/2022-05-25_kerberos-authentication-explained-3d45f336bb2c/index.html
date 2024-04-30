@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
 <title>Kerberos Authentication Explained | Ally Petitt</title>
-<meta name="keywords" content="">
+<meta name="keywords" content="Kerberos, Active Directory, Networking">
 <meta name="description" content="When first learning Kerberos, it can feel like you’re being chased by the three-headed dog. Not to fear, however, because today I’ll be explaining a high-level overview of Kerberos authentication. Kerberos was designed to provide secure authentication to services over a potentially insecure network. It is used by many organizations to implement single sign-on (SSO).
 Kerberos Terminology In order to understand the step-by-step explanation, it is important to have a basic understanding of the various components of Kerberos.">
 <meta name="author" content="Ally Petitt">
@@ -73,7 +73,7 @@ Kerberos Terminology In order to understand the step-by-step explanation, it is 
   "name": "Kerberos Authentication Explained",
   "description": "When first learning Kerberos, it can feel like you’re being chased by the three-headed dog. Not to fear, however, because today I’ll be explaining a high-level overview of Kerberos authentication. Kerberos was designed to provide secure authentication to services over a potentially insecure network. It is used by many organizations to implement single sign-on (SSO).\nKerberos Terminology In order to understand the step-by-step explanation, it is important to have a basic understanding of the various components of Kerberos.",
   "keywords": [
-    
+    "Kerberos", "Active Directory", "Networking"
   ],
   "articleBody": " When first learning Kerberos, it can feel like you’re being chased by the three-headed dog. Not to fear, however, because today I’ll be explaining a high-level overview of Kerberos authentication. Kerberos was designed to provide secure authentication to services over a potentially insecure network. It is used by many organizations to implement single sign-on (SSO).\nKerberos Terminology In order to understand the step-by-step explanation, it is important to have a basic understanding of the various components of Kerberos.\nKerberos Realm- the domain in which Kerberos has the ability to authenticate a user Principal- A unique identity within a Realm that represents either a user or service Client- The user that is trying to access a service Service- A resource provided to a client (eg. a file server, application, etc.) Key Distribution Center (KDC)- Supplies tickets and generates temporary session keys that allow a user to securely authenticate to a service. It also stores the secret symmetric keys for all of the users and services Authentication Server- ensures that the client making the request to the service is a known user. It then issues a ticket-granting ticket Ticket Granting Server- ensures that the user is making a request to a known service and grants service tickets How Kerberos Works The user sends an unencrypted message to the Authentication server requesting to access a service The Authentication server validates that the request came from a known user and generates a ticket-granting ticket (a ticket that allows you to be granted a ticket by the Ticket Granting Server) The Ticket Granting Ticket (TGT) is sent to the user alongside a message encrypted with the user’s secret key The user uses their secret key to decrypt the message and generates new messages. The user sends their new messages and the TGT that they received (step 3) to the Ticket Granting Server The Ticket Granting Server decrypts the Ticket Granting Ticket and does validation. Then, it creates a service ticket and a new encrypted message back to the user The user decrypts the message and creates an Authenticator message. The user Authenticator and the service ticket is finally sent to the service. The service decrypts and validates the service ticket and Authenticator message. Then, it sends back its own Authenticator message to the user. To paraphrase this, Kerberos makes sure that the user is legit, then it makes sure that the service is legit. Finally, a secure connection is created between the user and the service.\nKey Benefits of Using Kerberos Passwords are never sent across the network Encryption keys are never directly exchanged Mutual authentication between the client and the application Conclusion I hope that this overview cleared up some of the confusion around Kerberos authentication. Thank you for reading.\nMore Resources Kerberos Authentication Explained | A deep dive Kerberos (protocol) How Does Kerberos Work? The Authentication Protocol Explained ",
   "wordCount" : "475",
@@ -241,6 +241,9 @@ When first learning Kerberos, it can feel like you’re being chased by the thre
 
   <footer class="post-footer">
     <ul class="post-tags">
+      <li><a href="http://localhost:1313/ally-petitt/en/tags/kerberos/">Kerberos</a></li>
+      <li><a href="http://localhost:1313/ally-petitt/en/tags/active-directory/">Active Directory</a></li>
+      <li><a href="http://localhost:1313/ally-petitt/en/tags/networking/">Networking</a></li>
     </ul>
 <nav class="paginav">
   <a class="prev" href="http://localhost:1313/ally-petitt/en/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/">
@@ -259,7 +262,7 @@ When first learning Kerberos, it can feel like you’re being chased by the thre
 <ul class="share-buttons">
     <li>
         <a target="_blank" rel="noopener noreferrer" aria-label="share Kerberos Authentication Explained on x"
-            href="https://x.com/intent/tweet/?text=Kerberos%20Authentication%20Explained&amp;url=http%3a%2f%2flocalhost%3a1313%2fally-petitt%2fen%2fposts%2f2022-05-25_kerberos-authentication-explained-3d45f336bb2c%2f&amp;hashtags=">
+            href="https://x.com/intent/tweet/?text=Kerberos%20Authentication%20Explained&amp;url=http%3a%2f%2flocalhost%3a1313%2fally-petitt%2fen%2fposts%2f2022-05-25_kerberos-authentication-explained-3d45f336bb2c%2f&amp;hashtags=Kerberos%2cActiveDirectory%2cNetworking">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />

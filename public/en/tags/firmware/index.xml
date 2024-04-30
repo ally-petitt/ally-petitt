@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Firmware on Ally Petitt</title>
+    <link>http://localhost:1313/ally-petitt/en/tags/firmware/</link>
+    <description>Recent content in Firmware on Ally Petitt</description>
+    <generator>Hugo -- 0.125.4</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 05 Aug 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/ally-petitt/en/tags/firmware/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Beyond the Screen: The Hidden World of Firmware Security</title>
+      <link>http://localhost:1313/ally-petitt/en/posts/2023-08-05_beyond-the-screen--the-hidden-world-of-firmware-security-87b0ea6a20a4/</link>
+      <pubDate>Sat, 05 Aug 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/en/posts/2023-08-05_beyond-the-screen--the-hidden-world-of-firmware-security-87b0ea6a20a4/</guid>
+      <description>&lt;h1 id=&#34;introduction&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*UA4-sPgJH7Fhk9jbvvRafQ.jpeg&#34; alt=&#34;https://www.istockphoto.com/photo/man-using-laptop-with-update-software-computer-program-upgrade-business-technology-gm1449779856-486876929&#34;  /&gt;
+
+Introduction&lt;/h1&gt;
+&lt;p&gt;Firmware is a critical component of electronic devices. It is the program that is installed on embedded systems that defines their functionality. Firmware is responsible for initializing the hardware components as the computer boots up, enabling the device to function properly.&lt;/p&gt;
+&lt;p&gt;Attacks against firmware have been of increasing interest to hackers due to their relative ease to exploit in a world of increasingly more secure application- and network-layer security practices. Firmware security has been a frequently overlooked attack surface in cybersecurity that is now relatively unprotected in comparison to other attack vectors such as web applications or operating systems.&lt;/p&gt;
+&lt;p&gt;In addition, security mitigations such as performing firmware updates are often more costly and inconvenient as they may require updating other software and firmware dependencies on the system, leading to more downtime. In some environments such as hospitals, firmware must pass very strict regulations which can increase the time it takes for updates. Compatibility between the firmware and hardware can result in an additional barrier for firmware updates.&lt;/p&gt;
+&lt;h1 id=&#34;the-rise-of-firmwareattacks&#34;&gt;The Rise of Firmware Attacks&lt;/h1&gt;
+&lt;p&gt;Firmware attacks are quickly becoming more common. According to &lt;a href=&#34;https://www.microsoft.com/en-us/security/blog/2021/03/30/new-security-signals-study-shows-firmware-attacks-on-the-rise-heres-how-microsoft-is-working-to-help-eliminate-this-entire-class-of-threats/&#34;&gt;Microsoft&lt;/a&gt;, 80% of organizations between the years 2019 and 2021 were victims to at least 1 firmware attack. In many cases, firmware is a single point of failure in the devices of organizations. The privileged nature of firmware allows for it to be abused by cybercriminals to access information such as cryptographic keys in memory, the BIOS/UEFI memory, network traffic, and potentially data from peripheral devices such as SSDs or webcams.&lt;/p&gt;
+&lt;p&gt;These are some of the techniques used by adversaries once they have obtained firmware-level access:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Disable security settings such as Secure Boot (&lt;a href=&#34;https://thehackernews.com/2023/03/blacklotus-becomes-first-uefi-bootkit.html&#34;&gt;BlackLotus&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;Modify the boot record of the system to contain a bootkit&lt;/li&gt;
+&lt;li&gt;Wipe the boot record resulting in a bricked system&lt;/li&gt;
+&lt;li&gt;Arbitrarily read secrets and other sensitive data from memory&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;attack-surface&#34;&gt;Attack Surface&lt;/h1&gt;
+&lt;p&gt;Attacking firmware can lead to extremely privileged access to a system. For instance, Baseboard Management Controllers (BMCs), Unified Extensible Firmware Interface (UEFI), System Management Mode (SMMs), or management subsystems on the CPU can each be compromised. This section will outline each component’s purpose, security risk, and mitigation techniques.&lt;/p&gt;
+&lt;h2 id=&#34;bmcs&#34;&gt;BMCs&lt;/h2&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*9hEnbp2Z7WCO9WKV&#34; alt=&#34;&#34;  /&gt;
+
+Baseboard Management Controllers (BMCs) are hardware components that are often soldered into the motherboard of enterprise-grade servers. They may be assigned different names depending on the model that is used. For instance, Dell’s high end PowerEdge servers refer to the BMC as iDRAC (Dell Remote Access Controller) and HP has their infamous iLO (integrated Lights Out) which, as the name implies, provides out-of-band remote management services for the server that allow it to run in a lights out data center with minimal physical interaction.&lt;/p&gt;
+&lt;p&gt;The role of BMCs is to allow remote management of the server. This includes power management, which is the ability to turn the server off and on, and the ability to configure UEFI settings. They often include a built-in keyboard video mouse (KVM) functionality that allows out-of-band access to the display of the server and allows for direct interaction with it through a keyboard and mouse.&lt;/p&gt;
+&lt;p&gt;BMCs are highly privileged components that may be abused for&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Data theft and exfiltration&lt;/li&gt;
+&lt;li&gt;Malware installation&lt;/li&gt;
+&lt;li&gt;Disabling security features such as Secure Boot&lt;/li&gt;
+&lt;li&gt;Physical damage to the system caused by sending it a signal that increases the voltage to the CPU causing it to overheat&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Another attack might include incessant rebooting of the system, rendering it temporarily useless and leading to a loss of availability.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;BMC attacks can be mitigated through the following techniques:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Establishing unique user accounts (if possible) and setting a strong password- ideally one that is in line with &lt;a href=&#34;https://pages.nist.gov/800-63-3/sp800-63b.html&#34;&gt;NIST’s password guidelines&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Enforcing secure network practices such as not exposing the BMC to the internet and implementing VLAN separation&lt;/li&gt;
+&lt;li&gt;Use firmware scanning tools to verify the integrity of the firmware and catch security misconfigurations&lt;/li&gt;
+&lt;li&gt;Monitoring BMC integrity through an established root of trust (RoT) such as a TPM or secure enclave in the CPU&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;uefibios&#34;&gt;UEFI/BIOS&lt;/h2&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*B3RibWe5mxvLNeKh&#34; alt=&#34;&#34;  /&gt;
+
+&lt;em&gt;Picture of a BIOS screen&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;The Unified Extensible Firmware Interface (UEFI) is the modern and prevalent successor to the Basic Input Output System (BIOS).&lt;/p&gt;
+&lt;p&gt;With access to the UEFI, attackers can&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Wipe the UEFI — the resulting hardware would need to be sent back to the hardware to be flashed with the correct firmware again&lt;/li&gt;
+&lt;li&gt;Firmware modification&lt;/li&gt;
+&lt;li&gt;Bootkit installation&lt;/li&gt;
+&lt;li&gt;Physical damage to the system&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;An infamous example of malware that attacks the UEFI is &lt;a href=&#34;https://thehackernews.com/2023/03/blacklotus-becomes-first-uefi-bootkit.html&#34;&gt;BlackLotus&lt;/a&gt;, a bootkit that abused &lt;a href=&#34;https://github.com/Wack0/CVE-2022-21894&#34;&gt;CVE-2022–21894&lt;/a&gt; to truncate the SecureBoot policy from memory via the Windows Boot Application, thereby fully bypassing the security measure. Malware with the level of access granted by the UEFI can result in expensive damages to enterprise systems.&lt;/p&gt;
+&lt;h2 id=&#34;smms&#34;&gt;SMMs&lt;/h2&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*J6wRzq-WjDenWZ3v.png&#34; alt=&#34;&#34;  /&gt;
+
+&lt;em&gt;&lt;a href=&#34;https://www.microsoft.com/en-us/security/blog/wp-content/uploads/2020/11/SMM-social-2.png&#34;&gt;https://www.microsoft.com/en-us/security/blog/wp-content/uploads/2020/11/SMM-social-2.png&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;The System Management Mode (&lt;a href=&#34;https://en.wikipedia.org/wiki/System_Management_Mode&#34;&gt;SMM&lt;/a&gt;) is a highly privileged operating mode that is often referred to as Ring -2. The primary benefit of SMM is that it offers a distinct processor environment that is meant for use by only the UEFI/BIOS. The SMM code is executed in its own isolated address space known as SMRAM that is inaccessible to other privilege levels. This isolation is enforced by firmware.&lt;/p&gt;
+&lt;p&gt;When System Manager Interrupts (SMIs) are issued during runtime, they interrupt the current execution of the CPU and transfer control to the SMI Handler, which is a software routine stored in the firmware that is responsible for handling and processing these interrupts. SMIs are how the UEFI interacts with the SMM.&lt;/p&gt;
+&lt;p&gt;SMMs can be abused to&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Implant rootkits and bootkits on a system&lt;/li&gt;
+&lt;li&gt;Read sensitive data&lt;/li&gt;
+&lt;li&gt;Maintain persistence and stealth&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Mitigations for SMM attacks can include keeping the firmware updated and using security mechanisms such as Data Execution Prevention (DEP) and Control-Flow Integrity (CFI) on compiled binaries to protect from memory-based attacks.&lt;/p&gt;
+&lt;h2 id=&#34;management-subsystems&#34;&gt;Management Subsystems&lt;/h2&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*5XuFmJUmVLjZnmpG&#34; alt=&#34;&#34;  /&gt;
+
+&lt;em&gt;&lt;a href=&#34;https://freundschafter.com/wp-content/uploads/2018/01/7254-f-4-bc8a6355cce759c3.png&#34;&gt;https://freundschafter.com/wp-content/uploads/2018/01/7254-f-4-bc8a6355cce759c3.png&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Intel’s &lt;a href=&#34;https://en.wikipedia.org/wiki/Intel_Management_Engine&#34;&gt;Management Engine&lt;/a&gt; (ME) or AMD’s &lt;a href=&#34;https://en.wikipedia.org/wiki/AMD_Secure_Technology&#34;&gt;Platform Security Processor&lt;/a&gt; (PSP) are standalone microcontroller components that allow for out-of-band, remote management of a computer. They are included in the chipsets of these CPUs and, as explained in &lt;a href=&#34;https://freundschafter.com/research/about-intel-management-engine-intel-me-intel-active-management-technlogy-iamt/&#34;&gt;this article&lt;/a&gt;, the ME of an Intel chip in particular has a separated connection from the internal Interconnect, means it has the capabilities to bypass other subsystems like TPM and SMBus.&lt;/p&gt;
+&lt;p&gt;The ME contains the Intel Active Management Technology (AMT). The AMT provides the remote management and control capabilities for Intel-based computers and servers, even when the system is powered off or the operating system is not running. It is a service that is enabled by the hardware microcontroller that is referred to as the ME.&lt;/p&gt;
+&lt;p&gt;Despite ME and BMCs having a similar functionality, BMCs are not implemented into the same variety and scale of devices as the management engine is. This can significantly increase the impact of an ME vulnerability.&lt;/p&gt;
+&lt;p&gt;Well known vulnerabilities in the ME include &lt;a href=&#34;https://nvd.nist.gov/vuln/detail/CVE-2018-3627&#34;&gt;CVE-2018–3627&lt;/a&gt; and &lt;a href=&#34;https://nvd.nist.gov/vuln/detail/CVE-2020-8703&#34;&gt;CVE-2020–8703&lt;/a&gt; which can lead to arbitrary code execution and local privilege escalation respectively.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mitigation&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Keeping the software of the CPU updated is crucial for mitigation. The updates can contain patches for known security vulnerabilities on the ME of the chip. In particular, updating the CSME, AMT, I ISM, DAL and DAL Software can prevent vulnerabilities as well as securely configuring the management engine if possible.&lt;/p&gt;
+&lt;h1 id=&#34;supply-chainattacks&#34;&gt;Supply Chain Attacks&lt;/h1&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*3iEBRxmvxyY1JJnKj1V-Yw.png&#34; alt=&#34;&#34;  /&gt;
+
+&lt;em&gt;&lt;a href=&#34;https://www.enisa.europa.eu/news/enisa-news/understanding-the-increase-in-supply-chain-security-attacks/@@download/image/IncidentReporting-PR_423x300mm_01.png&#34;&gt;https://www.enisa.europa.eu/news/enisa-news/understanding-the-increase-in-supply-chain-security-attacks/@@download/image/IncidentReporting-PR_423x300mm_01.png&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Attacking the supply chain can involve tampering with the firmware or hardware at any stage in the supply chain including development, manufacturing, distribution, and updating or patching the system. The result can be widely distributed malware affecting countless systems.&lt;/p&gt;
+&lt;p&gt;In addition to the aforementioned tampering, firmware often uses 3rd-party dependencies (e.g. &lt;a href=&#34;https://binarly.io/posts/OpenSSL_Usage_in_UEFI_Firmware_Exposes_Weakness_in_SBOMs/index.html&#34;&gt;OpenSSL&lt;/a&gt;) which can remain outdated even when included in the latest firmware version. The result is a discrepancy between the firmware and its dependencies which never received an update, despite having critical security vulnerabilities.&lt;/p&gt;
+&lt;p&gt;One method used to manage supply chain dependencies is using a Software Bill of Materials (SBOM). This is a list of the software components that are implemented into a firmware component. The accuracy and integrity of these lists are crucial to ensure that the known vulnerabilities in the firmware’s dependencies can be identified. There are also commercial solutions that monitor the firmware’s activity and integrity in order to raise alerts when suspicious hallmarks of infected firmware are detected.&lt;/p&gt;
+&lt;h1 id=&#34;malware-attacks&#34;&gt;Malware Attacks&lt;/h1&gt;
+&lt;p&gt;Another way that firmware can be exploited is through a system that has already been infected. This may happen through social engineering, executing a malicious program, exploiting vulnerabilities in externally facing service, drive-by attacks, and other initial access methods identified by the &lt;a href=&#34;https://attack.mitre.org/&#34;&gt;MITRE ATT&amp;amp;CK framework&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;With this attack type, the malicious actor or malware will attempt to elevate their privileges to the highest possible level and use tools such as &lt;a href=&#34;http://rweverything.com/&#34;&gt;RWEverything&lt;/a&gt; to write to the drivers and firmware. Through this approach, attackers are still able to obtain the privileged access of and stealth granted through firmware-level access.&lt;/p&gt;
+&lt;h1 id=&#34;firmware-attacks-in-thewild&#34;&gt;Firmware Attacks in the Wild&lt;/h1&gt;
+&lt;p&gt;It has become increasingly more prevalent for adversaries to gain their initial foothold on a network through remote access products. In 2020 alone, &lt;a href=&#34;https://www.checkpoint.com/downloads/resources/cyber-security-report-2021.pdf&#34;&gt;Checkpoint’s annual&lt;/a&gt; cybersecurity report found a substantial increases ranging from 85% to 2,066% of attacks that exploit vulnerabilities in these products as shown in the image below.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*Mx8XRA2YeI3His7r24yFuQ.png&#34; alt=&#34;&#34;  /&gt;
+
+&lt;em&gt;Page 25 of Checkpoint’s 2021 cybersecurity report&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Many of these vulnerabilities are caused by insecure firmware. Examples of this in insecure VPN products are &lt;a href=&#34;https://www.bleepingcomputer.com/news/security/zyxel-warns-of-critical-vulnerabilities-in-firewall-and-vpn-devices/&#34;&gt;Zyxel&lt;/a&gt;’s &lt;a href=&#34;https://nvd.nist.gov/vuln/detail/CVE-2023-33009&#34;&gt;CVE-2023–33009&lt;/a&gt; and &lt;a href=&#34;https://nvd.nist.gov/vuln/detail/CVE-2023-33010&#34;&gt;CVE-2023–33010&lt;/a&gt; and Fortinet’s &lt;a href=&#34;https://nvd.nist.gov/vuln/detail/CVE-2023-27997&#34;&gt;CVE-2023–27997&lt;/a&gt;. Both are critical RCEs caused by a buffer overflow that can lead to unauthorized, highly privileged access to a device. This can then be abused to implant malware such as a bootkit or make other critical configuration changes to the system and to move laterally through the internal network.&lt;/p&gt;
+&lt;h1 id=&#34;mitigations&#34;&gt;Mitigations&lt;/h1&gt;
+&lt;h2 id=&#34;security-platforms&#34;&gt;Security Platforms&lt;/h2&gt;
+&lt;p&gt;Firmware security platforms such as those offered by &lt;a href=&#34;https://binarly.io/&#34;&gt;Binarly&lt;/a&gt; and &lt;a href=&#34;https://eclypsium.com/&#34;&gt;Eclypsium&lt;/a&gt; can help to detect and mitigate firmware misconfigurations and vulnerabilities. Binarly relies primarily on AI and deep code inspection to detect known and unknown vulnerabilities and misconfigurations in firmware. Eclypsium’s approach appears to incorporate both crytographic and heuristic verification of firmware with continuous monitoring, although the exact approach of both of these solutions is unknown.&lt;/p&gt;
+&lt;p&gt;In addition, Lenovo launched their &lt;a href=&#34;https://techtoday.lenovo.com/us/en/solutions/thinkshield&#34;&gt;ThinkShield&lt;/a&gt; earlier this week, which is also powered by Eclypsium. A testament to the increase in availability of commercial solutions in firmware and supply chain security.&lt;/p&gt;
+&lt;h2 id=&#34;code-signing&#34;&gt;Code Signing&lt;/h2&gt;
+&lt;p&gt;Solutions that use cryptographic signatures to verify the integrity of code can also be used to mitigate supply chain attacks. Unforeseen malware being added to production code, for instance, can be prevented since the changes after the program was signed would be easier to detect.&lt;/p&gt;
+&lt;p&gt;For instance, &lt;a href=&#34;https://www.sigstore.dev&#34;&gt;Sigstore&lt;/a&gt; is an open source project that at a high level uses Public Key Infrastructure (PKI) in order to validate the integrity of different modules in the supply chain to ensure that they were not tampered with. It does this by using a Sigstore client such as Cosign to request a public and private key from the certificate authority Fulcio. The private key that was obtained is used with Cosign to sign the file or image to be verified. After the artifact is signed, the signature of the file, its digest, and public key are stored in Rekor, an append-only transparency ledger that is viewable by the public. The private key is then deleted automatically, removing the need for key management. This system allows for developers, security professionals, and end users to verify that the file they have has not been tampered with.&lt;/p&gt;
+&lt;p&gt;It is worth noting, however, that while code signing will verify integrity, it does not guarantee that the Software Bill of Materials (SBOM) is fully accurate in its content and completeness in closed-source projects. The security implication is potential lack of transparency on 3rd-party dependencies in these projects leading to unpatched security vulnerabilities in the system.&lt;/p&gt;
+&lt;h1 id=&#34;initiatives&#34;&gt;Initiatives&lt;/h1&gt;
+&lt;p&gt;While firmware attacks are on the rise, there is hope to be found in the initiatives that have been enacted in order to fortify this section of cybersecurity.&lt;/p&gt;
+&lt;h2 id=&#34;increased-firmware-publications&#34;&gt;Increased Firmware Publications&lt;/h2&gt;
+&lt;p&gt;There has been a rising awareness of firmware security that can be attributed largely to the increased amount of publications in circulation. These may include security best practices, vulnerability disclosures, or news articles.&lt;/p&gt;
+&lt;p&gt;In June of this year, the Cybersecurity &amp;amp; Infrastructure Security Agency (CISA) and the National Security Agency (NSA) collaborated to create a guide for &lt;a href=&#34;https://media.defense.gov/2023/Jun/14/2003241405/-1/-1/0/CSI_HARDEN_BMCS.PDF&#34;&gt;hardening baseboard management controllers&lt;/a&gt;. This document outlined best practices for securing BMCs including many of the techniques that were mentioned previously in this article.&lt;/p&gt;
+&lt;h2 id=&#34;ssith&#34;&gt;SSITH&lt;/h2&gt;
+&lt;p&gt;In 2017, Defense Advanced Research Projects Agency (DARPA) created their System Security Integration Through Hardware and Firmware (&lt;a href=&#34;https://www.darpa.mil/program/ssith&#34;&gt;SSITH&lt;/a&gt;) program which takes a proactive approach to low-level security.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;SSITH is focusing specifically on common classes of hardware weaknesses as identified by the MITRE Common Weakness Enumeration Specification (CWE) and NIST, including buffer errors; information leakage; resource management; numeric errors; injection; permissions, privileges, and access control; and hardware/system-on-chip implementation errors. Researchers are exploring a number of different approaches that go well beyond patching. These include using metadata tagging to detect unauthorized system access; utilizing context sensing pipelines to determine the intent of instructions; and employing formal methods to reason about integrated circuit systems and guarantee the accuracy of security characteristics.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.darpa.mil/program/ssith&#34;&gt;Dr. Lok Yan&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Although it does have a predominant focus on hardware, SSITH still recognizes the role of firmware as an essential component in addressing security challenges and preventing exploit.&lt;/p&gt;
+&lt;p&gt;SSITH appears to be an ongoing program whose effects have not yet been released publicly.&lt;/p&gt;
+&lt;h2 id=&#34;secure-development-practices&#34;&gt;Secure Development Practices&lt;/h2&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*h4xdnj8S3XpVFr8o.jpg&#34; alt=&#34;&#34;  /&gt;
+
+&lt;em&gt;&lt;a href=&#34;https://blog.gitguardian.com/content/images/2022/05/21W10-blog-content-stateOfReport-image2.jpg&#34;&gt;https://blog.gitguardian.com/content/images/2022/05/21W10-blog-content-stateOfReport-image2.jpg&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Cybersecurity has gradually become a significant part of the development process of both software and firmware. More companies are making the shift to a Secure Software Development Lifecycle (SSDLC). With this model, security is a consideration from the conception of a program to its release.&lt;/p&gt;
+&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;With firmware attacks on the rise and an increased reliance on digital devices, securing systems is an important step of preventing critical cyberattacks. Modern commercial solutions can help to monitor firmware configurations, activity, and supply chain vulnerabilities and the trend towards secure development and education can help to decrease the amount of vulnerabilities that are in the firmware to begin with. In spite of this, firmware will likely never reach a point of having zero vulnerabilities. Maintaining regular updates and continuous education on the latest research is imperative in safeguarding our digital ecosystems, fortifying devices against emerging threats, and fostering a resilient foundation for a secure and trustworthy technological future.&lt;/p&gt;
+</description>
+      <content:encoded><![CDATA[<h1 id="introduction"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*UA4-sPgJH7Fhk9jbvvRafQ.jpeg" alt="https://www.istockphoto.com/photo/man-using-laptop-with-update-software-computer-program-upgrade-business-technology-gm1449779856-486876929"  />
+
+Introduction</h1>
+<p>Firmware is a critical component of electronic devices. It is the program that is installed on embedded systems that defines their functionality. Firmware is responsible for initializing the hardware components as the computer boots up, enabling the device to function properly.</p>
+<p>Attacks against firmware have been of increasing interest to hackers due to their relative ease to exploit in a world of increasingly more secure application- and network-layer security practices. Firmware security has been a frequently overlooked attack surface in cybersecurity that is now relatively unprotected in comparison to other attack vectors such as web applications or operating systems.</p>
+<p>In addition, security mitigations such as performing firmware updates are often more costly and inconvenient as they may require updating other software and firmware dependencies on the system, leading to more downtime. In some environments such as hospitals, firmware must pass very strict regulations which can increase the time it takes for updates. Compatibility between the firmware and hardware can result in an additional barrier for firmware updates.</p>
+<h1 id="the-rise-of-firmwareattacks">The Rise of Firmware Attacks</h1>
+<p>Firmware attacks are quickly becoming more common. According to <a href="https://www.microsoft.com/en-us/security/blog/2021/03/30/new-security-signals-study-shows-firmware-attacks-on-the-rise-heres-how-microsoft-is-working-to-help-eliminate-this-entire-class-of-threats/">Microsoft</a>, 80% of organizations between the years 2019 and 2021 were victims to at least 1 firmware attack. In many cases, firmware is a single point of failure in the devices of organizations. The privileged nature of firmware allows for it to be abused by cybercriminals to access information such as cryptographic keys in memory, the BIOS/UEFI memory, network traffic, and potentially data from peripheral devices such as SSDs or webcams.</p>
+<p>These are some of the techniques used by adversaries once they have obtained firmware-level access:</p>
+<ul>
+<li>Disable security settings such as Secure Boot (<a href="https://thehackernews.com/2023/03/blacklotus-becomes-first-uefi-bootkit.html">BlackLotus</a>)</li>
+<li>Modify the boot record of the system to contain a bootkit</li>
+<li>Wipe the boot record resulting in a bricked system</li>
+<li>Arbitrarily read secrets and other sensitive data from memory</li>
+</ul>
+<h1 id="attack-surface">Attack Surface</h1>
+<p>Attacking firmware can lead to extremely privileged access to a system. For instance, Baseboard Management Controllers (BMCs), Unified Extensible Firmware Interface (UEFI), System Management Mode (SMMs), or management subsystems on the CPU can each be compromised. This section will outline each component’s purpose, security risk, and mitigation techniques.</p>
+<h2 id="bmcs">BMCs</h2>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*9hEnbp2Z7WCO9WKV" alt=""  />
+
+Baseboard Management Controllers (BMCs) are hardware components that are often soldered into the motherboard of enterprise-grade servers. They may be assigned different names depending on the model that is used. For instance, Dell’s high end PowerEdge servers refer to the BMC as iDRAC (Dell Remote Access Controller) and HP has their infamous iLO (integrated Lights Out) which, as the name implies, provides out-of-band remote management services for the server that allow it to run in a lights out data center with minimal physical interaction.</p>
+<p>The role of BMCs is to allow remote management of the server. This includes power management, which is the ability to turn the server off and on, and the ability to configure UEFI settings. They often include a built-in keyboard video mouse (KVM) functionality that allows out-of-band access to the display of the server and allows for direct interaction with it through a keyboard and mouse.</p>
+<p>BMCs are highly privileged components that may be abused for</p>
+<ul>
+<li>Data theft and exfiltration</li>
+<li>Malware installation</li>
+<li>Disabling security features such as Secure Boot</li>
+<li>Physical damage to the system caused by sending it a signal that increases the voltage to the CPU causing it to overheat</li>
+</ul>
+<p>Another attack might include incessant rebooting of the system, rendering it temporarily useless and leading to a loss of availability.</p>
+<p><strong>Mitigation</strong></p>
+<p>BMC attacks can be mitigated through the following techniques:</p>
+<ul>
+<li>Establishing unique user accounts (if possible) and setting a strong password- ideally one that is in line with <a href="https://pages.nist.gov/800-63-3/sp800-63b.html">NIST’s password guidelines</a></li>
+<li>Enforcing secure network practices such as not exposing the BMC to the internet and implementing VLAN separation</li>
+<li>Use firmware scanning tools to verify the integrity of the firmware and catch security misconfigurations</li>
+<li>Monitoring BMC integrity through an established root of trust (RoT) such as a TPM or secure enclave in the CPU</li>
+</ul>
+<h2 id="uefibios">UEFI/BIOS</h2>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*B3RibWe5mxvLNeKh" alt=""  />
+
+<em>Picture of a BIOS screen</em></p>
+<p>The Unified Extensible Firmware Interface (UEFI) is the modern and prevalent successor to the Basic Input Output System (BIOS).</p>
+<p>With access to the UEFI, attackers can</p>
+<ul>
+<li>Wipe the UEFI — the resulting hardware would need to be sent back to the hardware to be flashed with the correct firmware again</li>
+<li>Firmware modification</li>
+<li>Bootkit installation</li>
+<li>Physical damage to the system</li>
+</ul>
+<p>An infamous example of malware that attacks the UEFI is <a href="https://thehackernews.com/2023/03/blacklotus-becomes-first-uefi-bootkit.html">BlackLotus</a>, a bootkit that abused <a href="https://github.com/Wack0/CVE-2022-21894">CVE-2022–21894</a> to truncate the SecureBoot policy from memory via the Windows Boot Application, thereby fully bypassing the security measure. Malware with the level of access granted by the UEFI can result in expensive damages to enterprise systems.</p>
+<h2 id="smms">SMMs</h2>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*J6wRzq-WjDenWZ3v.png" alt=""  />
+
+<em><a href="https://www.microsoft.com/en-us/security/blog/wp-content/uploads/2020/11/SMM-social-2.png">https://www.microsoft.com/en-us/security/blog/wp-content/uploads/2020/11/SMM-social-2.png</a></em></p>
+<p>The System Management Mode (<a href="https://en.wikipedia.org/wiki/System_Management_Mode">SMM</a>) is a highly privileged operating mode that is often referred to as Ring -2. The primary benefit of SMM is that it offers a distinct processor environment that is meant for use by only the UEFI/BIOS. The SMM code is executed in its own isolated address space known as SMRAM that is inaccessible to other privilege levels. This isolation is enforced by firmware.</p>
+<p>When System Manager Interrupts (SMIs) are issued during runtime, they interrupt the current execution of the CPU and transfer control to the SMI Handler, which is a software routine stored in the firmware that is responsible for handling and processing these interrupts. SMIs are how the UEFI interacts with the SMM.</p>
+<p>SMMs can be abused to</p>
+<ul>
+<li>Implant rootkits and bootkits on a system</li>
+<li>Read sensitive data</li>
+<li>Maintain persistence and stealth</li>
+</ul>
+<p><strong>Mitigation</strong></p>
+<p>Mitigations for SMM attacks can include keeping the firmware updated and using security mechanisms such as Data Execution Prevention (DEP) and Control-Flow Integrity (CFI) on compiled binaries to protect from memory-based attacks.</p>
+<h2 id="management-subsystems">Management Subsystems</h2>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*5XuFmJUmVLjZnmpG" alt=""  />
+
+<em><a href="https://freundschafter.com/wp-content/uploads/2018/01/7254-f-4-bc8a6355cce759c3.png">https://freundschafter.com/wp-content/uploads/2018/01/7254-f-4-bc8a6355cce759c3.png</a></em></p>
+<p>Intel’s <a href="https://en.wikipedia.org/wiki/Intel_Management_Engine">Management Engine</a> (ME) or AMD’s <a href="https://en.wikipedia.org/wiki/AMD_Secure_Technology">Platform Security Processor</a> (PSP) are standalone microcontroller components that allow for out-of-band, remote management of a computer. They are included in the chipsets of these CPUs and, as explained in <a href="https://freundschafter.com/research/about-intel-management-engine-intel-me-intel-active-management-technlogy-iamt/">this article</a>, the ME of an Intel chip in particular has a separated connection from the internal Interconnect, means it has the capabilities to bypass other subsystems like TPM and SMBus.</p>
+<p>The ME contains the Intel Active Management Technology (AMT). The AMT provides the remote management and control capabilities for Intel-based computers and servers, even when the system is powered off or the operating system is not running. It is a service that is enabled by the hardware microcontroller that is referred to as the ME.</p>
+<p>Despite ME and BMCs having a similar functionality, BMCs are not implemented into the same variety and scale of devices as the management engine is. This can significantly increase the impact of an ME vulnerability.</p>
+<p>Well known vulnerabilities in the ME include <a href="https://nvd.nist.gov/vuln/detail/CVE-2018-3627">CVE-2018–3627</a> and <a href="https://nvd.nist.gov/vuln/detail/CVE-2020-8703">CVE-2020–8703</a> which can lead to arbitrary code execution and local privilege escalation respectively.</p>
+<p><strong>Mitigation</strong></p>
+<p>Keeping the software of the CPU updated is crucial for mitigation. The updates can contain patches for known security vulnerabilities on the ME of the chip. In particular, updating the CSME, AMT, I ISM, DAL and DAL Software can prevent vulnerabilities as well as securely configuring the management engine if possible.</p>
+<h1 id="supply-chainattacks">Supply Chain Attacks</h1>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*3iEBRxmvxyY1JJnKj1V-Yw.png" alt=""  />
+
+<em><a href="https://www.enisa.europa.eu/news/enisa-news/understanding-the-increase-in-supply-chain-security-attacks/@@download/image/IncidentReporting-PR_423x300mm_01.png">https://www.enisa.europa.eu/news/enisa-news/understanding-the-increase-in-supply-chain-security-attacks/@@download/image/IncidentReporting-PR_423x300mm_01.png</a></em></p>
+<p>Attacking the supply chain can involve tampering with the firmware or hardware at any stage in the supply chain including development, manufacturing, distribution, and updating or patching the system. The result can be widely distributed malware affecting countless systems.</p>
+<p>In addition to the aforementioned tampering, firmware often uses 3rd-party dependencies (e.g. <a href="https://binarly.io/posts/OpenSSL_Usage_in_UEFI_Firmware_Exposes_Weakness_in_SBOMs/index.html">OpenSSL</a>) which can remain outdated even when included in the latest firmware version. The result is a discrepancy between the firmware and its dependencies which never received an update, despite having critical security vulnerabilities.</p>
+<p>One method used to manage supply chain dependencies is using a Software Bill of Materials (SBOM). This is a list of the software components that are implemented into a firmware component. The accuracy and integrity of these lists are crucial to ensure that the known vulnerabilities in the firmware’s dependencies can be identified. There are also commercial solutions that monitor the firmware’s activity and integrity in order to raise alerts when suspicious hallmarks of infected firmware are detected.</p>
+<h1 id="malware-attacks">Malware Attacks</h1>
+<p>Another way that firmware can be exploited is through a system that has already been infected. This may happen through social engineering, executing a malicious program, exploiting vulnerabilities in externally facing service, drive-by attacks, and other initial access methods identified by the <a href="https://attack.mitre.org/">MITRE ATT&amp;CK framework</a>.</p>
+<p>With this attack type, the malicious actor or malware will attempt to elevate their privileges to the highest possible level and use tools such as <a href="http://rweverything.com/">RWEverything</a> to write to the drivers and firmware. Through this approach, attackers are still able to obtain the privileged access of and stealth granted through firmware-level access.</p>
+<h1 id="firmware-attacks-in-thewild">Firmware Attacks in the Wild</h1>
+<p>It has become increasingly more prevalent for adversaries to gain their initial foothold on a network through remote access products. In 2020 alone, <a href="https://www.checkpoint.com/downloads/resources/cyber-security-report-2021.pdf">Checkpoint’s annual</a> cybersecurity report found a substantial increases ranging from 85% to 2,066% of attacks that exploit vulnerabilities in these products as shown in the image below.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*Mx8XRA2YeI3His7r24yFuQ.png" alt=""  />
+
+<em>Page 25 of Checkpoint’s 2021 cybersecurity report</em></p>
+<p>Many of these vulnerabilities are caused by insecure firmware. Examples of this in insecure VPN products are <a href="https://www.bleepingcomputer.com/news/security/zyxel-warns-of-critical-vulnerabilities-in-firewall-and-vpn-devices/">Zyxel</a>’s <a href="https://nvd.nist.gov/vuln/detail/CVE-2023-33009">CVE-2023–33009</a> and <a href="https://nvd.nist.gov/vuln/detail/CVE-2023-33010">CVE-2023–33010</a> and Fortinet’s <a href="https://nvd.nist.gov/vuln/detail/CVE-2023-27997">CVE-2023–27997</a>. Both are critical RCEs caused by a buffer overflow that can lead to unauthorized, highly privileged access to a device. This can then be abused to implant malware such as a bootkit or make other critical configuration changes to the system and to move laterally through the internal network.</p>
+<h1 id="mitigations">Mitigations</h1>
+<h2 id="security-platforms">Security Platforms</h2>
+<p>Firmware security platforms such as those offered by <a href="https://binarly.io/">Binarly</a> and <a href="https://eclypsium.com/">Eclypsium</a> can help to detect and mitigate firmware misconfigurations and vulnerabilities. Binarly relies primarily on AI and deep code inspection to detect known and unknown vulnerabilities and misconfigurations in firmware. Eclypsium’s approach appears to incorporate both crytographic and heuristic verification of firmware with continuous monitoring, although the exact approach of both of these solutions is unknown.</p>
+<p>In addition, Lenovo launched their <a href="https://techtoday.lenovo.com/us/en/solutions/thinkshield">ThinkShield</a> earlier this week, which is also powered by Eclypsium. A testament to the increase in availability of commercial solutions in firmware and supply chain security.</p>
+<h2 id="code-signing">Code Signing</h2>
+<p>Solutions that use cryptographic signatures to verify the integrity of code can also be used to mitigate supply chain attacks. Unforeseen malware being added to production code, for instance, can be prevented since the changes after the program was signed would be easier to detect.</p>
+<p>For instance, <a href="https://www.sigstore.dev">Sigstore</a> is an open source project that at a high level uses Public Key Infrastructure (PKI) in order to validate the integrity of different modules in the supply chain to ensure that they were not tampered with. It does this by using a Sigstore client such as Cosign to request a public and private key from the certificate authority Fulcio. The private key that was obtained is used with Cosign to sign the file or image to be verified. After the artifact is signed, the signature of the file, its digest, and public key are stored in Rekor, an append-only transparency ledger that is viewable by the public. The private key is then deleted automatically, removing the need for key management. This system allows for developers, security professionals, and end users to verify that the file they have has not been tampered with.</p>
+<p>It is worth noting, however, that while code signing will verify integrity, it does not guarantee that the Software Bill of Materials (SBOM) is fully accurate in its content and completeness in closed-source projects. The security implication is potential lack of transparency on 3rd-party dependencies in these projects leading to unpatched security vulnerabilities in the system.</p>
+<h1 id="initiatives">Initiatives</h1>
+<p>While firmware attacks are on the rise, there is hope to be found in the initiatives that have been enacted in order to fortify this section of cybersecurity.</p>
+<h2 id="increased-firmware-publications">Increased Firmware Publications</h2>
+<p>There has been a rising awareness of firmware security that can be attributed largely to the increased amount of publications in circulation. These may include security best practices, vulnerability disclosures, or news articles.</p>
+<p>In June of this year, the Cybersecurity &amp; Infrastructure Security Agency (CISA) and the National Security Agency (NSA) collaborated to create a guide for <a href="https://media.defense.gov/2023/Jun/14/2003241405/-1/-1/0/CSI_HARDEN_BMCS.PDF">hardening baseboard management controllers</a>. This document outlined best practices for securing BMCs including many of the techniques that were mentioned previously in this article.</p>
+<h2 id="ssith">SSITH</h2>
+<p>In 2017, Defense Advanced Research Projects Agency (DARPA) created their System Security Integration Through Hardware and Firmware (<a href="https://www.darpa.mil/program/ssith">SSITH</a>) program which takes a proactive approach to low-level security.</p>
+<blockquote>
+<p>SSITH is focusing specifically on common classes of hardware weaknesses as identified by the MITRE Common Weakness Enumeration Specification (CWE) and NIST, including buffer errors; information leakage; resource management; numeric errors; injection; permissions, privileges, and access control; and hardware/system-on-chip implementation errors. Researchers are exploring a number of different approaches that go well beyond patching. These include using metadata tagging to detect unauthorized system access; utilizing context sensing pipelines to determine the intent of instructions; and employing formal methods to reason about integrated circuit systems and guarantee the accuracy of security characteristics.</p>
+<ul>
+<li><a href="https://www.darpa.mil/program/ssith">Dr. Lok Yan</a></li>
+</ul>
+</blockquote>
+<p>Although it does have a predominant focus on hardware, SSITH still recognizes the role of firmware as an essential component in addressing security challenges and preventing exploit.</p>
+<p>SSITH appears to be an ongoing program whose effects have not yet been released publicly.</p>
+<h2 id="secure-development-practices">Secure Development Practices</h2>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*h4xdnj8S3XpVFr8o.jpg" alt=""  />
+
+<em><a href="https://blog.gitguardian.com/content/images/2022/05/21W10-blog-content-stateOfReport-image2.jpg">https://blog.gitguardian.com/content/images/2022/05/21W10-blog-content-stateOfReport-image2.jpg</a></em></p>
+<p>Cybersecurity has gradually become a significant part of the development process of both software and firmware. More companies are making the shift to a Secure Software Development Lifecycle (SSDLC). With this model, security is a consideration from the conception of a program to its release.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>With firmware attacks on the rise and an increased reliance on digital devices, securing systems is an important step of preventing critical cyberattacks. Modern commercial solutions can help to monitor firmware configurations, activity, and supply chain vulnerabilities and the trend towards secure development and education can help to decrease the amount of vulnerabilities that are in the firmware to begin with. In spite of this, firmware will likely never reach a point of having zero vulnerabilities. Maintaining regular updates and continuous education on the latest research is imperative in safeguarding our digital ecosystems, fortifying devices against emerging threats, and fostering a resilient foundation for a secure and trustworthy technological future.</p>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>
