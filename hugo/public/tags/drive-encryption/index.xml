@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Drive Encryption on Ally Petitt</title>
+    <link>http://localhost:1313/ally-petitt/tags/drive-encryption/</link>
+    <description>Recent content in Drive Encryption on Ally Petitt</description>
+    <generator>Hugo -- 0.125.4</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 05 May 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/ally-petitt/tags/drive-encryption/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to Encrypt a Drive in Linux</title>
+      <link>http://localhost:1313/ally-petitt/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/</link>
+      <pubDate>Fri, 05 May 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;Hey everyone, this is a pretty quick article on LUKS drive encryption on Linux with the &lt;code&gt;cryptsetup&lt;/code&gt; library. By following the steps outlined here, you will be able to encrypt a drive, decrypt it, and mount it. This was done in a Kali Linux VM and commands may vary for other distributions.&lt;/p&gt;
+&lt;p&gt;Disclaimer: This is not an area that I have much experience in so if details are inaccurate, I apologize in advance.&lt;/p&gt;
+&lt;h2 id=&#34;creating-a-new-partition&#34;&gt;Creating a new partition&lt;/h2&gt;
+&lt;p&gt;I’m using a virtual machine with 2 virtual hard disks.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*ao7i4G4xZFiEXNb2nX2-bQ.png&#34; alt=&#34;&#34;  /&gt;
+
+&lt;em&gt;Demonstrating my disks with “lsblk -e7”&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;I’ll be using a tool called &lt;code&gt;parted&lt;/code&gt; to create a partition on &lt;code&gt;/dev/sdb&lt;/code&gt;. Historically, when a system uses the Master Boot Record (MBR) partition table, &lt;code&gt;fdisk&lt;/code&gt; is used to manage the partition. In this article, I’ll use &lt;code&gt;parted&lt;/code&gt; because of its usability in scripting and automation.&lt;/p&gt;
+&lt;p&gt;I’ll start by listing the information of the drives.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;parted -s /dev/sdb print all
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*5w3JBHztlFmtojmfpSwqAg.png&#34; alt=&#34;&#34;  /&gt;
+
+The output &lt;code&gt;msdos&lt;/code&gt; under &lt;code&gt;/dev/sda&lt;/code&gt;, indicates that &lt;code&gt;sda&lt;/code&gt; is using the MBR partition table. Learn more about partition table types &lt;a href=&#34;https://en.wikipedia.org/wiki/Disk_partitioning&#34;&gt;here&lt;/a&gt; and &lt;a href=&#34;https://wiki.archlinux.org/title/Partitioning&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I’ll now create the GPT partition table on &lt;code&gt;/dev/sdb&lt;/code&gt;. You’ll notice that after running the command, &lt;code&gt;/dev/sdb&lt;/code&gt; now appears as a &lt;code&gt;gpt&lt;/code&gt; partition table.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*tZM4UvgCMQXekmpmoDJumg.png&#34; alt=&#34;&#34;  /&gt;
+
+I then create a partition on the disk with the ext4 file system.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*dbuTKtvJcQZI4cFNANRylQ.png&#34; alt=&#34;&#34;  /&gt;
+
+The commands I used for this are below. The values for the start and ending offsets when creating the partitions can be expressed in both percentages and exact byte values. Reference the &lt;a href=&#34;https://linux.die.net/man/8/parted&#34;&gt;man page&lt;/a&gt; for more details.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;parted -s /dev/sdb mklabel gpt  
+parted -s /dev/sdb mkpart primary ext4 0% 50MiB
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;encrypting-thedrive&#34;&gt;Encrypting the Drive&lt;/h2&gt;
+&lt;p&gt;This demonstrates how to encrypt file system using LUKS. It is important to remember the passphrase that you enter while encrypting the partition because it is a key piece of information when decrypting the drive.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;cryptsetup luksFormat /dev/sdb # encrypt /dev/sdb with luks
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;decrypting-thedrive&#34;&gt;Decrypting the Drive&lt;/h2&gt;
+&lt;p&gt;You’ll need to do this before you’re able to mount and use the partition on the drive.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;cryptsetup open /dev/sdb encrypted # open the encrypted drive as /dev/mapper/encrypted  
+mkfs.ext4 /dev/mapper/encrypted # create a filesystem on the device (only needed the first time you open the encrypted drive)
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;mounting-the-partition&#34;&gt;Mounting the Partition&lt;/h2&gt;
+&lt;p&gt;In order to actually use the partition and the file system on it, we must mount it.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;mkdir -p /mnt/encrypted # prepare the mount point  
+mount /dev/mapper/encrypted /mnt/encrypted # mount the decrypted filesystem on /mnt/encrypted
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;unmounting-the-partition&#34;&gt;Unmounting the Partition&lt;/h2&gt;
+&lt;p&gt;When you’re done using the drive, you can unmount it.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;umount /mnt/encrypted 
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;closing-and-re-encrypting-the-partition&#34;&gt;Closing and Re-encrypting the Partition&lt;/h2&gt;
+&lt;p&gt;In its unmounted state, it is still decrypted. To re-encrypt and close the drive, you can run the following command:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;cryptsetup close /dev/mapper/encrypted
+&lt;/code&gt;&lt;/pre&gt;&lt;h1 id=&#34;digging-deeper&#34;&gt;Digging Deeper&lt;/h1&gt;
+&lt;p&gt;Because I’m a curious person, I’ll share with you some commands that you can use to get more information on the file system that you just created and other findings that I thought were interesting.&lt;/p&gt;
+&lt;h2 id=&#34;file-systemmetadata&#34;&gt;File System Metadata&lt;/h2&gt;
+&lt;p&gt;After decrypting the drive, you can view the metadata of your filesystem.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;cryptsetup --type luks open /dev/sdb encrypted
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;These are some commands that will give you infromation.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;df -hT /dev/mapper/encrypted  
+tune2fs -l /dev/sdb
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;As shown in the screenshots, you’re able to view the number of inodes, the block count, block size, filesystem magic number, and much more.&lt;/p&gt;
+&lt;h2 id=&#34;inodes&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*k6QJaeh0pBMsxnfbGk6Rog.png&#34; alt=&#34;&#34;  /&gt;
+
+&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*BXNCkBoJaesaE0AfBZlOsQ.png&#34; alt=&#34;&#34;  /&gt;
+
+Inodes&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Inode&#34;&gt;Inodes&lt;/a&gt; are a data structure that contain information about files in the Linux filesystem. It contains metadata such as the block number that the file is located in on the hard drive, permissions, and file owner. In an ext4 filesystem, the number of inodes in is fixed, whereas in XFS and JFS, the number of inodes is dynamic. The result is that in ext4 filesystems where many inodes are used, such as in situations where many directories, symbolic links, and/or small files are made, an error message that the system is out of space may occur when there is plenty of space left. The reason for this is simply that the filesystem has no more available inodes to assign to new files. This is a relatively common occurence for mail servers that often hold many small files.&lt;/p&gt;
+&lt;p&gt;The number of inodes on your system’s filesystems can be viewed with &lt;code&gt;df -hi&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*_TgsDD7BK_fPitV0J31ywg.png&#34; alt=&#34;&#34;  /&gt;
+
+You can query the inode information on a specific file with the following command:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;ls -il file
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*nBvEce088HNvxUbcz1cF7w.png&#34; alt=&#34;&#34;  /&gt;
+
+The inode number is on the leftmost column of output. In this case, it is &lt;code&gt;131079&lt;/code&gt;. Additionally, you can see the read, write, and execute permissions on the file with the owner and group associated with it.&lt;/p&gt;
+&lt;p&gt;As an alternative, you can search for the file that is associated with a specific inode with this command:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;find / -inum 1234567 -ls
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*15DlndsZGVZ0Q9A3lAtXeg.png&#34; alt=&#34;&#34;  /&gt;
+
+I was able to find the file &lt;code&gt;/tmp/test.txt&lt;/code&gt; that was associated with &lt;code&gt;131079&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;duplicating-the-encrypted-drive&#34;&gt;Duplicating the Encrypted Drive&lt;/h2&gt;
+&lt;p&gt;This command can be used to create an exact duplicate of &lt;code&gt;/dev/sdb&lt;/code&gt; in &lt;code&gt;/media/sdb.img&lt;/code&gt;.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;dd if=/dev/sdb of=/media/sdb.img
+&lt;/code&gt;&lt;/pre&gt;&lt;h1 id=&#34;next-steps&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*hzoKv4rgFMHTAQtFFIcaYQ.png&#34; alt=&#34;&#34;  /&gt;
+
+Next Steps&lt;/h1&gt;
+&lt;p&gt;Moving forward, you can expand upon what was done in this article by implementing an added layer of abstraction and flexibility with &lt;a href=&#34;https://linuxconfig.org/linux-lvm-logical-volume-manager&#34;&gt;LVM&lt;/a&gt;. You can also continue to experiment with different ways of encrypting partitions such as those outlined in &lt;a href=&#34;https://www.baeldung.com/linux/encrypt-partition&#34;&gt;this article&lt;/a&gt;. There are many different ways to configure your system and I would encourage you to continue learning. Thank you for reading!&lt;/p&gt;
+</description>
+    </item>
+  </channel>
+</rss>

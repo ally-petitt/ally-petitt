@@ -1,0 +1,9 @@
+baseURL = 'https://ally-petitt.github.com/ally-petitt/'
+languageCode = 'en-us'
+title = 'Ally Petitt'
+theme = 'hugo-PaperMod'
+
+
+[params]
+  [params.contact]
+    email = 'allypetitt@proton.me'

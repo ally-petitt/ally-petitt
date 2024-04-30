@@ -1,0 +1,760 @@
+- basename: 2023-12-02_Stealthy-Exploit-Opens-Door-for-Pre-Compilation-Code-Execution-17a57b9585cb
+  cover_img_idx: 0
+  fname: ./export/posts/2023-12-02_Stealthy-Exploit-Opens-Door-for-Pre-Compilation-Code-Execution-17a57b9585cb.html
+  imgs:
+  - basename: 0*XwuUEqGz-1xT_v_j
+    ext: .jpg
+    url: https://cdn-images-1.medium.com/max/800/0*XwuUEqGz-1xT_v_j.jpg
+  - basename: 0*WhDuZ1uRN5oHHeR9
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*WhDuZ1uRN5oHHeR9
+  - basename: 0*Hgtdvi95rRshZbBM
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/0*Hgtdvi95rRshZbBM.png
+  - basename: 0*H4i_I34WTV0KbZE5
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*H4i_I34WTV0KbZE5
+  summary: Introduction
+  time: '2023-12-02T16:36:53.477Z'
+  time_human: December 2, 2023
+  title: Stealthy Exploit Opens Door for Pre-Compilation Code Execution
+  url: https://medium.com/@allypetitt/stealthy-exploit-opens-door-for-pre-compilation-code-execution-17a57b9585cb
+- basename: 2023-09-29_How-I-Found-Authentication-Bypass-Vulnerability---CVE-2023-43154-b55dee7c876b
+  cover_img_idx: 0
+  fname: ./export/posts/2023-09-29_How-I-Found-Authentication-Bypass-Vulnerability---CVE-2023-43154-b55dee7c876b.html
+  imgs:
+  - basename: 0*3hIZtNoj0lfZ86_b
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*3hIZtNoj0lfZ86_b
+  - basename: 1*Pkekiat_JJKGXIKOXuDGpQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*Pkekiat_JJKGXIKOXuDGpQ.png
+  - basename: 1*YiIswaTUkWAQg-oNymcuAg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*YiIswaTUkWAQg-oNymcuAg.png
+  - basename: 1*cf13zlJVAiQBLn4ZHPGXxg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*cf13zlJVAiQBLn4ZHPGXxg.png
+  - basename: 1*hSnIWCdKDG--lBGveEolvQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*hSnIWCdKDG--lBGveEolvQ.png
+  - basename: 1*a04RNWeykCU4OPm-t3CWSQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*a04RNWeykCU4OPm-t3CWSQ.png
+  - basename: 1*FDZGbf2o3aYsiVJnTI0kkQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*FDZGbf2o3aYsiVJnTI0kkQ.png
+  - basename: 1*dXa4uMZw2kGSoG3mqvgIeg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*dXa4uMZw2kGSoG3mqvgIeg.png
+  - basename: 1*caUiDSInsQ6owr2iKErNVQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*caUiDSInsQ6owr2iKErNVQ.png
+  - basename: 1*rGwiYW55r2P_iAi36kXF7w
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*rGwiYW55r2P_iAi36kXF7w.png
+  - basename: 1*H-JRAsYSEblniMQgPYm9Ew
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*H-JRAsYSEblniMQgPYm9Ew.png
+  summary: Introduction
+  time: '2023-09-29T20:41:57.849Z'
+  time_human: September 29, 2023
+  title: How I Found Authentication Bypass Vulnerability -- CVE-2023-43154
+  url: https://medium.com/@allypetitt/how-i-found-authentication-bypass-vulnerability-cve-2023-43154-b55dee7c876b
+- basename: 2023-04-09_How-to-Create-and-Deploy-Your-Own-Cloud-Server-with-NextCloud-345e185d602a
+  cover_img_idx: 0
+  fname: ./export/posts/2023-04-09_How-to-Create-and-Deploy-Your-Own-Cloud-Server-with-NextCloud-345e185d602a.html
+  imgs:
+  - basename: 0*-WVjY5h4EpphjjX7
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*-WVjY5h4EpphjjX7
+  - basename: 1*yVUBpaz7cPnubERvyi-o7w
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*yVUBpaz7cPnubERvyi-o7w.png
+  - basename: 1*GN-cYnfs54AiOogx8-NAQw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*GN-cYnfs54AiOogx8-NAQw.png
+  - basename: 1*09ClzbW6QlZFUKeE8VCFqw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*09ClzbW6QlZFUKeE8VCFqw.png
+  - basename: 1*NCg8BFzJsn7Q8DSYJc22gw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*NCg8BFzJsn7Q8DSYJc22gw.png
+  - basename: 1*rpUr6mASFndr9leQFgxjSw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*rpUr6mASFndr9leQFgxjSw.png
+  - basename: 1*XZ6nK22WFx20KFCEcIweNg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*XZ6nK22WFx20KFCEcIweNg.png
+  - basename: 1*EPZQQ90fBx0es5jESHsJQg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*EPZQQ90fBx0es5jESHsJQg.png
+  - basename: 1*RFzQIvqVYLkE7HLgJ2eciA
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*RFzQIvqVYLkE7HLgJ2eciA.png
+  - basename: 1*YSMzF6AAy_s1ddUyTn1fRA
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*YSMzF6AAy_s1ddUyTn1fRA.png
+  - basename: 0*rXIb7WPys_Tqgbh_
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*rXIb7WPys_Tqgbh_
+  summary: Why Create a Cloud Server?
+  time: '2023-04-09T16:48:24.847Z'
+  time_human: April 9, 2023
+  title: How to Create and Deploy Your Own Cloud Server with NextCloud
+  url: https://medium.com/@allypetitt/how-to-create-and-deploy-your-own-cloud-server-with-nextcloud-345e185d602a
+- basename: 2023-05-02_Snort-IPS-Quickstart-27559ae01fae
+  cover_img_idx: 0
+  fname: ./export/posts/2023-05-02_Snort-IPS-Quickstart-27559ae01fae.html
+  imgs:
+  - basename: 1*pngRmEDDXcscoXuasWQFdQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*pngRmEDDXcscoXuasWQFdQ.png
+  - basename: 1*uPIpmb3Q2AUJj3v3GkL2lQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*uPIpmb3Q2AUJj3v3GkL2lQ.png
+  - basename: 1*Pz6IDFwxqQwrMWmZS83kQg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*Pz6IDFwxqQwrMWmZS83kQg.png
+  - basename: 1*4STD2kRrAx3xnRfCA7ALqA
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*4STD2kRrAx3xnRfCA7ALqA.png
+  summary: Introduction
+  time: '2023-05-02T18:41:33.179Z'
+  time_human: May 2, 2023
+  title: Snort IPS Quickstart
+  url: https://medium.com/@allypetitt/snort-ips-quickstart-27559ae01fae
+- basename: 2022-02-18_Mustacchio-Walkthrough---Try-Hack-Me---Ally-Petitt-6295dfbbfb1b
+  cover_img_idx: 0
+  fname: ./export/posts/2022-02-18_Mustacchio-Walkthrough---Try-Hack-Me---Ally-Petitt-6295dfbbfb1b.html
+  imgs:
+  - basename: 1*F19asfqgh7o-jFDVwsTizA
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*F19asfqgh7o-jFDVwsTizA.png
+  - basename: 1*erwnChNmTvF8tXrU6r_S-Q
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*erwnChNmTvF8tXrU6r_S-Q.png
+  - basename: 1*V_As8mpAktOxs0GjknBnAw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*V_As8mpAktOxs0GjknBnAw.png
+  - basename: 1*tmf5emcwConOrADGYV4Veg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*tmf5emcwConOrADGYV4Veg.png
+  - basename: 1*n3kLAAUq1LNmS2DrlBHwcA
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*n3kLAAUq1LNmS2DrlBHwcA.png
+  - basename: 1*0UmbX55dZohkB-gKgPoRBw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*0UmbX55dZohkB-gKgPoRBw.png
+  - basename: 1*0tRlE5e6aAO2JQcOEZREOw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*0tRlE5e6aAO2JQcOEZREOw.png
+  - basename: 1*cD5Mov3ZH_r2YjtzfLoX3w
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*cD5Mov3ZH_r2YjtzfLoX3w.png
+  - basename: 1*XQySYPmpIgWDqkmlXyx_Ag
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*XQySYPmpIgWDqkmlXyx_Ag.png
+  - basename: 1*yEC5KVva_GVYWI45nKBEfg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*yEC5KVva_GVYWI45nKBEfg.png
+  - basename: 1*mGKSvT93JzuxBhgxAvxBIg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*mGKSvT93JzuxBhgxAvxBIg.png
+  - basename: 1*DFe8cHaY9rABFQoOAkr-iA
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*DFe8cHaY9rABFQoOAkr-iA.png
+  - basename: 1*RBrrcp7EVvjb9szz2tLUGg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*RBrrcp7EVvjb9szz2tLUGg.png
+  - basename: 1*4UbZ77EZp3aHOXEHYvNonQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*4UbZ77EZp3aHOXEHYvNonQ.png
+  - basename: 1*8nyN1k4x9nZpM1sGpDmSsg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*8nyN1k4x9nZpM1sGpDmSsg.png
+  summary: Introduction
+  time: '2022-02-18T01:55:45.712Z'
+  time_human: February 18, 2022
+  title: Mustacchio Walkthrough | Try Hack Me | Ally Petitt
+  url: https://medium.com/@allypetitt/mustacchio-walkthrough-try-hack-me-ally-petitt-6295dfbbfb1b
+- basename: 2023-03-19_How-I-got-my-OSCP-at-16-years-old-50ed402d6fd1
+  cover_img_idx: 0
+  fname: ./export/posts/2023-03-19_How-I-got-my-OSCP-at-16-years-old-50ed402d6fd1.html
+  imgs:
+  - basename: 1*BQs51p5uCqZyIuYNCVrqGQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*BQs51p5uCqZyIuYNCVrqGQ.png
+  - basename: 0*wehmn9kUcoEXnjLG
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*wehmn9kUcoEXnjLG
+  - basename: 1*K8Nv4EuM0InYvzhXWdoItA
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*K8Nv4EuM0InYvzhXWdoItA.png
+  - basename: 0*Fk9R3HxHH1nxuxF-
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*Fk9R3HxHH1nxuxF-
+  - basename: 0*Q8ieug4tq9emeV9_
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*Q8ieug4tq9emeV9_
+  - basename: 0*I7W7gRqGQgqtioYW
+    ext: .jpg
+    url: https://cdn-images-1.medium.com/max/800/0*I7W7gRqGQgqtioYW.jpg
+  - basename: 0*1XGLXdlNNkfdZLXa
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*1XGLXdlNNkfdZLXa
+  - basename: 0*Q_5-29t3MzePTHAp
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*Q_5-29t3MzePTHAp
+  - basename: 0*N-iZkZHiXrad1CEK
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*N-iZkZHiXrad1CEK
+  - basename: 0*3QBFTAphIYoDOzEe
+    ext: .jpg
+    url: https://cdn-images-1.medium.com/max/800/0*3QBFTAphIYoDOzEe.jpg
+  - basename: 0*CrQVpk88n0fjUXre
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/0*CrQVpk88n0fjUXre.png
+  - basename: 0*VUEaqMiluWjqWpXB
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*VUEaqMiluWjqWpXB
+  - basename: 0*5pIvjg81NpVA1zmd
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*5pIvjg81NpVA1zmd
+  - basename: 1*Ly6iRSDs7Ugn1kAajhrNjg
+    ext: .jpeg
+    url: https://cdn-images-1.medium.com/max/800/1*Ly6iRSDs7Ugn1kAajhrNjg.jpeg
+  - basename: 1*0JjF7v3_N9tkTMS4v7Jo0w
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*0JjF7v3_N9tkTMS4v7Jo0w.png
+  - basename: 0*CVPmxaTzJ_GYmftJ
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*CVPmxaTzJ_GYmftJ
+  summary: "Wait, you can do that? The answer is a resounding \u201Cyes\u201D. And\
+    \ I\u2019m not the only one who got my OSCP at the age of 16. Meet Mihai, Vanshal\u2026"
+  time: '2023-03-19T01:53:38.575Z'
+  time_human: March 19, 2023
+  title: How I got my OSCP at 16 years old
+  url: https://medium.com/@allypetitt/how-i-got-my-oscp-at-16-years-old-50ed402d6fd1
+- basename: 2022-07-09_How-Companies-Respond-to-Cyber-Attacks---The-6-Steps-of-an-Incident-Response-Plan-9c6f4267253e
+  cover_img_idx: 0
+  fname: ./export/posts/2022-07-09_How-Companies-Respond-to-Cyber-Attacks---The-6-Steps-of-an-Incident-Response-Plan-9c6f4267253e.html
+  imgs:
+  - basename: 1*NYCBo5F_MGeRvxzrEm1hsg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*NYCBo5F_MGeRvxzrEm1hsg.png
+  - basename: 1*b6BEiI2FjVfUf6e-zduodQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*b6BEiI2FjVfUf6e-zduodQ.png
+  summary: Introduction
+  time: '2022-07-09T01:22:34.236Z'
+  time_human: July 9, 2022
+  title: How Companies Respond to Cyber Attacks | The 6 Steps of an Incident Response
+    Plan
+  url: https://medium.com/@allypetitt/how-companies-respond-to-cyber-attacks-the-6-steps-of-an-incident-response-plan-9c6f4267253e
+- basename: 2023-06-01_5-Ways-I-Bypassed-Your-Web-Application-Firewall--WAF--43852a43a1c2
+  cover_img_idx: 0
+  fname: ./export/posts/2023-06-01_5-Ways-I-Bypassed-Your-Web-Application-Firewall--WAF--43852a43a1c2.html
+  imgs:
+  - basename: 0*lDR9M2gtJzPvOdWg
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*lDR9M2gtJzPvOdWg
+  - basename: 1*8zeEz07TxwZ8VGBIaqxVvA
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*8zeEz07TxwZ8VGBIaqxVvA.png
+  - basename: 1*_pCVKq8cL3ZTghqWG5BAyQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*_pCVKq8cL3ZTghqWG5BAyQ.png
+  - basename: 0*khYe6n5QPB7ar2GG
+    ext: .jpg
+    url: https://cdn-images-1.medium.com/max/800/0*khYe6n5QPB7ar2GG.jpg
+  - basename: 0*Dn2ov32HcZKKSE-4
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/0*Dn2ov32HcZKKSE-4.png
+  - basename: 0*0jvcJnOSNRnOcYZJ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/0*0jvcJnOSNRnOcYZJ.png
+  summary: Introduction
+  time: '2023-06-01T02:32:05.067Z'
+  time_human: June 1, 2023
+  title: 5 Ways I Bypassed Your Web Application Firewall (WAF)
+  url: https://medium.com/@allypetitt/5-ways-i-bypassed-your-web-application-firewall-waf-43852a43a1c2
+- basename: 2022-05-25_Kerberos-Authentication-Explained-3d45f336bb2c
+  cover_img_idx: 0
+  fname: ./export/posts/2022-05-25_Kerberos-Authentication-Explained-3d45f336bb2c.html
+  imgs:
+  - basename: 1*lPQ16gDtSYYccrc2-iExiA
+    ext: .jpeg
+    url: https://cdn-images-1.medium.com/max/800/1*lPQ16gDtSYYccrc2-iExiA.jpeg
+  - basename: 1*X7pcMLxklUmSlsC8ZvDO1A
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*X7pcMLxklUmSlsC8ZvDO1A.png
+  summary: "When first learning Kerberos, it can feel like you\u2019re being chased\
+    \ by the three-headed dog. Not to fear, however, because today I\u2019ll be\u2026"
+  time: '2022-05-25T03:01:55.837Z'
+  time_human: May 25, 2022
+  title: Kerberos Authentication Explained
+  url: https://medium.com/@allypetitt/kerberos-authentication-explained-3d45f336bb2c
+- basename: 2022-06-08_Pentester-s-Guide-to-Performing-File-Transfers-3c1a6a38dfc8
+  cover_img_idx: 0
+  fname: ./export/posts/2022-06-08_Pentester-s-Guide-to-Performing-File-Transfers-3c1a6a38dfc8.html
+  imgs:
+  - basename: 1*HNC0lT4gPMDU8uH0fyjRyw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*HNC0lT4gPMDU8uH0fyjRyw.png
+  - basename: 1*ehYiaPXjraslOYhNqIv7Zw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*ehYiaPXjraslOYhNqIv7Zw.png
+  - basename: 1*nBHrLvu-D9RNlMsbTG3Wsg
+    ext: .jpeg
+    url: https://cdn-images-1.medium.com/max/800/1*nBHrLvu-D9RNlMsbTG3Wsg.jpeg
+  - basename: 1*i6K6JFM5TTxSFf4b_ermuQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*i6K6JFM5TTxSFf4b_ermuQ.png
+  summary: Foreword
+  time: '2022-06-08T19:50:33.141Z'
+  time_human: June 8, 2022
+  title: Pentester's Guide to Performing File Transfers
+  url: https://medium.com/@allypetitt/pentesters-guide-to-performing-file-transfers-3c1a6a38dfc8
+- basename: 2023-05-13_5-Ways-I-Found-Your-Deleted-Files-492407dbd467
+  cover_img_idx: 0
+  fname: ./export/posts/2023-05-13_5-Ways-I-Found-Your-Deleted-Files-492407dbd467.html
+  imgs:
+  - basename: 0*MnBiAcwiwaFGOOAe
+    ext: .jpg
+    url: https://cdn-images-1.medium.com/max/800/0*MnBiAcwiwaFGOOAe.jpg
+  - basename: 1*HRHkhSM5bBjI9ouCYNpU4w
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*HRHkhSM5bBjI9ouCYNpU4w.png
+  - basename: 1*4gowWgQfJ4J1FXwjFHjhQg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*4gowWgQfJ4J1FXwjFHjhQg.png
+  - basename: 1*_T8VXPuyfnuQ7Rm5WNIOsQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*_T8VXPuyfnuQ7Rm5WNIOsQ.png
+  - basename: 1*EAJIlLWQ5g3rEgqc5nPNbQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*EAJIlLWQ5g3rEgqc5nPNbQ.png
+  - basename: 1*hINgjWeGy7ttVHl1qDs1EQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*hINgjWeGy7ttVHl1qDs1EQ.png
+  - basename: 1*mc44fgKV8os0qCVpYYZiJQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*mc44fgKV8os0qCVpYYZiJQ.png
+  - basename: 1*hQXtm0cZ7wge3IgQlexR-Q
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*hQXtm0cZ7wge3IgQlexR-Q.png
+  - basename: 1*Ipv-ABMSCpXNtc6PZT5zqQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*Ipv-ABMSCpXNtc6PZT5zqQ.png
+  - basename: 1*vEuqI7RnAWsvLfrH9n88Pw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*vEuqI7RnAWsvLfrH9n88Pw.png
+  - basename: 1*c5iJeI2oyLMdmRu_bBD5Qg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*c5iJeI2oyLMdmRu_bBD5Qg.png
+  - basename: 1*jl17is949wOoNF0JEzBcIg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*jl17is949wOoNF0JEzBcIg.png
+  - basename: 1*yYQEslxR1RWkUbkEX743Bg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*yYQEslxR1RWkUbkEX743Bg.png
+  - basename: 1*ayacIY6WQdxAYksd_nwT8g
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*ayacIY6WQdxAYksd_nwT8g.png
+  - basename: 1*kA2aubO7prDBFW9Xx0cGvQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*kA2aubO7prDBFW9Xx0cGvQ.png
+  - basename: 1*Y6kTU1JxILxivTOYbHN5tQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*Y6kTU1JxILxivTOYbHN5tQ.png
+  - basename: 1*O3huS4-S2BausvT-s2KiYw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*O3huS4-S2BausvT-s2KiYw.png
+  - basename: 1*jASCyrkTBYVfhWQxZkk3lg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*jASCyrkTBYVfhWQxZkk3lg.png
+  - basename: 1*5ixUUenRR50lIavpZ0oyIw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*5ixUUenRR50lIavpZ0oyIw.png
+  summary: Computer Forensics for File Recovery
+  time: '2023-05-13T17:39:57.346Z'
+  time_human: May 13, 2023
+  title: 5 Ways I Found Your Deleted Files
+  url: https://medium.com/@allypetitt/5-ways-i-found-your-deleted-files-492407dbd467
+- basename: 2023-04-23_How-to-Prevent-Data-Leaks-Before-they-Happen-3c53997b3744
+  cover_img_idx: 0
+  fname: ./export/posts/2023-04-23_How-to-Prevent-Data-Leaks-Before-they-Happen-3c53997b3744.html
+  imgs:
+  - basename: 0*65eSMdR110wv_HGg
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*65eSMdR110wv_HGg
+  - basename: 1*3VYpuFQz25D0HYRxMrEyMg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*3VYpuFQz25D0HYRxMrEyMg.png
+  - basename: 0*hwsT5tgv1e1AHF6S
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*hwsT5tgv1e1AHF6S
+  summary: Data Loss Prevention
+  time: '2023-04-23T22:13:14.240Z'
+  time_human: April 23, 2023
+  title: How to Prevent Data Leaks Before they Happen
+  url: https://medium.com/@allypetitt/how-to-stop-data-leaks-before-they-happen-3c53997b3744
+- basename: 2023-05-05_How-to-Encrypt-a-Drive-in-Linux-83b3001744f4
+  cover_img_idx: 0
+  fname: ./export/posts/2023-05-05_How-to-Encrypt-a-Drive-in-Linux-83b3001744f4.html
+  imgs:
+  - basename: 1*ao7i4G4xZFiEXNb2nX2-bQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*ao7i4G4xZFiEXNb2nX2-bQ.png
+  - basename: 1*5w3JBHztlFmtojmfpSwqAg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*5w3JBHztlFmtojmfpSwqAg.png
+  - basename: 1*tZM4UvgCMQXekmpmoDJumg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*tZM4UvgCMQXekmpmoDJumg.png
+  - basename: 1*dbuTKtvJcQZI4cFNANRylQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*dbuTKtvJcQZI4cFNANRylQ.png
+  - basename: 1*k6QJaeh0pBMsxnfbGk6Rog
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*k6QJaeh0pBMsxnfbGk6Rog.png
+  - basename: 1*BXNCkBoJaesaE0AfBZlOsQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*BXNCkBoJaesaE0AfBZlOsQ.png
+  - basename: 1*_TgsDD7BK_fPitV0J31ywg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*_TgsDD7BK_fPitV0J31ywg.png
+  - basename: 1*nBvEce088HNvxUbcz1cF7w
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*nBvEce088HNvxUbcz1cF7w.png
+  - basename: 1*15DlndsZGVZ0Q9A3lAtXeg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*15DlndsZGVZ0Q9A3lAtXeg.png
+  - basename: 1*hzoKv4rgFMHTAQtFFIcaYQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*hzoKv4rgFMHTAQtFFIcaYQ.png
+  summary: Introduction
+  time: '2023-05-05T02:47:08.951Z'
+  time_human: May 5, 2023
+  title: How to Encrypt a Drive in Linux
+  url: https://medium.com/@allypetitt/how-to-encrypt-a-drive-in-linux-83b3001744f4
+- basename: 2023-04-29_Digging-into-the-Linux-Secure-Boot-Process-9631a70b158b
+  cover_img_idx: 0
+  fname: ./export/posts/2023-04-29_Digging-into-the-Linux-Secure-Boot-Process-9631a70b158b.html
+  imgs:
+  - basename: 0*6T29Pwj4dMhQiPRW
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/0*6T29Pwj4dMhQiPRW.png
+  - basename: 1*NorYyiqugzWJsb0pbGlbmA
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*NorYyiqugzWJsb0pbGlbmA.png
+  summary: Introduction
+  time: '2023-04-29T23:22:36.055Z'
+  time_human: April 29, 2023
+  title: Digging into the Linux Secure Boot Process
+  url: https://medium.com/@allypetitt/digging-into-the-linux-secure-boot-process-9631a70b158b
+- basename: 2022-11-02_What-the-Pen-200-Has-Taught-Me-About-Pentesting-Methodology-1fd67760be5c
+  cover_img_idx: 0
+  fname: ./export/posts/2022-11-02_What-the-Pen-200-Has-Taught-Me-About-Pentesting-Methodology-1fd67760be5c.html
+  imgs:
+  - basename: 0*xcyov1D0RvoqVZfj
+    ext: .jpg
+    url: https://cdn-images-1.medium.com/max/800/0*xcyov1D0RvoqVZfj.jpg
+  summary: "The Pen-200 is the prerequisite course for the OSCP exam. As such, the\
+    \ writeups for the labs are incredibly difficult to find. As someone\u2026"
+  time: '2022-11-02T00:12:10.412Z'
+  time_human: November 2, 2022
+  title: What the Pen-200 Has Taught Me About Pentesting Methodology
+  url: https://medium.com/@allypetitt/what-the-pen-200-has-taught-me-about-pentesting-methodology-1fd67760be5c
+- basename: 2023-07-13_Reverse-Engineering---Analyzing-Headers-23dc84075cd
+  cover_img_idx: 0
+  fname: ./export/posts/2023-07-13_Reverse-Engineering---Analyzing-Headers-23dc84075cd.html
+  imgs:
+  - basename: 0*1ro_BkQGlcyGrJmG
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/0*1ro_BkQGlcyGrJmG.png
+  summary: "In this article, the tool will be used to dump\u2026"
+  time: '2023-07-13T23:26:45.953Z'
+  time_human: July 13, 2023
+  title: Reverse Engineering -- Analyzing Headers
+  url: https://medium.com/@allypetitt/reverse-engineering-analyzing-headers-23dc84075cd
+- basename: 2022-11-12_VPN-Troubleshooting--Inactivity-Timeout-----ping-restart--a52791c24a50
+  cover_img_idx: 0
+  fname: ./export/posts/2022-11-12_VPN-Troubleshooting--Inactivity-Timeout-----ping-restart--a52791c24a50.html
+  imgs:
+  - basename: 1*1SN24_SvT2cN2X0GeX-DUA
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*1SN24_SvT2cN2X0GeX-DUA.png
+  - basename: 1*GCaxAU5pr5MvU-aF5ujO7w
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*GCaxAU5pr5MvU-aF5ujO7w.png
+  - basename: 1*c25ACGc0dibyMqgCdBy9Xw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*c25ACGc0dibyMqgCdBy9Xw.png
+  - basename: 1*fGnBltujryQ_p2CLOjUAiw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*fGnBltujryQ_p2CLOjUAiw.png
+  - basename: 1*QygUgBksC3lNe-XBgKPG9A
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*QygUgBksC3lNe-XBgKPG9A.png
+  summary: 'If your VPN log looks something like this:'
+  time: '2022-11-12T23:49:29.786Z'
+  time_human: November 12, 2022
+  title: 'VPN Troubleshooting: Inactivity Timeout ( -- ping-restart)'
+  url: https://medium.com/@allypetitt/vpn-troubleshooting-inactivity-timeout-ping-restart-a52791c24a50
+- basename: 2023-08-05_Beyond-the-Screen--The-Hidden-World-of-Firmware-Security-87b0ea6a20a4
+  cover_img_idx: 0
+  fname: ./export/posts/2023-08-05_Beyond-the-Screen--The-Hidden-World-of-Firmware-Security-87b0ea6a20a4.html
+  imgs:
+  - basename: 1*UA4-sPgJH7Fhk9jbvvRafQ
+    ext: .jpeg
+    url: https://cdn-images-1.medium.com/max/800/1*UA4-sPgJH7Fhk9jbvvRafQ.jpeg
+  - basename: 0*9hEnbp2Z7WCO9WKV
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*9hEnbp2Z7WCO9WKV
+  - basename: 0*B3RibWe5mxvLNeKh
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*B3RibWe5mxvLNeKh
+  - basename: 0*J6wRzq-WjDenWZ3v
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/0*J6wRzq-WjDenWZ3v.png
+  - basename: 0*5XuFmJUmVLjZnmpG
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*5XuFmJUmVLjZnmpG
+  - basename: 1*3iEBRxmvxyY1JJnKj1V-Yw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*3iEBRxmvxyY1JJnKj1V-Yw.png
+  - basename: 1*Mx8XRA2YeI3His7r24yFuQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*Mx8XRA2YeI3His7r24yFuQ.png
+  - basename: 0*h4xdnj8S3XpVFr8o
+    ext: .jpg
+    url: https://cdn-images-1.medium.com/max/800/0*h4xdnj8S3XpVFr8o.jpg
+  summary: Introduction
+  time: '2023-08-05T21:41:44.333Z'
+  time_human: August 5, 2023
+  title: 'Beyond the Screen: The Hidden World of Firmware Security'
+  url: https://medium.com/@allypetitt/beyond-the-screen-the-hidden-world-of-firmware-security-87b0ea6a20a4
+- basename: 2023-04-13_Restoring-Files-in--usr-include-88622911c3ae
+  cover_img_idx: 0
+  fname: ./export/posts/2023-04-13_Restoring-Files-in--usr-include-88622911c3ae.html
+  imgs:
+  - basename: 1*fAw86hUT7orMXK8ZVFfZHQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*fAw86hUT7orMXK8ZVFfZHQ.png
+  summary: "Hi guys, I made a mistake. In my frustration trying to debug my C program,\
+    \ I inadvertently deleted all the files within my /usr/include\u2026"
+  time: '2023-04-13T00:02:45.918Z'
+  time_human: April 13, 2023
+  title: Restoring Files in /usr/include
+  url: https://medium.com/@allypetitt/restoring-files-in-usr-include-88622911c3ae
+- basename: 2023-03-28_Practical-Demonstration--DNS-Spoofing---Home-Lab-f7294443fb23
+  cover_img_idx: 0
+  fname: ./export/posts/2023-03-28_Practical-Demonstration--DNS-Spoofing---Home-Lab-f7294443fb23.html
+  imgs:
+  - basename: 0*P3ZahJWqz8AFbk9s
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/0*P3ZahJWqz8AFbk9s.png
+  - basename: 1*UY_WaZN3PluXBghyE4c0nA
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*UY_WaZN3PluXBghyE4c0nA.png
+  - basename: 1*8yqslDbjbDYLIde9DLp0Jw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*8yqslDbjbDYLIde9DLp0Jw.png
+  - basename: 1*c0hPCdzDnLLWE_0zuWDwtw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*c0hPCdzDnLLWE_0zuWDwtw.png
+  - basename: 1*Bov2hAJHJNLDGy6L-T8Idg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*Bov2hAJHJNLDGy6L-T8Idg.png
+  - basename: 1*OC5xz4T3RuZNKlKHAjLlNg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*OC5xz4T3RuZNKlKHAjLlNg.png
+  - basename: 1*KcKAb7OJbz_0f5CoNtpJow
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*KcKAb7OJbz_0f5CoNtpJow.png
+  - basename: 1*nz7wSTrT_fwsS9C9p12JAA
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*nz7wSTrT_fwsS9C9p12JAA.png
+  - basename: 1*NJo2YFgmY4SD6zkBz7DNpA
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*NJo2YFgmY4SD6zkBz7DNpA.png
+  - basename: 1*m54-jnHr4SRYB0rNDpbzIA
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*m54-jnHr4SRYB0rNDpbzIA.png
+  - basename: 1*saKkteivYxqf_WJ6vQ6xnQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*saKkteivYxqf_WJ6vQ6xnQ.png
+  - basename: 1*iA33LttxmEYOcbNGJ57MDA
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*iA33LttxmEYOcbNGJ57MDA.png
+  - basename: 1*Hn7A8k11PR6HrcXcRBD14g
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*Hn7A8k11PR6HrcXcRBD14g.png
+  - basename: 1*kYuERsIIlgodh6L8wP2RrQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*kYuERsIIlgodh6L8wP2RrQ.png
+  - basename: 1*tNOBptOwGtIEKMVP-E-qOw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*tNOBptOwGtIEKMVP-E-qOw.png
+  - basename: 1*K8cS5-Fsf0b97Zt20E-Vjw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*K8cS5-Fsf0b97Zt20E-Vjw.png
+  - basename: 1*YXQSYdj_RbcymtXs2FOMxg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*YXQSYdj_RbcymtXs2FOMxg.png
+  summary: DNS Cache Poisoning on Home Lab Walkthrough
+  time: '2023-03-28T01:09:15.804Z'
+  time_human: March 28, 2023
+  title: 'Practical Demonstration: DNS Spoofing + Home Lab'
+  url: https://medium.com/@allypetitt/practical-demonstration-dns-spoofing-home-lab-f7294443fb23
+- basename: 2022-09-24_How-Did-an-18-Year-Old-Hack-Uber--788f092b9dc3
+  cover_img_idx: 0
+  fname: ./export/posts/2022-09-24_How-Did-an-18-Year-Old-Hack-Uber--788f092b9dc3.html
+  imgs:
+  - basename: 0*p8HCs81YRFvhgaR3
+    ext: .jpg
+    url: https://cdn-images-1.medium.com/max/800/0*p8HCs81YRFvhgaR3.jpg
+  - basename: 0*d0qrDND0kRrSzFmQ
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*d0qrDND0kRrSzFmQ
+  - basename: 1*Nwaj3JZDBIbVPP9y2y9aYQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*Nwaj3JZDBIbVPP9y2y9aYQ.png
+  - basename: 0*aBZc_OpaYL5iYHKQ
+    ext: .jpg
+    url: https://cdn-images-1.medium.com/max/800/0*aBZc_OpaYL5iYHKQ.jpg
+  - basename: 1*16105fZhVW_EBRmOWDI_hg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*16105fZhVW_EBRmOWDI_hg.png
+  - basename: 1*oeZ-TBZHlybgDJMZbpdCUg
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*oeZ-TBZHlybgDJMZbpdCUg.png
+  summary: 'An 18-year-old hacker gained admin access to Uber on September 15, 2022.
+    These are the steps that the hacker took:'
+  time: '2022-09-24T22:40:40.151Z'
+  time_human: September 24, 2022
+  title: How Did an 18-Year-Old Hack Uber?
+  url: https://medium.com/@allypetitt/how-did-an-18-year-old-hack-uber-788f092b9dc3
+- basename: 2022-12-09_Windows-Remoting--Difference-between-psexec--wmiexec--atexec---exec-bf7d1edb5986
+  cover_img_idx: 0
+  fname: ./export/posts/2022-12-09_Windows-Remoting--Difference-between-psexec--wmiexec--atexec---exec-bf7d1edb5986.html
+  imgs:
+  - basename: 0*2pekupqLLWtBkgpl
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*2pekupqLLWtBkgpl
+  - basename: 0*Pj8MeQykWNNX4Kr_
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/0*Pj8MeQykWNNX4Kr_.png
+  - basename: 0*8jYiFbXMIpkEf-r1
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/0*8jYiFbXMIpkEf-r1.png
+  - basename: 0*-KV26ONRuN8dlFWy
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/0*-KV26ONRuN8dlFWy.png
+  - basename: 0*MsVaNUTQpbyjLkci
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/0*MsVaNUTQpbyjLkci.png
+  - basename: 0*TzXqdM8qKIHbTsMN
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/0*TzXqdM8qKIHbTsMN.png
+  summary: "If you\u2019re anything like me, you discovered Impacket, either through\
+    \ a course, Ippsec, or your own research, and you look at the scripts\u2026"
+  time: '2022-12-09T06:47:30.893Z'
+  time_human: December 9, 2022
+  title: 'Windows Remoting: Difference between psexec, wmiexec, atexec, *exec'
+  url: https://medium.com/@allypetitt/windows-remoting-difference-between-psexec-wmiexec-atexec-exec-bf7d1edb5986
+- basename: 2023-08-19_How-to-safely-convert-to-LVM-without-losing-your-data-258ce044448
+  cover_img_idx: 0
+  fname: ./export/posts/2023-08-19_How-to-safely-convert-to-LVM-without-losing-your-data-258ce044448.html
+  imgs:
+  - basename: 0*es1LJrnEBsSNgXZM
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/0*es1LJrnEBsSNgXZM.png
+  summary: Introduction
+  time: '2023-08-19T06:06:20.809Z'
+  time_human: August 19, 2023
+  title: How to safely convert to LVM without losing your data
+  url: https://medium.com/@allypetitt/how-to-safely-convert-to-lvm-without-losing-your-data-258ce044448
+- basename: 2022-05-30_Antivirus-Evasion--What-it-is-and-How-to-do-it-17f98e920704
+  cover_img_idx: 0
+  fname: ./export/posts/2022-05-30_Antivirus-Evasion--What-it-is-and-How-to-do-it-17f98e920704.html
+  imgs:
+  - basename: 1*W1qjqIKKNMK9_QYWXGQzRw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*W1qjqIKKNMK9_QYWXGQzRw.png
+  - basename: 1*ehROjARifrRnkEITjkFwMw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*ehROjARifrRnkEITjkFwMw.png
+  - basename: 1*8jt-Qw_ai_h_GCSJV15fuQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*8jt-Qw_ai_h_GCSJV15fuQ.png
+  - basename: 1*meCStYsucAG7XXY88Lnj0w
+    ext: .jpeg
+    url: https://cdn-images-1.medium.com/max/800/1*meCStYsucAG7XXY88Lnj0w.jpeg
+  - basename: 1*VY6GEFR7NyUkIPcXNT49bg
+    ext: .jpeg
+    url: https://cdn-images-1.medium.com/max/800/1*VY6GEFR7NyUkIPcXNT49bg.jpeg
+  - basename: 1*H6l629Qydy1pFxjjyoQn9A
+    ext: .jpeg
+    url: https://cdn-images-1.medium.com/max/800/1*H6l629Qydy1pFxjjyoQn9A.jpeg
+  summary: How Does Antivirus Software Actually Work?
+  time: '2022-05-30T18:27:33.704Z'
+  time_human: May 30, 2022
+  title: 'Antivirus Evasion: What it is and How to do it'
+  url: https://medium.com/@allypetitt/antivirus-evasion-what-it-is-and-how-to-do-it-17f98e920704
+- basename: 2024-03-21_How-I-Found-3-CVEs-in-2-Days-8a135eb924d3
+  cover_img_idx: 0
+  fname: ./export/posts/2024-03-21_How-I-Found-3-CVEs-in-2-Days-8a135eb924d3.html
+  imgs:
+  - basename: 0*wGuRqNuBuFV5u69n
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/0*wGuRqNuBuFV5u69n.png
+  - basename: 1*Q3BI1WCSQj8kJmb7iCEh4g
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*Q3BI1WCSQj8kJmb7iCEh4g.png
+  - basename: 1*IcA_HpVxf3LP9FlM7miVUw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*IcA_HpVxf3LP9FlM7miVUw.png
+  - basename: 1*_stvfUY2HtkR9wda-TgZQQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*_stvfUY2HtkR9wda-TgZQQ.png
+  - basename: 1*TDquE7S3UnTHXilR4TYrVA
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*TDquE7S3UnTHXilR4TYrVA.png
+  - basename: 1*HvHtu0HaoxRLzojL3vjfPQ
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*HvHtu0HaoxRLzojL3vjfPQ.png
+  - basename: 1*-N45bZ7BrPdguKZWsQs0cw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*-N45bZ7BrPdguKZWsQs0cw.png
+  - basename: 1*Zs5bxl01fMcxsXTfZd4mzw
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*Zs5bxl01fMcxsXTfZd4mzw.png
+  - basename: 1*SIBvRLsqwT0QVwFI1ZczrA
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*SIBvRLsqwT0QVwFI1ZczrA.png
+  - basename: 1*4Pup6AnABk8L9bM8QGeGow
+    ext: .png
+    url: https://cdn-images-1.medium.com/max/800/1*4Pup6AnABk8L9bM8QGeGow.png
+  summary: 'Author: Ally Petitt'
+  time: '2024-03-21T02:48:14.462Z'
+  time_human: March 21, 2024
+  title: How I Found 3 CVEs in 2 Days
+  url: https://medium.com/@allypetitt/how-i-found-3-cves-in-2-days-8a135eb924d3
+- basename: 2024-01-01_How-to-Find-more-Vulnerabilities---Source-Code-Auditing-Explained-2c8a10896374
+  cover_img_idx: 0
+  fname: ./export/posts/2024-01-01_How-to-Find-more-Vulnerabilities---Source-Code-Auditing-Explained-2c8a10896374.html
+  imgs:
+  - basename: 0*jDmBerRWYf3eZh2J
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*jDmBerRWYf3eZh2J
+  - basename: 0*UPqLe8hb4dLd2h30
+    ext: ''
+    url: https://cdn-images-1.medium.com/max/800/0*UPqLe8hb4dLd2h30
+  summary: Introduction
+  time: '2024-01-01T20:19:32.511Z'
+  time_human: January 1, 2024
+  title: How to Find more Vulnerabilities -- Source Code Auditing Explained
+  url: https://medium.com/@allypetitt/how-to-find-more-vulnerabilities-source-code-auditing-explained-2c8a10896374

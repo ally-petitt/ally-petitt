@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>OSCP on Ally Petitt</title>
+    <link>http://localhost:1313/ally-petitt/en/tags/oscp/</link>
+    <description>Recent content in OSCP on Ally Petitt</description>
+    <generator>Hugo -- 0.125.4</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 19 Mar 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/ally-petitt/en/tags/oscp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How I got my OSCP at 16 years old</title>
+      <link>http://localhost:1313/ally-petitt/en/posts/2023-03-19_how-i-got-my-oscp-at-16-years-old-50ed402d6fd1/</link>
+      <pubDate>Sun, 19 Mar 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/en/posts/2023-03-19_how-i-got-my-oscp-at-16-years-old-50ed402d6fd1/</guid>
+      <description>&lt;p&gt;Wait, you can do that? The answer is a resounding “yes”. And I’m not the only one who got my OSCP at the age of 16. Meet &lt;a href=&#34;https://www.offsec.com/offsec/meet-mihai-16-year-old-oscp-holder/&#34;&gt;Mihai&lt;/a&gt;, &lt;a href=&#34;https://vanshal.medium.com/my-oscp-journey-9a4041bab24a&#34;&gt;Vanshal&lt;/a&gt;, &lt;a href=&#34;https://grants235.github.io/cybersecurity/oscp/&#34;&gt;Grant&lt;/a&gt;, and &lt;a href=&#34;https://www.reddit.com/r/oscp/comments/swmqs1/aced_it_at_16yrs/?utm_source=share&amp;utm_medium=web2x&amp;context=3&#34;&gt;this person&lt;/a&gt; from Reddit. Admittedly, the number of us is few and far between when compared to the typical demographic of OSCP test-takers. To add to this, I’m a woman and I haven’t seen any other women my age do this. Still, people have done it and it  possible.&lt;/p&gt;
+&lt;p&gt;I present to you, the beautiful:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*BQs51p5uCqZyIuYNCVrqGQ.png&#34; alt=&#34;Picture of my OSCP certification&#34;  /&gt;
+
+&lt;em&gt;&lt;a href=&#34;https://www.credential.net/7370f6c4-31c5-4989-8612-90b600811813&#34;&gt;https://www.credential.net/7370f6c4-31c5-4989-8612-90b600811813&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;h1 id=&#34;how-to-get-your-oscp-as-aminor&#34;&gt;How to Get Your OSCP as a Minor&lt;/h1&gt;
+&lt;p&gt;For those that are like me, or simply for the curious, the process is slightly different for minors. I contacted &lt;a href=&#34;mailto:registrar@offensive-security.com&#34;&gt;registrar@offensive-security.com&lt;/a&gt; and asked them for the registration steps as a minor. As a response, they requested that I send in my government-issued ID and a letter with my parent&amp;rsquo;s signature. I responded with these and they informed me that I was eligible to take the PEN-200. You must do this &lt;strong&gt;before&lt;/strong&gt; buying the PEN-200.&lt;/p&gt;
+&lt;p&gt;As a note on money, I know that we’re probably broke high-school students and the cheapest option ($1499) is not very cheap. If you work at a job, your employer  be willing to pay for the training, even if you don’t work in a position related to technology. There’s a slim chance you can convince the school to pay for it. If not, maybe family/friends can help, or you could do what I did and pay for it yourself with the money that you earn from a job/internship.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*wehmn9kUcoEXnjLG&#34; alt=&#34;&#34;  /&gt;
+
+Also, it’s important that your parents/guardians are on board. They don’t have to be your biggest cheerleaders but make sure that they understand that this involves taking a 48-hour exam. If you’re doing this on a weekend, it could interfere with your sleep before school and it will be very beneficial for you to have a workspace to do the exam at that is free of distractions. Food is another concern and if they’re supportive enough to cook for you, that can be helpful. These are things that you may have to discuss with them, and I know that it can be hard to convince them if they don’t understand the value of an OSCP (or the cost of it). It’s just important to keep in mind that they ultimately have the last call in whether you are allowed to hack into computers for 24 hours instead of doing chores.&lt;/p&gt;
+&lt;p&gt;I was lucky enough to have parents who didn’t understand but supported me as long as I was willing to pay for it on my own.&lt;/p&gt;
+&lt;h1 id=&#34;my-oscpjourney&#34;&gt;My OSCP Journey&lt;/h1&gt;
+&lt;p&gt;This will include my preparation, my mindset, and my exam/report experience.&lt;/p&gt;
+&lt;p&gt;This simple image is a summary of my OSCP timeline.&lt;/p&gt;
+&lt;h2 id=&#34;my-background&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*K8Nv4EuM0InYvzhXWdoItA.png&#34; alt=&#34;A simple image summarizing my OSCP timeline&#34;  /&gt;
+
+My Background&lt;/h2&gt;
+&lt;p&gt;I started from a bit of a unique position. Because of my (albeit inconsistent) work over the past 3 years, I had been able to establish a technical foundation in coding. I didn’t understand IT or networking, but I understood software. I began my journey with 1 1/2 years of experience as a software engineer in part-time internships throughout my first 2 years of high school. I can talk more about this in another post if people are interested because finding these internships was a vast challenge as a minor. This is not necessary by any means, but I do think that the background helped me. In particular, from this, I got comfortable reading documentation, understanding/writing code, and troubleshooting.&lt;/p&gt;
+&lt;h2 id=&#34;the-beginning&#34;&gt;The Beginning&lt;/h2&gt;
+&lt;p&gt;My cybersecurity journey started out in late December of 2021 with a TryHackMe course on networking. It began with the fundamental question of how information can travel from one device to the next. Why is it that I can send a message to my mother’s phone without ever having physical interaction with it? And I also wondered about hacking, and, in particular, what it truly looked like.&lt;/p&gt;
+&lt;p&gt;My journey started out of pure curiosity.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*Fk9R3HxHH1nxuxF-&#34; alt=&#34;Girl looking through a microscope curiously&#34;  /&gt;
+
+I went through the modules and then didn’t touch TryHackMe again, or anything cybersecurity-related, for another 2 months. I was at an internship at a startup on top of school, which was already exhausting. I knew that doing any more would lead me to burn out.&lt;/p&gt;
+&lt;p&gt;When my internship ended, I had more free time. I recall using TryHackMe for about 1–2 hours per week in February and March of 2022. But my main focus was finding another software engineering internship because I wanted more experience before I graduated high school. At this point, I didn’t take cybersecurity seriously and I didn’t have the skill to do much relating to it.&lt;/p&gt;
+&lt;p&gt;Around April of 2022, I started to passively do more TryHackMe alongside my new internship. At this point, I became deeply passionate about understanding the way that the devices worked. The idea of being able to outsmart the way that something functions so as to make it do something it wasn’t intended to do really appealed to me. It was the intellectual challenge that I craved and allowed me the freedom to think creatively. I began to understand the world better from what the modem down the hall does to how my school account works.&lt;/p&gt;
+&lt;h2 id=&#34;getting-morefocused&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*Q8ieug4tq9emeV9_&#34; alt=&#34;&#34;  /&gt;
+
+Getting More Focused&lt;/h2&gt;
+&lt;p&gt;The summer of 2022 was by far my most prolific period of learning throughout this journey. I watched countless YouTube videos, read numerous research blogs, and just fell in love with this community of diverse thinkers. It’s fascinating the way that cybersecurity folks will use their beautiful brains to challenge their surroundings. I found a video of a guy hacking his car, I learned about the Flipper Zero, and the WiFi Pineapple. Each of these surprised me in the most astonishing way because I didn’t know that these feats and gadgets were possible!&lt;/p&gt;
+&lt;p&gt;This strengthened my passion for cybersecurity and I began following closely to IppSec. I couldn’t do HackTheBox machines without help from a walkthrough. By the way, HackTheBox is hard! Those machines are way more difficult than the OSCP! If you can’t do them, don’t fret. It takes practice and patience over a long-enough period of time. And that timeline will be different for each person.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*I7W7gRqGQgqtioYW.jpg&#34; alt=&#34;&#34;  /&gt;
+
+I also took this time to learn basic networking and IT from this &lt;a href=&#34;https://www.youtube.com/@PowerCertAnimatedVideos&#34;&gt;extremely helpful channel&lt;/a&gt; and did some experiments on my home network.&lt;/p&gt;
+&lt;h2 id=&#34;enrolling-in-thepen-200&#34;&gt;Enrolling in the PEN-200&lt;/h2&gt;
+&lt;p&gt;This was a big step for me. I was unsure of whether I was skilled enough to get started. By this point, I was able to do some of the HTB boxes on TJ Null’s list without referencing a writeup. Getting this course was a big purchase and I didn’t want to waste my money.&lt;/p&gt;
+&lt;p&gt;I ended up being disappointed with the course. I was hoping for better explanations and the topic exercises didn’t work about 10% of the time which prevented me from getting bonus points. In addition, before I knew about the topic exercises, I tried writing the lab report just to find out it wasn’t accepted after January 2023 for bonus points, so I wasted 1 1/2 months writing 400 pages when I could have instead been learning skills that would actually transfer to the OSCP.&lt;/p&gt;
+&lt;p&gt;The labs weren’t very valuable to me with the exception of the AD networks and the IT network that required pivoting to get to. These two allowed me to practice port-forwarding and AD methodology in a way that was meaningful and transferrable.&lt;/p&gt;
+&lt;p&gt;After about 2 months, of the PEN-200, I left to find better labs in Proving Grounds. I started by following TJ Null’s list, and then I switched to doing the ones that weren’t listed since I finished the list. It was also around this time that I got really interested in anonymity. So I spent the first week of my Christmas break learning about anonymity. I went on a number of other research tangents throughout my journey. I realized that I had trouble sustaining my OSCP journey without taking the time to explore other topics that interested me, so it was a common occurrence for me to shift my focus away from the OSCP every few weeks to learn something else.&lt;/p&gt;
+&lt;h2 id=&#34;exam-month&#34;&gt;Exam Month&lt;/h2&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*1XGLXdlNNkfdZLXa&#34; alt=&#34;&#34;  /&gt;
+
+&lt;em&gt;Woman who is stressed for her dear life&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;In the month leading up to the exam, I had reached a point of exhaustion. I experienced stress from several areas of my life at once and came to the conclusion that if I wanted to do well on my exam, de-stressing was my top priority. At this point, I had compromised over 200 lab machines total. I had the skill, I had my notes, and I had intuition. The final month wasn’t going to make a difference. I was already ready.&lt;/p&gt;
+&lt;p&gt;As a result, I spent this time reading books about anthropology, neuroscience, and history. I went to the gym and socialized with friends at school I created more free time for myself and did what I needed to relax while also keeping my thinking skills sharp.&lt;/p&gt;
+&lt;p&gt;I did about 1 PG machine per week. For each one of these, I made a focused effort to practice thorough note-taking and I would write an example report on it.&lt;/p&gt;
+&lt;p&gt;I scheduled my exam about 2 weeks prior to the exam date. Waiting until so late meant that the only time available for me was 4:00 AM. I reserved this time knowing I would be able to wake up from the adrenaline rush.&lt;/p&gt;
+&lt;h2 id=&#34;exam-day&#34;&gt;Exam Day&lt;/h2&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*Q_5-29t3MzePTHAp&#34; alt=&#34;&#34;  /&gt;
+
+I woke up at 12:30 AM. I think the excitement woke me up because I was unable to fall asleep. I went to sleep at 8:00 PM the night before, hoping to wake up at 3:15 AM. It turned out that I didn’t even need to set an alarm that day!&lt;/p&gt;
+&lt;p&gt;This wasn’t ideal because I had about 3 less hours of sleep than planned. I was still able to make it work, however. I logged on to the proctoring software at 3:45. After walking through the &lt;a href=&#34;https://help.offensive-security.com/hc/en-us/articles/360040574491-What-is-expected-of-me-as-a-learner-to-participate-in-a-proctored-exam-&#34;&gt;pre-exam checks&lt;/a&gt;, I was able to connect to my VPN at 4:00 AM.&lt;/p&gt;
+&lt;p&gt;Here is a quick timeline of my test since this is already getting lengthy:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;4:00 AM (0pts)&lt;/strong&gt;- Use &lt;a href=&#34;https://rustscan.github.io/RustScan/&#34;&gt;RustScan&lt;/a&gt; to scan all the hosts and become familiar with my exam dashboard.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;4:10 AM (0pts)&lt;/strong&gt;- Start enumerating the first AD machine. I didn’t find anything useful so I moved on temporarily.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;4:40 AM (0pts)&lt;/strong&gt;- Start enumerating one of the individual machines. I figure out what I need to do.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;4:55 AM (10pts)&lt;/strong&gt;- Submit my first local.txt and try to privesc.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;5:10 AM (10pts)&lt;/strong&gt;- Don’t find a quick privesc, so start looking at second independent target. It takes about 20 more minutes, but I find what I need.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;5:46 AM (20pts)&lt;/strong&gt;- Got a shell and submitted second local.txt.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;5:46–6:10 AM (20pts)&lt;/strong&gt;- Take a break.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;6:10 AM (20pts)&lt;/strong&gt;- Enumerate domain controller. At this point, I’m getting really deep into enumeration and finding nothing.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;8:30 AM (20pts)&lt;/strong&gt;- Shift focus on 3rd independent target.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;9:20 AM (20pts)&lt;/strong&gt;- Found potential vulnerabilities, but wasn’t able to exploit them. Tried privesc on 1st independent target again.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;10:20 AM (20pts)&lt;/strong&gt;- Discovered interesting findings. Unable to use them for an exploit. Moved to AD machine.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;11:20 AM (20pts)&lt;/strong&gt;- Thorough enumeration, but didn’t find what I needed. I’m starting to get anxious.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;11:20–11:50 AM (20pts)&lt;/strong&gt;- Take a break.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;By this point, I was starting to lose my cool. I had been awake for nearly 12 hours on insufficient sleep. I went on a walk to clear my mind and brainstorm new enumeration ideas. With my list in mind, I returned to the exam desk:&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*N-iZkZHiXrad1CEK&#34; alt=&#34;&#34;  /&gt;
+&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;11:50 AM (20pts)&lt;/strong&gt;- Enumerate AD machine more with new ideas.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;1:30 PM (20pts)&lt;/strong&gt;- Still no progress. Briefly contemplate giving up, but decide to keep going (read more about this in next section).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;3:00 PM (20pts)&lt;/strong&gt;- Take a nap. Struggle to sleep because of excitement, but eventually relax. Completely exhausted from my enumeration efforts and lack of adequate sleep.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;4:30 PM (20pts)&lt;/strong&gt;- Wake up and continue searching AD machine. This time with more of a focus on thorough, methodical, and manual enumeration.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;5:00 PM (20pts)&lt;/strong&gt;- Find the missing piece!&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;5:30 PM (20pts)&lt;/strong&gt;- Successfully exploit first AD machine!&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;6:30 PM (20pts)&lt;/strong&gt;- Escalate privileges and get proof.txt. Take a short break to cry tears of joy.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;7:00 PM (20pts)&lt;/strong&gt;- Encountering difficulties with getting one of my tools to work the way it normally does.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;8:00 PM (20pts)&lt;/strong&gt;- I found the solution to my problem after a lot of troubleshooting and continued to move forward.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;8:30–8:50 PM (20pts)&lt;/strong&gt;- Take a break.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;9:05 PM (20pts)&lt;/strong&gt;- Move laterally to 2nd AD machine and get proof.txt.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;9:31 PM (60pts)&lt;/strong&gt;- Privesc to 3rd AD machine as domain admin. Got proof.txt!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*3QBFTAphIYoDOzEe.jpg&#34; alt=&#34;&#34;  /&gt;
+
+At this point, I was in &lt;strong&gt;utter disbelief&lt;/strong&gt; that I had actually done it. I took a break from the exam to go tell my mom how I was able to do it. I said, “This all started out as a naive dream that I had last April and I didn’t think it would actually happen. I went for it anyways, and now it’s actually coming true.”&lt;/p&gt;
+&lt;p&gt;Now, I had the final task of scoring 10 more points before I was eligible to pass. I started by trying to get a foothold on independent target #3, but continue to fail. I go for the privesc on the 1st independent target, but hit numerous dead ends.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;11:30 PM (60pts)&lt;/strong&gt;- Shift focus to privesc on 2nd independent target, the one I thought I was least likely to get. My enumeration scripts weren’t working and I didn’t find much in my initial manual enumeration. Then, I went through my &lt;a href=&#34;https://github.com/ally-petitt/OSCP-cheatsheet/tree/main&#34;&gt;notes&lt;/a&gt; and tried each enumeration step one-by-one.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;11:50 PM (60pts)&lt;/strong&gt;- Discover a vulnerability that allowed me to privesc from a check that I almost didn’t include in my notes. I figured out how to exploit it and attempted it with the expectation that it would fail since I had been failing for the past 3 hours.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;11:55 PM (70pts)&lt;/strong&gt;- The exploit succeeds and I can’t believe that I just scored 70 points!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*CrQVpk88n0fjUXre.png&#34; alt=&#34;Woman crying tears of joy&#34;  /&gt;
+
+My jaw is dropped as I stare at my terminal output. The feeling that I experienced in this moment is indescribable. My best attempt at illustrating the way that I felt is runner’s high… on a high. I had never felt so uplifted and energetic. This moment made the preceding hours of banging my head against the keyboard worth it. I take a break and just allow myself the time to appreciate that moment before continuing&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;12:30 AM (70pts)&lt;/strong&gt;- Do more enumeration on 3rd independent target to see if I can get an easy foothold. Realize how exhausted I am and check that I did an adequate job at screenshots and note-taking.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;1:10 AM-iss (70pts)&lt;/strong&gt;- End exam early after verifying I had all the documentation I needed to write a good report&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I made the difficult decision to end my exam at 70 points, knowing that any mistake I made in reporting, proof screenshots, or flag submission would result in a fail. After triple-checking that my notes were thorough and that my screenshots/flag submissions met the exam requirements, I asked my proctor to end the exam early. I chose to do this for two reasons:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;I would rather spend the last 3 hours of exam time sleeping since I knew I had a report to write the next day that required strong mental focus.&lt;/li&gt;
+&lt;li&gt;If I were to compromise another machine, I would have to add it to my report, which would just make a job the next day more difficult.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Combined, I would have less sleep and more work for the next day. I decided that, ultimately, for me to write a great report tomorrow, I needed the sleep. So I sacrificed the potential extra points for the security that I would have the brain power to make the most beautiful report of my life.&lt;/p&gt;
+&lt;p&gt;I also do want to mention that I was taking thorough notes and screenshots throughout my exam time just like I had practiced doing. I didn’t have to retrace my steps in order to ensure I had good notes because I had developed good documentation skills before the exam.&lt;/p&gt;
+&lt;p&gt;I do want to note that I left out many of the breaks that I took just for the sake of brevity. I probably did take a break every 50 minutes on average. Most of them were only 5 minutes, some were 30.&lt;/p&gt;
+&lt;h2 id=&#34;dont-giveup&#34;&gt;Don’t Give Up&lt;/h2&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*VUEaqMiluWjqWpXB&#34; alt=&#34;&#34;  /&gt;
+
+I do want to touch on 1:30 AM. I did genuinely consider quitting. I had previously failed the eJPT exam last July, so part of me figured that I was destined to fail this one as well. Before I allowed myself to spiral, I reconsidered what it cost me to be able to have that moment. I thought about the money that I spent, the hours I took to prepare, and the people who believed in me. I made an agreement with myself:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;I told myself that it was okay to fail. As long as I failed knowing that I did everything I possibly could to succeed.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;So in order to appease my own mind and fail this exam regret-free, I continued. Ironically, it was my willingness to fail that allowed me to succeed. My stress levels decreased and I was able to actually get some sleep. After my nap, I compromised the first AD machine!&lt;/p&gt;
+&lt;h2 id=&#34;youll-run-out-of-ideas-before-you-run-out-oftime&#34;&gt;You’ll Run Out of Ideas Before You Run Out of Time&lt;/h2&gt;
+&lt;p&gt;The reason I was able to compromise the first AD machine after 12 hours of being stuck is this: I kept coming up with new ideas. Even if there’s a 1% chance of it working, when you have 100 of those ideas, one of them is bound to be it!&lt;/p&gt;
+&lt;p&gt;Channel your inner child and keep asking questions and experimenting with ideas, even if you think it won’t work. Most ideas will probably fail, but all you need is one success.&lt;/p&gt;
+&lt;h2 id=&#34;reporting&#34;&gt;Reporting&lt;/h2&gt;
+&lt;p&gt;I could make a dedicated article just on this topic. To summarize, I cross-referenced multiple templates that I found online and figured out what my report should look like. I then used the template that I thought was the most aesthetic and modified it to fit my needs.&lt;/p&gt;
+&lt;p&gt;I took pride in the report I created because I was very meticulous about my word choice, adhering to the documentation requirements, maintaining a consistent diction, explaining concepts clearly and accurately, and providing adequate screenshots.&lt;/p&gt;
+&lt;p&gt;I submitted my report after triple-checking that it was perfect and re-reading it countless times. Then, the wait ensued.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*5pIvjg81NpVA1zmd&#34; alt=&#34;&#34;  /&gt;
+
+&lt;em&gt;A man hopelessly staring at the clock&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;the-aftermath&#34;&gt;The Aftermath&lt;/h2&gt;
+&lt;p&gt;This exam left me exhausted. I was very sleep deprived, fatigued, and anxious. It takes a significant amount of mental energy to maintain such intense attention to detail for a prolonged period of time. Throughout the exam period, I had a constant rush of adrenaline. And this made it near impossible to fall asleep. After I had submitted my report, I had to next most difficult part of the OSCP: the wait. Luckily, it only took 25 hours for me to get the email that I passed. Each of those 25 hours, I made sure to refresh my inbox every 30 seconds (optional step).&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*Ly6iRSDs7Ugn1kAajhrNjg.jpeg&#34; alt=&#34;Picture of the exam email annoucning my success&#34;  /&gt;
+
+I do want to mention that this exam also takes a physical toll. Sitting at a desk for so many hours, even with breaks, is hard on the body. Make sure to move, stretch, and hydrate. I felt stiff in the few days following the exam.&lt;/p&gt;
+&lt;p&gt;For the next few days, I felt a lightness and joy knowing that all of my hard work had paid off. That I had dared to try something so ambitious and unrealistic and it actually worked. This was a major accomplishment for me that required overcoming countless challenges.&lt;/p&gt;
+&lt;h2 id=&#34;takeaways&#34;&gt;Takeaways&lt;/h2&gt;
+&lt;p&gt;The OSCP was much more than a test of technical ability. It was an assessment of organizational skills, time management, resourcefulness, troubleshooting, problem-solving ability, capacity to work under stress, and much more. There was a point during the exam when BurpSuite wasn’t working for me, so I had to improvise in order to figure out a different solution. There were points where I almost went down rabbit holes searching for something that didn’t exist. It really takes experience to realize when these things are happening and how to adapt.&lt;/p&gt;
+&lt;p&gt;Additionally, working under that time constraint with a proctor watching my every move through the webcam was stressful. I also had to make sure I had standards for taking good notes, I had my systems for organizing the log files that I collected, a way to organize my screenshots, I knew the sections and layout of my report, etc.. A failure to do any of these would result in time being wasted, and with such a strict time constraint, there wasn’t much room for error.&lt;/p&gt;
+&lt;h1 id=&#34;was-it-worthit&#34;&gt;Was it worth it?&lt;/h1&gt;
+&lt;p&gt;The short answer is that I don’t know yet. It’s really hard to find cybersecurity work in general as a minor, but I think that having this certification demonstrates my skill and for the few opportunities that do exist, I’ll be more likely to actually get them.&lt;/p&gt;
+&lt;p&gt;It’s worth noting that when people who know me think about cybersecurity, I’m the first person who comes to mind, which can help in creating more opportunities through word-of-mouth. Additionally, I am more respected by the adults and peers who understand what the OSCP is. When I’m networking, people are more interested in learning about me and working with me than before I was certified now that I have something tangible to back up my skill.&lt;/p&gt;
+&lt;p&gt;Accomplishing this in high school is a pretty remarkable feat, and people in the industry realize this and respect it. It’s impressive and can help get your foot in the door in combination with other factors such as networking, education, and other experiences/projects. The closer that you get to becoming a legal adult, the more valuable the OSCP becomes in terms of career opportunities, although accomplishing it younger definitely stands out. It’s really a personal decision for you to make based on your situation, limitations, and values.&lt;/p&gt;
+&lt;h2 id=&#34;imposter-syndrome&#34;&gt;Imposter Syndrome&lt;/h2&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*0JjF7v3_N9tkTMS4v7Jo0w.png&#34; alt=&#34;&#34;  /&gt;
+
+As an update from future me, I would like to briefly mention my struggles with self-esteem following this exam. I set my mind to achieving this certification and diligently spent months preparing for it, but now that I’ve done it, I’ve noticed that I feel even less competent in my own abilities. I’ve continued to learn more and realized just how little I actually know. I’ve convinced myself that I just got lucky in achieving the OSCP and that I didn’t actually earn it.&lt;/p&gt;
+&lt;p&gt;In the days following the exam, I felt amazing. But in the weeks following the exam, I felt degraded. And honestly, the doors that I thought would open for me just didn’t. I do realize that this is a massive achievement and logically, I truly have developed the mental and technical skills necessary to achieve this, but I also feel the need to work even harder to learn more and prove myself. I put unrealistically high expectations on myself at such a young age and it’s quite overwhelming. It’s like the Dunning-Kruger effect taken to the extreme.&lt;/p&gt;
+&lt;p&gt;From what I’ve read, imposter syndrome is very common among people in this field, so I take it that I’m not unique in the sense of feeling worse after the OSCP. Despite this, however, I do not regret going for this certification. I’m so glad that I did. I think that imposter syndrome will be a long-term struggle for me going forward.&lt;/p&gt;
+&lt;p&gt;In honesty, there’ve been times when I thought about quitting because the pressures that I would put on myself would be so extreme. I think that I would face this struggle in any career I enter just due to my personality. Everyone that knows me personally has told me that I will be successful and high-achieving. Somehow, I’ve convinced myself that I am not good/smart enough to accomplish these things and that is really sad. I think that this will get better, though, because I’ve discovered some things that have worked for me in the past. Until then, this has been my experience following the exam.&lt;/p&gt;
+&lt;h1 id=&#34;next-steps&#34;&gt;Next Steps&lt;/h1&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*CVPmxaTzJ_GYmftJ&#34; alt=&#34;&#34;  /&gt;
+
+I’m still deciding on the best ways to allocate my time, but I’m considering doing some combination of these things (subject to change):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Contributing more to open-source projects&lt;/li&gt;
+&lt;li&gt;Creating my own cybersecurity coding projects/tools&lt;/li&gt;
+&lt;li&gt;Speaking at a cybersecurity conference&lt;/li&gt;
+&lt;li&gt;Strengthening my web application security skills&lt;/li&gt;
+&lt;li&gt;Attempt bug bounty hunting&lt;/li&gt;
+&lt;li&gt;Expanding my network and looking for more opportunities&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I’m looking to improve both my hard and soft skills while going to high-school full-time. Moving forward, I would like to share more of my journey and hopefully help to strengthen a community of young professionals such as myself.&lt;/p&gt;
+&lt;p&gt;If you have any questions, my inbox is open. Please reach out to &lt;a href=&#34;mailto:allypetitt@gmail.com&#34;&gt;allypetitt@gmail.com&lt;/a&gt;. Thanks for reading!&lt;/p&gt;
+</description>
+      <content:encoded><![CDATA[<p>Wait, you can do that? The answer is a resounding “yes”. And I’m not the only one who got my OSCP at the age of 16. Meet <a href="https://www.offsec.com/offsec/meet-mihai-16-year-old-oscp-holder/">Mihai</a>, <a href="https://vanshal.medium.com/my-oscp-journey-9a4041bab24a">Vanshal</a>, <a href="https://grants235.github.io/cybersecurity/oscp/">Grant</a>, and <a href="https://www.reddit.com/r/oscp/comments/swmqs1/aced_it_at_16yrs/?utm_source=share&utm_medium=web2x&context=3">this person</a> from Reddit. Admittedly, the number of us is few and far between when compared to the typical demographic of OSCP test-takers. To add to this, I’m a woman and I haven’t seen any other women my age do this. Still, people have done it and it  possible.</p>
+<p>I present to you, the beautiful:</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*BQs51p5uCqZyIuYNCVrqGQ.png" alt="Picture of my OSCP certification"  />
+
+<em><a href="https://www.credential.net/7370f6c4-31c5-4989-8612-90b600811813">https://www.credential.net/7370f6c4-31c5-4989-8612-90b600811813</a></em></p>
+<h1 id="how-to-get-your-oscp-as-aminor">How to Get Your OSCP as a Minor</h1>
+<p>For those that are like me, or simply for the curious, the process is slightly different for minors. I contacted <a href="mailto:registrar@offensive-security.com">registrar@offensive-security.com</a> and asked them for the registration steps as a minor. As a response, they requested that I send in my government-issued ID and a letter with my parent&rsquo;s signature. I responded with these and they informed me that I was eligible to take the PEN-200. You must do this <strong>before</strong> buying the PEN-200.</p>
+<p>As a note on money, I know that we’re probably broke high-school students and the cheapest option ($1499) is not very cheap. If you work at a job, your employer  be willing to pay for the training, even if you don’t work in a position related to technology. There’s a slim chance you can convince the school to pay for it. If not, maybe family/friends can help, or you could do what I did and pay for it yourself with the money that you earn from a job/internship.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*wehmn9kUcoEXnjLG" alt=""  />
+
+Also, it’s important that your parents/guardians are on board. They don’t have to be your biggest cheerleaders but make sure that they understand that this involves taking a 48-hour exam. If you’re doing this on a weekend, it could interfere with your sleep before school and it will be very beneficial for you to have a workspace to do the exam at that is free of distractions. Food is another concern and if they’re supportive enough to cook for you, that can be helpful. These are things that you may have to discuss with them, and I know that it can be hard to convince them if they don’t understand the value of an OSCP (or the cost of it). It’s just important to keep in mind that they ultimately have the last call in whether you are allowed to hack into computers for 24 hours instead of doing chores.</p>
+<p>I was lucky enough to have parents who didn’t understand but supported me as long as I was willing to pay for it on my own.</p>
+<h1 id="my-oscpjourney">My OSCP Journey</h1>
+<p>This will include my preparation, my mindset, and my exam/report experience.</p>
+<p>This simple image is a summary of my OSCP timeline.</p>
+<h2 id="my-background"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*K8Nv4EuM0InYvzhXWdoItA.png" alt="A simple image summarizing my OSCP timeline"  />
+
+My Background</h2>
+<p>I started from a bit of a unique position. Because of my (albeit inconsistent) work over the past 3 years, I had been able to establish a technical foundation in coding. I didn’t understand IT or networking, but I understood software. I began my journey with 1 1/2 years of experience as a software engineer in part-time internships throughout my first 2 years of high school. I can talk more about this in another post if people are interested because finding these internships was a vast challenge as a minor. This is not necessary by any means, but I do think that the background helped me. In particular, from this, I got comfortable reading documentation, understanding/writing code, and troubleshooting.</p>
+<h2 id="the-beginning">The Beginning</h2>
+<p>My cybersecurity journey started out in late December of 2021 with a TryHackMe course on networking. It began with the fundamental question of how information can travel from one device to the next. Why is it that I can send a message to my mother’s phone without ever having physical interaction with it? And I also wondered about hacking, and, in particular, what it truly looked like.</p>
+<p>My journey started out of pure curiosity.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*Fk9R3HxHH1nxuxF-" alt="Girl looking through a microscope curiously"  />
+
+I went through the modules and then didn’t touch TryHackMe again, or anything cybersecurity-related, for another 2 months. I was at an internship at a startup on top of school, which was already exhausting. I knew that doing any more would lead me to burn out.</p>
+<p>When my internship ended, I had more free time. I recall using TryHackMe for about 1–2 hours per week in February and March of 2022. But my main focus was finding another software engineering internship because I wanted more experience before I graduated high school. At this point, I didn’t take cybersecurity seriously and I didn’t have the skill to do much relating to it.</p>
+<p>Around April of 2022, I started to passively do more TryHackMe alongside my new internship. At this point, I became deeply passionate about understanding the way that the devices worked. The idea of being able to outsmart the way that something functions so as to make it do something it wasn’t intended to do really appealed to me. It was the intellectual challenge that I craved and allowed me the freedom to think creatively. I began to understand the world better from what the modem down the hall does to how my school account works.</p>
+<h2 id="getting-morefocused"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*Q8ieug4tq9emeV9_" alt=""  />
+
+Getting More Focused</h2>
+<p>The summer of 2022 was by far my most prolific period of learning throughout this journey. I watched countless YouTube videos, read numerous research blogs, and just fell in love with this community of diverse thinkers. It’s fascinating the way that cybersecurity folks will use their beautiful brains to challenge their surroundings. I found a video of a guy hacking his car, I learned about the Flipper Zero, and the WiFi Pineapple. Each of these surprised me in the most astonishing way because I didn’t know that these feats and gadgets were possible!</p>
+<p>This strengthened my passion for cybersecurity and I began following closely to IppSec. I couldn’t do HackTheBox machines without help from a walkthrough. By the way, HackTheBox is hard! Those machines are way more difficult than the OSCP! If you can’t do them, don’t fret. It takes practice and patience over a long-enough period of time. And that timeline will be different for each person.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*I7W7gRqGQgqtioYW.jpg" alt=""  />
+
+I also took this time to learn basic networking and IT from this <a href="https://www.youtube.com/@PowerCertAnimatedVideos">extremely helpful channel</a> and did some experiments on my home network.</p>
+<h2 id="enrolling-in-thepen-200">Enrolling in the PEN-200</h2>
+<p>This was a big step for me. I was unsure of whether I was skilled enough to get started. By this point, I was able to do some of the HTB boxes on TJ Null’s list without referencing a writeup. Getting this course was a big purchase and I didn’t want to waste my money.</p>
+<p>I ended up being disappointed with the course. I was hoping for better explanations and the topic exercises didn’t work about 10% of the time which prevented me from getting bonus points. In addition, before I knew about the topic exercises, I tried writing the lab report just to find out it wasn’t accepted after January 2023 for bonus points, so I wasted 1 1/2 months writing 400 pages when I could have instead been learning skills that would actually transfer to the OSCP.</p>
+<p>The labs weren’t very valuable to me with the exception of the AD networks and the IT network that required pivoting to get to. These two allowed me to practice port-forwarding and AD methodology in a way that was meaningful and transferrable.</p>
+<p>After about 2 months, of the PEN-200, I left to find better labs in Proving Grounds. I started by following TJ Null’s list, and then I switched to doing the ones that weren’t listed since I finished the list. It was also around this time that I got really interested in anonymity. So I spent the first week of my Christmas break learning about anonymity. I went on a number of other research tangents throughout my journey. I realized that I had trouble sustaining my OSCP journey without taking the time to explore other topics that interested me, so it was a common occurrence for me to shift my focus away from the OSCP every few weeks to learn something else.</p>
+<h2 id="exam-month">Exam Month</h2>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*1XGLXdlNNkfdZLXa" alt=""  />
+
+<em>Woman who is stressed for her dear life</em></p>
+<p>In the month leading up to the exam, I had reached a point of exhaustion. I experienced stress from several areas of my life at once and came to the conclusion that if I wanted to do well on my exam, de-stressing was my top priority. At this point, I had compromised over 200 lab machines total. I had the skill, I had my notes, and I had intuition. The final month wasn’t going to make a difference. I was already ready.</p>
+<p>As a result, I spent this time reading books about anthropology, neuroscience, and history. I went to the gym and socialized with friends at school I created more free time for myself and did what I needed to relax while also keeping my thinking skills sharp.</p>
+<p>I did about 1 PG machine per week. For each one of these, I made a focused effort to practice thorough note-taking and I would write an example report on it.</p>
+<p>I scheduled my exam about 2 weeks prior to the exam date. Waiting until so late meant that the only time available for me was 4:00 AM. I reserved this time knowing I would be able to wake up from the adrenaline rush.</p>
+<h2 id="exam-day">Exam Day</h2>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*Q_5-29t3MzePTHAp" alt=""  />
+
+I woke up at 12:30 AM. I think the excitement woke me up because I was unable to fall asleep. I went to sleep at 8:00 PM the night before, hoping to wake up at 3:15 AM. It turned out that I didn’t even need to set an alarm that day!</p>
+<p>This wasn’t ideal because I had about 3 less hours of sleep than planned. I was still able to make it work, however. I logged on to the proctoring software at 3:45. After walking through the <a href="https://help.offensive-security.com/hc/en-us/articles/360040574491-What-is-expected-of-me-as-a-learner-to-participate-in-a-proctored-exam-">pre-exam checks</a>, I was able to connect to my VPN at 4:00 AM.</p>
+<p>Here is a quick timeline of my test since this is already getting lengthy:</p>
+<ul>
+<li><strong>4:00 AM (0pts)</strong>- Use <a href="https://rustscan.github.io/RustScan/">RustScan</a> to scan all the hosts and become familiar with my exam dashboard.</li>
+<li><strong>4:10 AM (0pts)</strong>- Start enumerating the first AD machine. I didn’t find anything useful so I moved on temporarily.</li>
+<li><strong>4:40 AM (0pts)</strong>- Start enumerating one of the individual machines. I figure out what I need to do.</li>
+<li><strong>4:55 AM (10pts)</strong>- Submit my first local.txt and try to privesc.</li>
+<li><strong>5:10 AM (10pts)</strong>- Don’t find a quick privesc, so start looking at second independent target. It takes about 20 more minutes, but I find what I need.</li>
+<li><strong>5:46 AM (20pts)</strong>- Got a shell and submitted second local.txt.</li>
+<li><strong>5:46–6:10 AM (20pts)</strong>- Take a break.</li>
+<li><strong>6:10 AM (20pts)</strong>- Enumerate domain controller. At this point, I’m getting really deep into enumeration and finding nothing.</li>
+<li><strong>8:30 AM (20pts)</strong>- Shift focus on 3rd independent target.</li>
+<li><strong>9:20 AM (20pts)</strong>- Found potential vulnerabilities, but wasn’t able to exploit them. Tried privesc on 1st independent target again.</li>
+<li><strong>10:20 AM (20pts)</strong>- Discovered interesting findings. Unable to use them for an exploit. Moved to AD machine.</li>
+<li><strong>11:20 AM (20pts)</strong>- Thorough enumeration, but didn’t find what I needed. I’m starting to get anxious.</li>
+<li><strong>11:20–11:50 AM (20pts)</strong>- Take a break.</li>
+</ul>
+<p>By this point, I was starting to lose my cool. I had been awake for nearly 12 hours on insufficient sleep. I went on a walk to clear my mind and brainstorm new enumeration ideas. With my list in mind, I returned to the exam desk:</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*N-iZkZHiXrad1CEK" alt=""  />
+</p>
+<ul>
+<li><strong>11:50 AM (20pts)</strong>- Enumerate AD machine more with new ideas.</li>
+<li><strong>1:30 PM (20pts)</strong>- Still no progress. Briefly contemplate giving up, but decide to keep going (read more about this in next section).</li>
+<li><strong>3:00 PM (20pts)</strong>- Take a nap. Struggle to sleep because of excitement, but eventually relax. Completely exhausted from my enumeration efforts and lack of adequate sleep.</li>
+<li><strong>4:30 PM (20pts)</strong>- Wake up and continue searching AD machine. This time with more of a focus on thorough, methodical, and manual enumeration.</li>
+<li><strong>5:00 PM (20pts)</strong>- Find the missing piece!</li>
+<li><strong>5:30 PM (20pts)</strong>- Successfully exploit first AD machine!</li>
+<li><strong>6:30 PM (20pts)</strong>- Escalate privileges and get proof.txt. Take a short break to cry tears of joy.</li>
+<li><strong>7:00 PM (20pts)</strong>- Encountering difficulties with getting one of my tools to work the way it normally does.</li>
+<li><strong>8:00 PM (20pts)</strong>- I found the solution to my problem after a lot of troubleshooting and continued to move forward.</li>
+<li><strong>8:30–8:50 PM (20pts)</strong>- Take a break.</li>
+<li><strong>9:05 PM (20pts)</strong>- Move laterally to 2nd AD machine and get proof.txt.</li>
+<li><strong>9:31 PM (60pts)</strong>- Privesc to 3rd AD machine as domain admin. Got proof.txt!</li>
+</ul>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*3QBFTAphIYoDOzEe.jpg" alt=""  />
+
+At this point, I was in <strong>utter disbelief</strong> that I had actually done it. I took a break from the exam to go tell my mom how I was able to do it. I said, “This all started out as a naive dream that I had last April and I didn’t think it would actually happen. I went for it anyways, and now it’s actually coming true.”</p>
+<p>Now, I had the final task of scoring 10 more points before I was eligible to pass. I started by trying to get a foothold on independent target #3, but continue to fail. I go for the privesc on the 1st independent target, but hit numerous dead ends.</p>
+<ul>
+<li><strong>11:30 PM (60pts)</strong>- Shift focus to privesc on 2nd independent target, the one I thought I was least likely to get. My enumeration scripts weren’t working and I didn’t find much in my initial manual enumeration. Then, I went through my <a href="https://github.com/ally-petitt/OSCP-cheatsheet/tree/main">notes</a> and tried each enumeration step one-by-one.</li>
+<li><strong>11:50 PM (60pts)</strong>- Discover a vulnerability that allowed me to privesc from a check that I almost didn’t include in my notes. I figured out how to exploit it and attempted it with the expectation that it would fail since I had been failing for the past 3 hours.</li>
+<li><strong>11:55 PM (70pts)</strong>- The exploit succeeds and I can’t believe that I just scored 70 points!</li>
+</ul>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*CrQVpk88n0fjUXre.png" alt="Woman crying tears of joy"  />
+
+My jaw is dropped as I stare at my terminal output. The feeling that I experienced in this moment is indescribable. My best attempt at illustrating the way that I felt is runner’s high… on a high. I had never felt so uplifted and energetic. This moment made the preceding hours of banging my head against the keyboard worth it. I take a break and just allow myself the time to appreciate that moment before continuing</p>
+<ul>
+<li><strong>12:30 AM (70pts)</strong>- Do more enumeration on 3rd independent target to see if I can get an easy foothold. Realize how exhausted I am and check that I did an adequate job at screenshots and note-taking.</li>
+<li><strong>1:10 AM-iss (70pts)</strong>- End exam early after verifying I had all the documentation I needed to write a good report</li>
+</ul>
+<p>I made the difficult decision to end my exam at 70 points, knowing that any mistake I made in reporting, proof screenshots, or flag submission would result in a fail. After triple-checking that my notes were thorough and that my screenshots/flag submissions met the exam requirements, I asked my proctor to end the exam early. I chose to do this for two reasons:</p>
+<ol>
+<li>I would rather spend the last 3 hours of exam time sleeping since I knew I had a report to write the next day that required strong mental focus.</li>
+<li>If I were to compromise another machine, I would have to add it to my report, which would just make a job the next day more difficult.</li>
+</ol>
+<p>Combined, I would have less sleep and more work for the next day. I decided that, ultimately, for me to write a great report tomorrow, I needed the sleep. So I sacrificed the potential extra points for the security that I would have the brain power to make the most beautiful report of my life.</p>
+<p>I also do want to mention that I was taking thorough notes and screenshots throughout my exam time just like I had practiced doing. I didn’t have to retrace my steps in order to ensure I had good notes because I had developed good documentation skills before the exam.</p>
+<p>I do want to note that I left out many of the breaks that I took just for the sake of brevity. I probably did take a break every 50 minutes on average. Most of them were only 5 minutes, some were 30.</p>
+<h2 id="dont-giveup">Don’t Give Up</h2>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*VUEaqMiluWjqWpXB" alt=""  />
+
+I do want to touch on 1:30 AM. I did genuinely consider quitting. I had previously failed the eJPT exam last July, so part of me figured that I was destined to fail this one as well. Before I allowed myself to spiral, I reconsidered what it cost me to be able to have that moment. I thought about the money that I spent, the hours I took to prepare, and the people who believed in me. I made an agreement with myself:</p>
+<p><strong>I told myself that it was okay to fail. As long as I failed knowing that I did everything I possibly could to succeed.</strong></p>
+<p>So in order to appease my own mind and fail this exam regret-free, I continued. Ironically, it was my willingness to fail that allowed me to succeed. My stress levels decreased and I was able to actually get some sleep. After my nap, I compromised the first AD machine!</p>
+<h2 id="youll-run-out-of-ideas-before-you-run-out-oftime">You’ll Run Out of Ideas Before You Run Out of Time</h2>
+<p>The reason I was able to compromise the first AD machine after 12 hours of being stuck is this: I kept coming up with new ideas. Even if there’s a 1% chance of it working, when you have 100 of those ideas, one of them is bound to be it!</p>
+<p>Channel your inner child and keep asking questions and experimenting with ideas, even if you think it won’t work. Most ideas will probably fail, but all you need is one success.</p>
+<h2 id="reporting">Reporting</h2>
+<p>I could make a dedicated article just on this topic. To summarize, I cross-referenced multiple templates that I found online and figured out what my report should look like. I then used the template that I thought was the most aesthetic and modified it to fit my needs.</p>
+<p>I took pride in the report I created because I was very meticulous about my word choice, adhering to the documentation requirements, maintaining a consistent diction, explaining concepts clearly and accurately, and providing adequate screenshots.</p>
+<p>I submitted my report after triple-checking that it was perfect and re-reading it countless times. Then, the wait ensued.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*5pIvjg81NpVA1zmd" alt=""  />
+
+<em>A man hopelessly staring at the clock</em></p>
+<h2 id="the-aftermath">The Aftermath</h2>
+<p>This exam left me exhausted. I was very sleep deprived, fatigued, and anxious. It takes a significant amount of mental energy to maintain such intense attention to detail for a prolonged period of time. Throughout the exam period, I had a constant rush of adrenaline. And this made it near impossible to fall asleep. After I had submitted my report, I had to next most difficult part of the OSCP: the wait. Luckily, it only took 25 hours for me to get the email that I passed. Each of those 25 hours, I made sure to refresh my inbox every 30 seconds (optional step).</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*Ly6iRSDs7Ugn1kAajhrNjg.jpeg" alt="Picture of the exam email annoucning my success"  />
+
+I do want to mention that this exam also takes a physical toll. Sitting at a desk for so many hours, even with breaks, is hard on the body. Make sure to move, stretch, and hydrate. I felt stiff in the few days following the exam.</p>
+<p>For the next few days, I felt a lightness and joy knowing that all of my hard work had paid off. That I had dared to try something so ambitious and unrealistic and it actually worked. This was a major accomplishment for me that required overcoming countless challenges.</p>
+<h2 id="takeaways">Takeaways</h2>
+<p>The OSCP was much more than a test of technical ability. It was an assessment of organizational skills, time management, resourcefulness, troubleshooting, problem-solving ability, capacity to work under stress, and much more. There was a point during the exam when BurpSuite wasn’t working for me, so I had to improvise in order to figure out a different solution. There were points where I almost went down rabbit holes searching for something that didn’t exist. It really takes experience to realize when these things are happening and how to adapt.</p>
+<p>Additionally, working under that time constraint with a proctor watching my every move through the webcam was stressful. I also had to make sure I had standards for taking good notes, I had my systems for organizing the log files that I collected, a way to organize my screenshots, I knew the sections and layout of my report, etc.. A failure to do any of these would result in time being wasted, and with such a strict time constraint, there wasn’t much room for error.</p>
+<h1 id="was-it-worthit">Was it worth it?</h1>
+<p>The short answer is that I don’t know yet. It’s really hard to find cybersecurity work in general as a minor, but I think that having this certification demonstrates my skill and for the few opportunities that do exist, I’ll be more likely to actually get them.</p>
+<p>It’s worth noting that when people who know me think about cybersecurity, I’m the first person who comes to mind, which can help in creating more opportunities through word-of-mouth. Additionally, I am more respected by the adults and peers who understand what the OSCP is. When I’m networking, people are more interested in learning about me and working with me than before I was certified now that I have something tangible to back up my skill.</p>
+<p>Accomplishing this in high school is a pretty remarkable feat, and people in the industry realize this and respect it. It’s impressive and can help get your foot in the door in combination with other factors such as networking, education, and other experiences/projects. The closer that you get to becoming a legal adult, the more valuable the OSCP becomes in terms of career opportunities, although accomplishing it younger definitely stands out. It’s really a personal decision for you to make based on your situation, limitations, and values.</p>
+<h2 id="imposter-syndrome">Imposter Syndrome</h2>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*0JjF7v3_N9tkTMS4v7Jo0w.png" alt=""  />
+
+As an update from future me, I would like to briefly mention my struggles with self-esteem following this exam. I set my mind to achieving this certification and diligently spent months preparing for it, but now that I’ve done it, I’ve noticed that I feel even less competent in my own abilities. I’ve continued to learn more and realized just how little I actually know. I’ve convinced myself that I just got lucky in achieving the OSCP and that I didn’t actually earn it.</p>
+<p>In the days following the exam, I felt amazing. But in the weeks following the exam, I felt degraded. And honestly, the doors that I thought would open for me just didn’t. I do realize that this is a massive achievement and logically, I truly have developed the mental and technical skills necessary to achieve this, but I also feel the need to work even harder to learn more and prove myself. I put unrealistically high expectations on myself at such a young age and it’s quite overwhelming. It’s like the Dunning-Kruger effect taken to the extreme.</p>
+<p>From what I’ve read, imposter syndrome is very common among people in this field, so I take it that I’m not unique in the sense of feeling worse after the OSCP. Despite this, however, I do not regret going for this certification. I’m so glad that I did. I think that imposter syndrome will be a long-term struggle for me going forward.</p>
+<p>In honesty, there’ve been times when I thought about quitting because the pressures that I would put on myself would be so extreme. I think that I would face this struggle in any career I enter just due to my personality. Everyone that knows me personally has told me that I will be successful and high-achieving. Somehow, I’ve convinced myself that I am not good/smart enough to accomplish these things and that is really sad. I think that this will get better, though, because I’ve discovered some things that have worked for me in the past. Until then, this has been my experience following the exam.</p>
+<h1 id="next-steps">Next Steps</h1>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*CVPmxaTzJ_GYmftJ" alt=""  />
+
+I’m still deciding on the best ways to allocate my time, but I’m considering doing some combination of these things (subject to change):</p>
+<ul>
+<li>Contributing more to open-source projects</li>
+<li>Creating my own cybersecurity coding projects/tools</li>
+<li>Speaking at a cybersecurity conference</li>
+<li>Strengthening my web application security skills</li>
+<li>Attempt bug bounty hunting</li>
+<li>Expanding my network and looking for more opportunities</li>
+</ul>
+<p>I’m looking to improve both my hard and soft skills while going to high-school full-time. Moving forward, I would like to share more of my journey and hopefully help to strengthen a community of young professionals such as myself.</p>
+<p>If you have any questions, my inbox is open. Please reach out to <a href="mailto:allypetitt@gmail.com">allypetitt@gmail.com</a>. Thanks for reading!</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>What the Pen-200 Has Taught Me About Pentesting Methodology</title>
+      <link>http://localhost:1313/ally-petitt/en/posts/2022-11-02_what-the-pen-200-has-taught-me-about-pentesting-methodology-1fd67760be5c/</link>
+      <pubDate>Wed, 02 Nov 2022 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/en/posts/2022-11-02_what-the-pen-200-has-taught-me-about-pentesting-methodology-1fd67760be5c/</guid>
+      <description>&lt;p&gt;The Pen-200 is the prerequisite course for the OSCP exam. As such, the writeups for the labs are incredibly difficult to find. As someone who has relied heavily on the accessibility of HTB walkthroughs, I’ve never been in an environment where I wasn’t one Google search away from figuring out the next step in solving a box. Needless to say, 0xdf couldn’t help me much with the Pen-200 labs.&lt;/p&gt;
+&lt;p&gt;The Pen-200 labs were a struggle not because I was incompetent, but because I didn’t have enough practice reaching dead ends. I didn’t spend enough time in rabbit holes, therefore I wouldn’t realize when I was in one. I didn’t know how to search for details that I might have missed on my first look. When trying to solve a box, I learned that sometimes the vulnerability could be found just by Googling a word that I was not entirely familiar with on the&lt;code&gt;nmap&lt;/code&gt; scan.&lt;/p&gt;
+&lt;p&gt;My journey began with referencing writeups on HTB, but when I no longer could, I learned how to use cheatsheets on the internet. Some of my most notable mentions are &lt;a href=&#34;https://book.hacktricks.xyz/welcome/readme&#34;&gt;HackTricks&lt;/a&gt; and &lt;a href=&#34;https://kashz.gitbook.io/kashz-jewels/&#34;&gt;Kashz Jewels&lt;/a&gt;. When I found an open port, I would ensure that I went through every enumeration step that I found on these cheat sheets. It was still a slight crutch, but it did allow me to develop methodologies that I wasn’t getting by relying solely on writeups.&lt;/p&gt;
+&lt;p&gt;Eventually, thoroughly enumerating the services became second nature and I became better at quickly identifying vulnerabilities in the virtual machines. I learned to search for CVEs for any software that I found running and I learned to do more thorough experimentation with user input fields and query parameters. I learned how to troubleshoot the errors that I was getting on my system when trying to run an exploit.&lt;/p&gt;
+&lt;p&gt;I am feeling very confident in my abilities to hack into the lab systems and am beginning to look towards something more challenging such as Proving Grounds in preparation for the OSCP.&lt;/p&gt;
+&lt;h2 id=&#34;key-takeaways&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*xcyov1D0RvoqVZfj.jpg&#34; alt=&#34;&#34;  /&gt;
+
+Key Takeaways&lt;/h2&gt;
+&lt;p&gt;This process of feeling helpless with gradual progress towards becoming self-reliant and resourceful has taught me an important lesson about cybersecurity which is this: methodology is key. Methodology might be the single largest difference in my pen-testing abilities before and after the Pen-200. I learned how to consistently find vulnerabilities and how to reliably exploit them. And methodology is best developed through repetition and exposing yourself to a variety of different machines. Each one requires a slightly different approach which creates a more complete methodology.&lt;/p&gt;
+&lt;p&gt;In addition, note-taking is powerful. Taking frequent screenshots and saving the output of scans into a file will save time when wanting to look back at scan results and it will allow for further refinement of your methodology.&lt;/p&gt;
+</description>
+      <content:encoded><![CDATA[<p>The Pen-200 is the prerequisite course for the OSCP exam. As such, the writeups for the labs are incredibly difficult to find. As someone who has relied heavily on the accessibility of HTB walkthroughs, I’ve never been in an environment where I wasn’t one Google search away from figuring out the next step in solving a box. Needless to say, 0xdf couldn’t help me much with the Pen-200 labs.</p>
+<p>The Pen-200 labs were a struggle not because I was incompetent, but because I didn’t have enough practice reaching dead ends. I didn’t spend enough time in rabbit holes, therefore I wouldn’t realize when I was in one. I didn’t know how to search for details that I might have missed on my first look. When trying to solve a box, I learned that sometimes the vulnerability could be found just by Googling a word that I was not entirely familiar with on the<code>nmap</code> scan.</p>
+<p>My journey began with referencing writeups on HTB, but when I no longer could, I learned how to use cheatsheets on the internet. Some of my most notable mentions are <a href="https://book.hacktricks.xyz/welcome/readme">HackTricks</a> and <a href="https://kashz.gitbook.io/kashz-jewels/">Kashz Jewels</a>. When I found an open port, I would ensure that I went through every enumeration step that I found on these cheat sheets. It was still a slight crutch, but it did allow me to develop methodologies that I wasn’t getting by relying solely on writeups.</p>
+<p>Eventually, thoroughly enumerating the services became second nature and I became better at quickly identifying vulnerabilities in the virtual machines. I learned to search for CVEs for any software that I found running and I learned to do more thorough experimentation with user input fields and query parameters. I learned how to troubleshoot the errors that I was getting on my system when trying to run an exploit.</p>
+<p>I am feeling very confident in my abilities to hack into the lab systems and am beginning to look towards something more challenging such as Proving Grounds in preparation for the OSCP.</p>
+<h2 id="key-takeaways"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*xcyov1D0RvoqVZfj.jpg" alt=""  />
+
+Key Takeaways</h2>
+<p>This process of feeling helpless with gradual progress towards becoming self-reliant and resourceful has taught me an important lesson about cybersecurity which is this: methodology is key. Methodology might be the single largest difference in my pen-testing abilities before and after the Pen-200. I learned how to consistently find vulnerabilities and how to reliably exploit them. And methodology is best developed through repetition and exposing yourself to a variety of different machines. Each one requires a slightly different approach which creates a more complete methodology.</p>
+<p>In addition, note-taking is powerful. Taking frequent screenshots and saving the output of scans into a file will save time when wanting to look back at scan results and it will allow for further refinement of your methodology.</p>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

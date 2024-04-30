@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Data Loss Protection (DLP) on Ally Petitt</title>
+    <link>http://localhost:1313/ally-petitt/en/tags/data-loss-protection-dlp/</link>
+    <description>Recent content in Data Loss Protection (DLP) on Ally Petitt</description>
+    <generator>Hugo -- 0.125.4</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 23 Apr 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/ally-petitt/en/tags/data-loss-protection-dlp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to Prevent Data Leaks Before they Happen</title>
+      <link>http://localhost:1313/ally-petitt/en/posts/2023-04-23_how-to-prevent-data-leaks-before-they-happen-3c53997b3744/</link>
+      <pubDate>Sun, 23 Apr 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/en/posts/2023-04-23_how-to-prevent-data-leaks-before-they-happen-3c53997b3744/</guid>
+      <description>&lt;p&gt;Data Loss Prevention&lt;/p&gt;
+&lt;h1 id=&#34;what-is-data-loss-prevention&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*65eSMdR110wv_HGg&#34; alt=&#34;&#34;  /&gt;
+
+What is Data Loss Prevention?&lt;/h1&gt;
+&lt;p&gt;Data Loss Prevention (DLP) is a strategy for preventing data exfiltration and destruction. Examples of data include financial information, customer data, trade secrets, and other confidential information that could harm a company or its customers if exposed.&lt;/p&gt;
+&lt;p&gt;Common causes of data loss include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Human error&lt;/strong&gt;- accidental deletion of sensitive files, misconfiguring security settings, or being the victim of a social engineering attack.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Insider threats&lt;/strong&gt;- unauthorized saving and distribution of sensitive files by those with access to corporate systems.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Malware&lt;/strong&gt;- programs that infect a system and steal or corrupt data.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Physical damage&lt;/strong&gt;- natural disasters, hardware failures, and power outages can all result in the loss of data.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Theft or loss of devices&lt;/strong&gt;- data on the device at the time of being stolen/lost may be compromised.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;steps-of-data-loss-prevention&#34;&gt;Steps of Data Loss Prevention&lt;/h1&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*3VYpuFQz25D0HYRxMrEyMg.png&#34; alt=&#34;&#34;  /&gt;
+
+&lt;em&gt;&lt;a href=&#34;https://cdn.sketchbubble.com/pub/media/catalog/product/optimized1/7/f/7f3f224484e9abfed723832a1fee08a73cdf27c9b5eb2b177a645fcc3c2c7261/data-loss-prevention-slide2.png&#34;&gt;https://cdn.sketchbubble.com/pub/media/catalog/product/optimized1/7/f/7f3f224484e9abfed723832a1fee08a73cdf27c9b5eb2b177a645fcc3c2c7261/data-loss-prevention-slide2.png&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Data Classification&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;p&gt;Data classification falls under the broad umbrella of data governance. This is essentially the process of determining which data is considered to be sensitive so that it can be protected. It is an important prerequisite step to a successful DLP program.&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;Data Mapping&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;p&gt;This is the process of determining how data is transferred, where data is stored, how it is processed, and who has access to it. The goal of data mapping is to create a comprehensive inventory of an organization’s data assets.&lt;/p&gt;
+&lt;p&gt;Data is often in one of two states: in transit or at rest. It is typical that an audit will be performed on all the systems and applications that contain data at rest including file servers, cloud storage, databases, email systems, and other data repositories. Once this has been completed, it is common to create a map illustrating the flow of data through an organization. This includes identifying how data is processed, transmitted, and stored, as well as who has access to it at each stage of the process. The information collected through data mapping can be used to develop DLP policies and controls to protect sensitive data.&lt;/p&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;Protect Data&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;p&gt;Data protection involves implementing controls in order to maintain the confidentiality of the information classified in step 1. Common data protection methods include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Encryption&lt;/strong&gt;- the robustness and scope of encryption used will be determined by the assets that it is aiming to protect and how sensitive they are.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Access Control&lt;/strong&gt;- limiting user permissions, enforcing multi-factor authentication (MFA), and potentially monitoring user behavior to detect suspicious activity&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Security Policy&lt;/strong&gt;- social media policy, clear desk policy, acceptable use policy, and end user policy are all potential ways to enforce operational security.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Employee Training&lt;/strong&gt;- employees should be trained on data handling best practices, strong password policy, and identifying social engineering schemes. Regular awareness campaigns can reinforce the importance of data security.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;DLP Software Solutions&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*hwsT5tgv1e1AHF6S&#34; alt=&#34;&#34;  /&gt;
+
+&lt;em&gt;&lt;a href=&#34;https://innovative.land/wp-content/uploads/2020/08/Data-Loss-Prevention-DLP.jpg&#34;&gt;https://innovative.land/wp-content/uploads/2020/08/Data-Loss-Prevention-DLP.jpg&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Commercial tools can be used to prevent data loss the methods mentioned previously. DLP software can be found from cloud platforms and email providers as native implementations. Commercial solutions include Symantec CloudSOC CASB, Symantec DLP, McAfee Total Protection for DLP, and Digital Guardian to name a few.&lt;/p&gt;
+&lt;p&gt;As explained by CloudFlare, DLP solutions may detect sensitive data through data fingerprinting, keyword matching in files, pattern matching, file matching, and exact data matching. By comparing the unique identifiers of sensitive data, the software is able to determine whether the sensitive data is being exfiltrated and enact measures to prevent it. For example, the DLP program may block suspicious outgoing emails.&lt;/p&gt;
+&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;Data loss prevention is an essential element of any organization’s cybersecurity strategy, as it helps protect sensitive data from loss or theft. By implementing a comprehensive DLP program, organizations can reduce the risk of data breaches and maintain the trust of their customers and stakeholders. However, it’s important to remember that DLP requires ongoing monitoring, evaluation, and improvement to ensure its effectiveness over time.&lt;/p&gt;
+&lt;h1 id=&#34;more-reading&#34;&gt;More Reading&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.cloudflare.com/learning/access-management/what-is-dlp/&#34;&gt;https://www.cloudflare.com/learning/access-management/what-is-dlp/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=TPU6VrBa0Fs&#34;&gt;https://www.youtube.com/watch?v=TPU6VrBa0Fs&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Data_loss&#34;&gt;https://en.wikipedia.org/wiki/Data_loss&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.secureworld.io/industry-news/data-loss-prevention-next-gen-dlp&#34;&gt;https://www.secureworld.io/industry-news/data-loss-prevention-next-gen-dlp&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      <content:encoded><![CDATA[<p>Data Loss Prevention</p>
+<h1 id="what-is-data-loss-prevention"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*65eSMdR110wv_HGg" alt=""  />
+
+What is Data Loss Prevention?</h1>
+<p>Data Loss Prevention (DLP) is a strategy for preventing data exfiltration and destruction. Examples of data include financial information, customer data, trade secrets, and other confidential information that could harm a company or its customers if exposed.</p>
+<p>Common causes of data loss include:</p>
+<ul>
+<li><strong>Human error</strong>- accidental deletion of sensitive files, misconfiguring security settings, or being the victim of a social engineering attack.</li>
+<li><strong>Insider threats</strong>- unauthorized saving and distribution of sensitive files by those with access to corporate systems.</li>
+<li><strong>Malware</strong>- programs that infect a system and steal or corrupt data.</li>
+<li><strong>Physical damage</strong>- natural disasters, hardware failures, and power outages can all result in the loss of data.</li>
+<li><strong>Theft or loss of devices</strong>- data on the device at the time of being stolen/lost may be compromised.</li>
+</ul>
+<h1 id="steps-of-data-loss-prevention">Steps of Data Loss Prevention</h1>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*3VYpuFQz25D0HYRxMrEyMg.png" alt=""  />
+
+<em><a href="https://cdn.sketchbubble.com/pub/media/catalog/product/optimized1/7/f/7f3f224484e9abfed723832a1fee08a73cdf27c9b5eb2b177a645fcc3c2c7261/data-loss-prevention-slide2.png">https://cdn.sketchbubble.com/pub/media/catalog/product/optimized1/7/f/7f3f224484e9abfed723832a1fee08a73cdf27c9b5eb2b177a645fcc3c2c7261/data-loss-prevention-slide2.png</a></em></p>
+<ol>
+<li>Data Classification</li>
+</ol>
+<hr>
+<p>Data classification falls under the broad umbrella of data governance. This is essentially the process of determining which data is considered to be sensitive so that it can be protected. It is an important prerequisite step to a successful DLP program.</p>
+<ol start="2">
+<li>Data Mapping</li>
+</ol>
+<hr>
+<p>This is the process of determining how data is transferred, where data is stored, how it is processed, and who has access to it. The goal of data mapping is to create a comprehensive inventory of an organization’s data assets.</p>
+<p>Data is often in one of two states: in transit or at rest. It is typical that an audit will be performed on all the systems and applications that contain data at rest including file servers, cloud storage, databases, email systems, and other data repositories. Once this has been completed, it is common to create a map illustrating the flow of data through an organization. This includes identifying how data is processed, transmitted, and stored, as well as who has access to it at each stage of the process. The information collected through data mapping can be used to develop DLP policies and controls to protect sensitive data.</p>
+<ol start="3">
+<li>Protect Data</li>
+</ol>
+<hr>
+<p>Data protection involves implementing controls in order to maintain the confidentiality of the information classified in step 1. Common data protection methods include:</p>
+<ul>
+<li><strong>Encryption</strong>- the robustness and scope of encryption used will be determined by the assets that it is aiming to protect and how sensitive they are.</li>
+<li><strong>Access Control</strong>- limiting user permissions, enforcing multi-factor authentication (MFA), and potentially monitoring user behavior to detect suspicious activity</li>
+<li><strong>Security Policy</strong>- social media policy, clear desk policy, acceptable use policy, and end user policy are all potential ways to enforce operational security.</li>
+<li><strong>Employee Training</strong>- employees should be trained on data handling best practices, strong password policy, and identifying social engineering schemes. Regular awareness campaigns can reinforce the importance of data security.</li>
+</ul>
+<ol start="4">
+<li>DLP Software Solutions</li>
+</ol>
+<hr>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*hwsT5tgv1e1AHF6S" alt=""  />
+
+<em><a href="https://innovative.land/wp-content/uploads/2020/08/Data-Loss-Prevention-DLP.jpg">https://innovative.land/wp-content/uploads/2020/08/Data-Loss-Prevention-DLP.jpg</a></em></p>
+<p>Commercial tools can be used to prevent data loss the methods mentioned previously. DLP software can be found from cloud platforms and email providers as native implementations. Commercial solutions include Symantec CloudSOC CASB, Symantec DLP, McAfee Total Protection for DLP, and Digital Guardian to name a few.</p>
+<p>As explained by CloudFlare, DLP solutions may detect sensitive data through data fingerprinting, keyword matching in files, pattern matching, file matching, and exact data matching. By comparing the unique identifiers of sensitive data, the software is able to determine whether the sensitive data is being exfiltrated and enact measures to prevent it. For example, the DLP program may block suspicious outgoing emails.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>Data loss prevention is an essential element of any organization’s cybersecurity strategy, as it helps protect sensitive data from loss or theft. By implementing a comprehensive DLP program, organizations can reduce the risk of data breaches and maintain the trust of their customers and stakeholders. However, it’s important to remember that DLP requires ongoing monitoring, evaluation, and improvement to ensure its effectiveness over time.</p>
+<h1 id="more-reading">More Reading</h1>
+<ul>
+<li><a href="https://www.cloudflare.com/learning/access-management/what-is-dlp/">https://www.cloudflare.com/learning/access-management/what-is-dlp/</a></li>
+<li><a href="https://www.youtube.com/watch?v=TPU6VrBa0Fs">https://www.youtube.com/watch?v=TPU6VrBa0Fs</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Data_loss">https://en.wikipedia.org/wiki/Data_loss</a></li>
+<li><a href="https://www.secureworld.io/industry-news/data-loss-prevention-next-gen-dlp">https://www.secureworld.io/industry-news/data-loss-prevention-next-gen-dlp</a></li>
+</ul>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

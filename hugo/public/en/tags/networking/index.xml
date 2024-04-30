@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Networking on Ally Petitt</title>
+    <link>http://localhost:1313/ally-petitt/en/tags/networking/</link>
+    <description>Recent content in Networking on Ally Petitt</description>
+    <generator>Hugo -- 0.125.4</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 25 May 2022 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/ally-petitt/en/tags/networking/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kerberos Authentication Explained</title>
+      <link>http://localhost:1313/ally-petitt/en/posts/2022-05-25_kerberos-authentication-explained-3d45f336bb2c/</link>
+      <pubDate>Wed, 25 May 2022 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/en/posts/2022-05-25_kerberos-authentication-explained-3d45f336bb2c/</guid>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*lPQ16gDtSYYccrc2-iExiA.jpeg&#34; alt=&#34;Kerberos- a three-headed dog&#34;  /&gt;
+
+When first learning Kerberos, it can feel like you’re being chased by the three-headed dog. Not to fear, however, because today I’ll be explaining a high-level overview of Kerberos authentication. Kerberos was designed to provide secure authentication to services over a potentially insecure network. It is used by many organizations to implement single sign-on (SSO).&lt;/p&gt;
+&lt;h1 id=&#34;kerberos-terminology&#34;&gt;Kerberos Terminology&lt;/h1&gt;
+&lt;p&gt;In order to understand the step-by-step explanation, it is important to have a basic understanding of the various components of Kerberos.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Kerberos Realm-&lt;/strong&gt; the domain in which Kerberos has the ability to authenticate a user&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Principal-&lt;/strong&gt; A unique identity within a Realm that represents either a user or service&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Client-&lt;/strong&gt; The user that is trying to access a service&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Service-&lt;/strong&gt; A resource provided to a client (eg. a file server, application, etc.)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Key Distribution Center (KDC)-&lt;/strong&gt; Supplies tickets and generates temporary session keys that allow a user to securely authenticate to a service. It also stores the secret symmetric keys for all of the users and services&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Authentication Server-&lt;/strong&gt; ensures that the client making the request to the service is a known user. It then issues a ticket-granting ticket&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Ticket Granting Server-&lt;/strong&gt; ensures that the user is making a request to a known service and grants service tickets&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;how-kerberosworks&#34;&gt;How Kerberos Works&lt;/h1&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*X7pcMLxklUmSlsC8ZvDO1A.png&#34; alt=&#34;&#34;  /&gt;
+&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;The user sends an unencrypted message to the Authentication server requesting to access a service&lt;/li&gt;
+&lt;li&gt;The Authentication server validates that the request came from a known user and generates a ticket-granting ticket (a ticket that allows you to be granted a ticket by the Ticket Granting Server)&lt;/li&gt;
+&lt;li&gt;The Ticket Granting Ticket (TGT) is sent to the user alongside a message encrypted with the user’s secret key&lt;/li&gt;
+&lt;li&gt;The user uses their secret key to decrypt the message and generates new messages.&lt;/li&gt;
+&lt;li&gt;The user sends their new messages and the TGT that they received (step 3) to the Ticket Granting Server&lt;/li&gt;
+&lt;li&gt;The Ticket Granting Server decrypts the Ticket Granting Ticket and does validation. Then, it creates a service ticket and a new encrypted message back to the user&lt;/li&gt;
+&lt;li&gt;The user decrypts the message and creates an Authenticator message. The user Authenticator and the service ticket is finally sent to the service.&lt;/li&gt;
+&lt;li&gt;The service decrypts and validates the service ticket and Authenticator message. Then, it sends back its own Authenticator message to the user.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;To paraphrase this, Kerberos makes sure that the user is legit, then it makes sure that the service is legit. Finally, a secure connection is created between the user and the service.&lt;/p&gt;
+&lt;h1 id=&#34;key-benefits-of-usingkerberos&#34;&gt;Key Benefits of Using Kerberos&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Passwords are never sent across the network&lt;/li&gt;
+&lt;li&gt;Encryption keys are never directly exchanged&lt;/li&gt;
+&lt;li&gt;Mutual authentication between the client and the application&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;I hope that this overview cleared up some of the confusion around Kerberos authentication. Thank you for reading.&lt;/p&gt;
+&lt;h1 id=&#34;more-resources&#34;&gt;More Resources&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://youtu.be/5N242XcKAsM&#34;&gt;Kerberos Authentication Explained | A deep dive&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Kerberos_%28protocol%29&#34;&gt;Kerberos (protocol)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.freecodecamp.org/news/how-does-kerberos-work-authentication-protocol/&#34;&gt;How Does Kerberos Work? The Authentication Protocol Explained&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      <content:encoded><![CDATA[<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*lPQ16gDtSYYccrc2-iExiA.jpeg" alt="Kerberos- a three-headed dog"  />
+
+When first learning Kerberos, it can feel like you’re being chased by the three-headed dog. Not to fear, however, because today I’ll be explaining a high-level overview of Kerberos authentication. Kerberos was designed to provide secure authentication to services over a potentially insecure network. It is used by many organizations to implement single sign-on (SSO).</p>
+<h1 id="kerberos-terminology">Kerberos Terminology</h1>
+<p>In order to understand the step-by-step explanation, it is important to have a basic understanding of the various components of Kerberos.</p>
+<ul>
+<li><strong>Kerberos Realm-</strong> the domain in which Kerberos has the ability to authenticate a user</li>
+<li><strong>Principal-</strong> A unique identity within a Realm that represents either a user or service</li>
+<li><strong>Client-</strong> The user that is trying to access a service</li>
+<li><strong>Service-</strong> A resource provided to a client (eg. a file server, application, etc.)</li>
+<li><strong>Key Distribution Center (KDC)-</strong> Supplies tickets and generates temporary session keys that allow a user to securely authenticate to a service. It also stores the secret symmetric keys for all of the users and services</li>
+<li><strong>Authentication Server-</strong> ensures that the client making the request to the service is a known user. It then issues a ticket-granting ticket</li>
+<li><strong>Ticket Granting Server-</strong> ensures that the user is making a request to a known service and grants service tickets</li>
+</ul>
+<h1 id="how-kerberosworks">How Kerberos Works</h1>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*X7pcMLxklUmSlsC8ZvDO1A.png" alt=""  />
+</p>
+<ol>
+<li>The user sends an unencrypted message to the Authentication server requesting to access a service</li>
+<li>The Authentication server validates that the request came from a known user and generates a ticket-granting ticket (a ticket that allows you to be granted a ticket by the Ticket Granting Server)</li>
+<li>The Ticket Granting Ticket (TGT) is sent to the user alongside a message encrypted with the user’s secret key</li>
+<li>The user uses their secret key to decrypt the message and generates new messages.</li>
+<li>The user sends their new messages and the TGT that they received (step 3) to the Ticket Granting Server</li>
+<li>The Ticket Granting Server decrypts the Ticket Granting Ticket and does validation. Then, it creates a service ticket and a new encrypted message back to the user</li>
+<li>The user decrypts the message and creates an Authenticator message. The user Authenticator and the service ticket is finally sent to the service.</li>
+<li>The service decrypts and validates the service ticket and Authenticator message. Then, it sends back its own Authenticator message to the user.</li>
+</ol>
+<p>To paraphrase this, Kerberos makes sure that the user is legit, then it makes sure that the service is legit. Finally, a secure connection is created between the user and the service.</p>
+<h1 id="key-benefits-of-usingkerberos">Key Benefits of Using Kerberos</h1>
+<ul>
+<li>Passwords are never sent across the network</li>
+<li>Encryption keys are never directly exchanged</li>
+<li>Mutual authentication between the client and the application</li>
+</ul>
+<h1 id="conclusion">Conclusion</h1>
+<p>I hope that this overview cleared up some of the confusion around Kerberos authentication. Thank you for reading.</p>
+<h1 id="more-resources">More Resources</h1>
+<ul>
+<li><a href="https://youtu.be/5N242XcKAsM">Kerberos Authentication Explained | A deep dive</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Kerberos_%28protocol%29">Kerberos (protocol)</a></li>
+<li><a href="https://www.freecodecamp.org/news/how-does-kerberos-work-authentication-protocol/">How Does Kerberos Work? The Authentication Protocol Explained</a></li>
+</ul>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

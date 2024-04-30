@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Snort on Ally Petitt</title>
+    <link>http://localhost:1313/ally-petitt/tags/snort/</link>
+    <description>Recent content in Snort on Ally Petitt</description>
+    <generator>Hugo -- 0.125.4</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 02 May 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/ally-petitt/tags/snort/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Snort IPS Quickstart</title>
+      <link>http://localhost:1313/ally-petitt/posts/2023-05-02_snort-ips-quickstart-27559ae01fae/</link>
+      <pubDate>Tue, 02 May 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/posts/2023-05-02_snort-ips-quickstart-27559ae01fae/</guid>
+      <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;Snort is an open source Intrusion Prevention System (IPS) that detects malicious network traffic by comparing the network packets to a set of rules, often created by Snort and the community. Snort can be used as a packet sniffer, packet logger, and intrusion prevention system.&lt;/p&gt;
+&lt;p&gt;In this article, I’ll go over some of the first steps of installing, configuring, and running Snort so that new users have a place to branch off of.&lt;/p&gt;
+&lt;h1 id=&#34;quick-install&#34;&gt;Quick Install&lt;/h1&gt;
+&lt;p&gt;You can install this on Ubuntu easily with the following command:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ sudo apt-get install snort
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;kali-linux&#34;&gt;Kali Linux&lt;/h2&gt;
+&lt;p&gt;For my Kali friends, you might get the message that you’re unable to locate the &lt;code&gt;snort&lt;/code&gt; package when trying to install it. This happens because the repositories that your distribution looks into when searching for apt packages doesn’t contain &lt;code&gt;snort&lt;/code&gt;. To fix this, you can try to append the following repos to your &lt;code&gt;/etc/apt/sources.list&lt;/code&gt;.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;deb http://http.kali.org/kali kali-rolling main non-free contrib  
+deb http://http.kali.org/kali sana main non-free contrib  
+deb http://security.kali.org/kali-security sana/updates main contrib non-free  
+deb http://old.kali.org/kali moto main non-free contrib
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Let the changes take effect and install Snort.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ sudo apt-get update  
+$ sudo apt-get install snort
+&lt;/code&gt;&lt;/pre&gt;&lt;h1 id=&#34;building-fromsource&#34;&gt;Building From Source&lt;/h1&gt;
+&lt;p&gt;If you’re crazy enough to build Snort from the source code, this section is for you.&lt;/p&gt;
+&lt;h2 id=&#34;installing-dependencies&#34;&gt;Installing Dependencies&lt;/h2&gt;
+&lt;p&gt;Before you can build Snort, you must first install its dependencies. These are listed in their &lt;a href=&#34;https://github.com/snort3/snort3#dependencies&#34;&gt;README.md&lt;/a&gt; on GitHub, but for the sake of brevity, I’ll put some of them here. Keep in mind that some of the dependencies have more dependencies which is why some appear below and not in the documentation.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo apt update &amp;amp;&amp;amp; apt install -y gcc libpcre3-dev zlib1g-dev libluajit-5.1-dev   
+libpcap-dev openssl libssl-dev libnghttp2-dev libdumbnet-dev   
+bison flex libdnet autoconf libtool cmake
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;daq&#34;&gt;DAQ&lt;/h2&gt;
+&lt;p&gt;Snort has another depenency called DAQ that needs to be installed. I’ll be downloading their latest release form GitHub and extracting it in a folder called &lt;code&gt;daq&lt;/code&gt;.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ wget https://github.com/snort3/libdaq/archive/refs/tags/v3.0.11.zip  
+$ unzip v3.0.11.zip -d daq &amp;amp;&amp;amp; cd daq/libdaq-3.0.11
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;After downloading and extracting it, I’ll run &lt;code&gt;bootstrap&lt;/code&gt; to generate the configuration script and then proceed to install it.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ./bootstrap  
+$ ./configure &amp;amp;&amp;amp; make &amp;amp;&amp;amp; sudo make install
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;hwloc&#34;&gt;hwloc&lt;/h2&gt;
+&lt;p&gt;Another dependency is &lt;code&gt;hwloc&lt;/code&gt;. You can find additional methods of installation on their &lt;a href=&#34;https://github.com/open-mpi/hwloc&#34;&gt;GitHub&lt;/a&gt; and &lt;a href=&#34;https://www.open-mpi.org/software/hwloc/v2.9/&#34;&gt;website&lt;/a&gt;. This is the way that I did it:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ git clone https://github.com/open-mpi/hwloc.git  
+$ cd hwloc &amp;amp;&amp;amp; ./autogen.sh  
+$ ./configure &amp;amp;&amp;amp; make &amp;amp;&amp;amp; sudo make install
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;openssl&#34;&gt;OpenSSL&lt;/h2&gt;
+&lt;p&gt;If you don’t already have &lt;code&gt;openssl&lt;/code&gt; installed on your system, you could install it from source:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ git clone https://github.com/openssl/openssl.git &amp;amp;&amp;amp; cd openssl  
+$ ./Configure &amp;amp;&amp;amp; make &amp;amp;&amp;amp; make test
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;It is also possible to install it through &lt;code&gt;apt&lt;/code&gt;. You may still need to install some additional headers for Snort to work. For this, you can try&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ sudo apt install libssl-dev openssl
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;snort-install&#34;&gt;Snort Install&lt;/h2&gt;
+&lt;p&gt;Finally, we can start building Snort. I’ll be building directly from their source code on GitHub. Following the instructions on their README.md in &lt;a href=&#34;https://github.com/snort3/snort3#readme&#34;&gt;GitHub&lt;/a&gt;, I clone their GitHub repository and run these commands:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ git clone https://github.com/snort3/snort3.git  
+$ cd snort3
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Then, I’ll build the program. You’ll need &lt;code&gt;cmake&lt;/code&gt; among other packages in order to do this, so I’ve included the install command for those packages.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ sudo apt install -y gcc cmake libpcre3-dev zlib1g-dev libluajit-5.1-dev libpcap-dev openssl libssl-dev libnghttp2-dev libdumbnet-dev bison flex autoconf libtool  
+$ ./configure\_cmake.sh --prefix=$(pwd) --with-daq-libraries=/path/to/libdaq-3.0.11  
+$ cd build  
+$ make -j $(nproc) install
+&lt;/code&gt;&lt;/pre&gt;&lt;h1 id=&#34;configuration&#34;&gt;Configuration&lt;/h1&gt;
+&lt;h2 id=&#34;capturing-all-networktraffic&#34;&gt;Capturing all Network Traffic&lt;/h2&gt;
+&lt;p&gt;To start, we’ll set our network adapter to run in promiscuous mode. This means that it will capture all packets on the network rather than only the ones that were assigned to be captured by it. This can be done through WiFi settings or through the command line.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ sudo ip link set wlan0 promisc on
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;modifying-the-configuration-file&#34;&gt;Modifying the Configuration File&lt;/h2&gt;
+&lt;p&gt;Most configurations will go within &lt;code&gt;/etc/snort/snort.conf&lt;/code&gt;.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ sudo vim /etc/snort/snort.conf
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;There’s many configuration options within this file that are broken up into 9 sections. Most of our changes will be in section 1.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*pngRmEDDXcscoXuasWQFdQ.png&#34; alt=&#34;&#34;  /&gt;
+
+On line 45 of the configuration file, we’ll change the value of &lt;code&gt;HOME_NET&lt;/code&gt; from &lt;code&gt;any&lt;/code&gt; to be the network that you would like to monitor. In my case, it is &lt;code&gt;192.168.1.0/24&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*uPIpmb3Q2AUJj3v3GkL2lQ.png&#34; alt=&#34;&#34;  /&gt;
+
+I would encourage you to go through the other variables in the configuration file to include the ports and hosts that are running various services so that Snort can detect them and apply the rules to them.&lt;/p&gt;
+&lt;p&gt;Rules are included in step #7. The syntax for rule files is &lt;code&gt;include /path/to/rule.rules&lt;/code&gt;. In this case, &lt;code&gt;$RULE_PATH&lt;/code&gt; refers to &lt;code&gt;/etc/snort&lt;/code&gt;. You can include multiple rule files and add your own under &lt;code&gt;/etc/snort/local.rules&lt;/code&gt; or whichever file name that you configure for you own rules. This structure allows you to compartmentalize various rule sets and keep them organized.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*Pz6IDFwxqQwrMWmZS83kQg.png&#34; alt=&#34;&#34;  /&gt;
+
+As a side note, if you would like to download the latest community rules, you can find them at the &lt;a href=&#34;https://www.snort.org/downloads#rules&#34;&gt;official website&lt;/a&gt;. You would extract the tarball and add the rule files to your &lt;code&gt;/etc/snort/snort.conf&lt;/code&gt;.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ wget https://www.snort.org/downloads/community/snort3-community-rules.tar.gz  
+$ tar -xf snort3-community-rules.tar.gz
+&lt;/code&gt;&lt;/pre&gt;&lt;h1 id=&#34;running-snort&#34;&gt;Running Snort&lt;/h1&gt;
+&lt;p&gt;Once you have your configuration file created, you can test that everything works with the following command:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ sudo snort -T -i wlan0 -c /etc/snort/snort.conf
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;You will get a lot of output. The most important pieces of information to be aware of in this output are the Snort rules. Here, you will be able to see how many were loaded in.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*4STD2kRrAx3xnRfCA7ALqA.png&#34; alt=&#34;&#34;  /&gt;
+
+To actually run Snort as a daemon, you would change the &lt;code&gt;-T&lt;/code&gt; option to &lt;code&gt;-D&lt;/code&gt;.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ sudo snort -D -i eth0 -c /etc/snort/snort.conf  
+Spawning daemon child...  
+My daemon child 197993 lives...  
+Daemon parent exiting (0)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;To verify that it is working, you can use &lt;code&gt;ps aux&lt;/code&gt;.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ps aux | grep snort  
+root 196973 0.0 0.3 450316 118644 ? Ssl 10:25 0:00 snort -D -i wlan0 -c /etc/snort/snort.conf
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;All alerts from Snort will be sent to &lt;code&gt;/var/log/snort/alert&lt;/code&gt; unless otherwise specified in a command line argument.&lt;/p&gt;
+&lt;h1 id=&#34;moving-forward&#34;&gt;Moving Forward&lt;/h1&gt;
+&lt;p&gt;For those who are interested in learning Snort on a deeper level, one recommendation is learning how to create your own rules and learning what the other configuration options are. It may be worth it to read their &lt;code&gt;man&lt;/code&gt; page as well to be aware of options available on the CLI. You can also combine Snort with a SIEM such as Splunk and other solutions like pfSense.&lt;/p&gt;
+</description>
+    </item>
+  </channel>
+</rss>

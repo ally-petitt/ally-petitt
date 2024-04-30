@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/ally-petitt/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=ally-petitt/livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>5 Ways I Found Your Deleted Files | Ally Petitt</title>
+<meta name="keywords" content="Tutorial, Forensics, CTF, Linux">
+<meta name="description" content="Computer Forensics for File Recovery https://edgy.app/wp-content/uploads/2018/04/dataleakhackerGorodenkoff-970x546.jpg
+Introduction When a file is “deleted”, its contents aren’t typically erased from the storage device that it was stored on. More often than not, the blocks that stored the file are marked as unallocated and the filesystem pointers are removed from it. The implication is that the file still exists on the disk until it is overwritten.
+There are many methods to recovering the raw, unallocated data.">
+<meta name="author" content="Ally Petitt">
+<link rel="canonical" href="http://localhost:1313/ally-petitt/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/">
+<link crossorigin="anonymous" href="/ally-petitt/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/ally-petitt/assets/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/ally-petitt/assets/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/ally-petitt/assets/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/ally-petitt/assets/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/ally-petitt/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/ally-petitt/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript>
+  
+
+<meta property="og:title" content="5 Ways I Found Your Deleted Files" />
+<meta property="og:description" content="Computer Forensics for File Recovery https://edgy.app/wp-content/uploads/2018/04/dataleakhackerGorodenkoff-970x546.jpg
+Introduction When a file is “deleted”, its contents aren’t typically erased from the storage device that it was stored on. More often than not, the blocks that stored the file are marked as unallocated and the filesystem pointers are removed from it. The implication is that the file still exists on the disk until it is overwritten.
+There are many methods to recovering the raw, unallocated data." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/ally-petitt/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-05-13T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-05-13T00:00:00+00:00" /><meta property="og:site_name" content="Ally Petitt" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="5 Ways I Found Your Deleted Files"/>
+<meta name="twitter:description" content="Computer Forensics for File Recovery https://edgy.app/wp-content/uploads/2018/04/dataleakhackerGorodenkoff-970x546.jpg
+Introduction When a file is “deleted”, its contents aren’t typically erased from the storage device that it was stored on. More often than not, the blocks that stored the file are marked as unallocated and the filesystem pointers are removed from it. The implication is that the file still exists on the disk until it is overwritten.
+There are many methods to recovering the raw, unallocated data."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://localhost:1313/ally-petitt/en/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "5 Ways I Found Your Deleted Files",
+      "item": "http://localhost:1313/ally-petitt/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "5 Ways I Found Your Deleted Files",
+  "name": "5 Ways I Found Your Deleted Files",
+  "description": "Computer Forensics for File Recovery https://edgy.app/wp-content/uploads/2018/04/dataleakhackerGorodenkoff-970x546.jpg\nIntroduction When a file is “deleted”, its contents aren’t typically erased from the storage device that it was stored on. More often than not, the blocks that stored the file are marked as unallocated and the filesystem pointers are removed from it. The implication is that the file still exists on the disk until it is overwritten.\nThere are many methods to recovering the raw, unallocated data.",
+  "keywords": [
+    "Tutorial", "Forensics", "CTF", "Linux"
+  ],
+  "articleBody": "Computer Forensics for File Recovery https://edgy.app/wp-content/uploads/2018/04/dataleakhackerGorodenkoff-970x546.jpg\nIntroduction When a file is “deleted”, its contents aren’t typically erased from the storage device that it was stored on. More often than not, the blocks that stored the file are marked as unallocated and the filesystem pointers are removed from it. The implication is that the file still exists on the disk until it is overwritten.\nThere are many methods to recovering the raw, unallocated data. This website lists many tools that can be used for file recovery in different scenarios. In this article, I’ll be walking through 5 different tools that can be used to recover data.\nSetup I’ll be using doing forensic analysis on a drive that I created and attached to my Kali Linux VM. To see how this is done, you can reference this article. On this drive, I saved and then deleted an image file and text file.\nI’ll start by doing general enumeration on the disk image. Then, I’ll showcase a variety of file recovery techniques used by forensic analysts that allowed me to recover the deleted files. Many of the tools used will be from the Sleuth Kit (TSK).\nBefore starting, I’ll unmount the filesystem, create a duplicate of it, remove write permissions from the duplicate, and verify the integrity of the duplicate against the original hash of /dev/sdb.\n$ cd ../ \u0026\u0026 umount /mnt/secret # unmount /mnt/secret $ dd if=/dev/sdb of=/home/kali/forensics/sdb.img # copy /dev/sdb into sdb.img 22286+0 records in 22286+0 records out 11410432 bytes (11 MB, 11 MiB) copied, 0.0412053 s, 277 MB/s $ chmod a-w /home/kali/forensics/sdb.img # remove write access to the image $ md5sum /home/kali/forensics/sdb.img /dev/sdb 6c49fb21916d59e0df69453959392e23 /home/kali/forensics/sdb.img 6c49fb21916d59e0df69453959392e23 /dev/sdb Enumeration Image Analysis Using the file command reveals that the image uses an ext4 file system.\nFurthermore, the stat command displays information about the image such as its size, time stamps, and block details.\nWith the information that the image uses ext4, the fsstat command can be used to extract more detailed information about the file system, metadata, content data, and block groups.\n$ fsstat -f ext4 sdb.img FILE SYSTEM INFORMATION -------------------------------------------- File System Type: Ext4 Volume Name: Volume ID: dc8a4fb36dce8eabee4c51cf01c2d52a Last Written at: 2023-05-09 22:35:31 (EDT) Last Checked at: 2023-05-09 22:23:26 (EDT) Last Mounted at: 2023-05-09 22:24:27 (EDT) Unmounted properly Last mounted on: /mnt/secret Source OS: Linux Dynamic Structure Compat Features: Journal, Ext Attributes, Resize Inode, Dir Index InCompat Features: Filetype, Extents, 64bit, Flexible Block Groups, Read Only Compat Features: Sparse Super, Large File, Huge File, Extra Inode Size Journal ID: 00 Journal Inode: 8 METADATA INFORMATION -------------------------------------------- Inode Range: 1 - 2785 Root Directory: 2 Free Inodes: 2773 Inode Size: 256 CONTENT INFORMATION -------------------------------------------- Block Groups Per Flex Group: 16 Block Range: 0 - 11139 Block Size: 1024 Reserved Blocks Before Block Groups: 1 Free Blocks: 9223 BLOCK GROUP INFORMATION -------------------------------------------- Number of Block Groups: 2 Inodes per group: 1392 Blocks per group: 8192 Group: 0: Block Group Flags: [INODE\\_ZEROED] Inode Range: 1 - 1392 Block Range: 1 - 8192 Layout: Super Block: 1 - 1 Group Descriptor Table: 2 - 2 Group Descriptor Growth Blocks: 3 - 89 Data bitmap: 90 - 90 Inode bitmap: 92 - 92 Inode Table: 94 - 441 Uninit Data Bitmaps: 92 - 105 Uninit Inode Bitmaps: 94 - 107 Uninit Inode Table: 790 - 5661 Data Blocks: 5690 - 8192 Free Inodes: 1381 (99%) Free Blocks: 6365 (77%) Total Directories: 2 Stored Checksum: 0x7DEB Group: 1: Block Group Flags: [INODE\\_UNINIT, INODE\\_ZEROED] Inode Range: 1393 - 2784 Block Range: 8193 - 11139 Layout: Super Block: 8193 - 8193 Group Descriptor Table: 8194 - 8194 Group Descriptor Growth Blocks: 8195 - 8281 Data bitmap: 91 - 91 Inode bitmap: 93 - 93 Inode Table: 442 - 789 Data Blocks: 8282 - 11139 Free Inodes: 1392 (100%) Free Blocks: 2858 (96%) Total Directories: 0 Stored Checksum: 0xDFA7 Based on this output, it is clear that the block size is 1024 bits, there are 1113 total blocks, and there are 2785 inodes.\nIn addition, parted can be used to find more information on the partition table, which can be useful when using scalpel.\nFinally, running strings on the image gives more insight as to what is in the filesystem. It appears that my secret.txt file with the contents Hello World is appearing from the strings command in addition to a failed image download attempt.\nIn the command strings -a --radix=d sdb.img, -a is an option to scan the entire file and --radix=d tells strings to show the offset that the string was found at in base 10.\nAnalyzing the Files This particular image does not have any files currently in it aside from deleted files, so there isn’t much information to gain from mounting it and analyzing the files. In cases where it is desireable to do so, the following command can be used:\n$ mount -o ro,loop,noexec,noatime sdb.img Below, I’ll explain what the options do:\n-o: sets the options for mounting sdb.img. ro: an option to mount the file system as being read-only loop: mount the file system on a loop device noexec: disallow execution noatime: don’t change the access time of the files You can then continue to run file on the files within the mounted loop device and save their md5 hashes to verify integrity.\nRecovering the Files Method 1: Using Sleuth Kit Often, if you have deleted files, they may be displayed with fls sdb.img, enumerated with istat -o sdb.img , and recovered with icat -o sdb.img . An example of the latter 2 steps are shown in the screenshot below.\nhttps://www.therootuser.com/wp-content/uploads/2017/11/Screenshot-2017-11-07-17.27.58.png\nThis does not appear to be the case for me, however. My deleted files are not appearing from the fls command. Instead, I see a variable called $OrphanFiles.\n$OrphanFiles are files that still exist in the image, but are no longer able to be accessed from the root directory. $OrphanFiles is not an actual directory on the image, it is Sleuth Kit’s virtual way to demonstrate that the file metadata still exists (read more).\nTo recover these orphan files, I will attempt a few techniques starting with extundelete.\nMethod 2: Extundelete This tool can be used to recover files on ext3 and ext4 filesystems. I was having some difficulties with the build from apt, so I build the program from source with the following commands to it working again:\napt update \u0026\u0026 apt install -y libext2fs-dev git clone https://github.com/cherojeong/extundelete.git ./configure make src/extundelete --restore-all /path/to/image.img os \u003c\u003c “Directory ACL: “ \u003c\u003c inode.i_dir_acl \u003c\u003c std::endl; with os \u003c\u003c “Directory ACL: “ \u003c\u003c inode.i_file_acl \u003c\u003c std::endl;.\nThe command extundelete --restore-all sdb.img can be used to recover files.\nAs you can see in the screenshot above, the tool was unsuccessful in recovering the orphan files. This is still a viable option that can work in many scenarios which is why I decided to include it in this article.\nI’m not giving up yet. We’ll try again!\nMethod 3: TestDisk The .tar.bz file can be downloaded here. I’m using version 7.2. Note that in order for TestDisk to work, you must run it in the download directory. Otherwise you might get an error like *** Error in /path/to/testdisk-7.2-WIP/photorec_static’: malloc(): memory corruption: 0x0000000002617d29 ***`.\n# extract and run the file tar -xf testdisk-7.2-WIP.linux26-x86\\_64.tar.bz2 cd testdisk-7.2-WIP ./photorec\\_static /path/to/sdb.img /log A help menu will appear. I’ll first select the image that I want to work with.\nThen, I select the option for the partition table for the media. Mine does not have one, so I choose “None”. I verified that this was the only option that was able to list files for me.\nAfter this, I navigate to the “List” option at the bottom of the terminal and press Enter.\nThis leads me to the listing of the files on the image with the successfully recovered ones in red text.\nAs you can see in the screenshot, there are no new files there listed in red. This means that TestDisk was unsuccessful in recovering the deleted files.\nIt’s okay, I still got a few more tricks up my sleeve.\nMethod 4: Foremost Foremost can be installed with apt.\nsudo apt install foremost This tool uses a technique known as file carving which involves searching through the raw data on a disk and carving out the values between the header and/or footer of the file.\nAlas, we were able to recover a deleted image file from the drive with foremost -t jpeg -o recovered-files -i sdb.img. The recovered image renders as expected in the Image Viewer. What a pretty camp fire.\nThe fact that this worked while the previous 3 methods did not further demonstrates that different tools and techniques will be more effective at data recovery in different scenarios.\nIt’s also worth mentioning that you can edit the /etc/foremost.conf file to contain your own custom headers and footers for the file you are looking for. Modifying these values will be explored in the next and final method.\nMethod 5: Scalpel Scalpel is much like Foremost with added flexibility. You are not as limited on the file types and headers, although there is a way to modify foremost to have the same customization that scalpel provides.\nsudo apt install scalpel cp /etc/scalpel/scalpel.conf . vim scalpel.conf I’ll edit the config with the bit of background information that I have. I know that I’m attempting to recover a JPEG file and I also know that there was a text file that began with the word “Hello”. By using xxd, I can determine the file headers for a .txt file starting with the word “Hello”. In this case, it would be \\x48\\x65\\x6c\\x6c\\x6f.\n$ echo -n Hello | xxd 00000000: 4865 6c6c 6f Hello. We will use this information to update the scalpel.conf file in vim. As explained in the comments at the top of the config file, the first column indicates the file extension. The second is whether the header and footer are case sensitive, the third is the header in hexadecimal bytes, the fourth column is an optional footer, and the fifth column is an optional parameter to search backwards from the header rather than just forward.\nWith these options set, scalpel can now be ran to extract these files from the drive.\nscalpel -o recovered-files\\_scalpel -c scalpel.conf sdb.img It appears that the text file was successfully recovered.\nThe image was recovered as well.\nConclusion There’s many ways to achieve the same outcome. The different tools showcased here have their specific applications where they perform best. Even though not all the methods outlined here worked for my particular situation, that doesn’t mean they won’t work for you. There are many factors that determine whether file recovery will be successful including the partitioning table type, how long it has been since they were deleted, the size of the file (smaller files are more likely to be recovered), the health of the storage device, and the operations that have been done on the drive since deleting the files such as reformatting the drive.\nI hope that through reading this article, you were able to deepen your understanding of file recovery and gain practical knowledge that you can apply in the real world. Thanks for reading and I’ll see you next time.\n",
+  "wordCount" : "1868",
+  "inLanguage": "en",
+  "datePublished": "2023-05-13T00:00:00Z",
+  "dateModified": "2023-05-13T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Ally Petitt"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://localhost:1313/ally-petitt/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Ally Petitt",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://localhost:1313/ally-petitt/assets/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class=" dark" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/ally-petitt/en/" accesskey="h" title="Home (Alt + H)">Home</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/ally-petitt/en/archives" title="Archive">
+                    <span>Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/ally-petitt/en/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/ally-petitt/en/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/ally-petitt/en/about-me/" title="About Me">
+                    <span>About Me</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://localhost:1313/ally-petitt/en/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/ally-petitt/en/posts/">Posts</a></div>
+    <h1 class="post-title entry-hint-parent">
+      5 Ways I Found Your Deleted Files
+    </h1>
+    <div class="post-meta"><span title='2023-05-13 00:00:00 +0000 UTC'>2023-05-13</span>&nbsp;·&nbsp;9 min&nbsp;·&nbsp;Ally Petitt
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul><ul>
+                <li>
+                    <a href="#computer-forensics-for-filerecovery" aria-label="Computer Forensics for File Recovery">Computer Forensics for File Recovery</a></li></ul>
+                    
+                <li>
+                    <a href="#introduction" aria-label="Introduction">Introduction</a></li>
+                <li>
+                    <a href="#setup" aria-label="Setup">Setup</a></li>
+                <li>
+                    <a href="#enumeration" aria-label="Enumeration">Enumeration</a><ul>
+                        
+                <li>
+                    <a href="#image-analysis" aria-label="Image Analysis">Image Analysis</a></li>
+                <li>
+                    <a href="#analyzing-thefiles" aria-label="Analyzing the Files">Analyzing the Files</a></li></ul>
+                </li>
+                <li>
+                    <a href="#recovering-thefiles" aria-label="Recovering the Files">Recovering the Files</a><ul>
+                        
+                <li>
+                    <a href="#method-1-using-sleuthkithttpsleuthkitorgsleuthkit" aria-label="Method 1: Using Sleuth Kit">Method 1: Using Sleuth Kit</a></li>
+                <li>
+                    <a href="#method-2-extundeletehttpsextundeletesourceforgenet" aria-label="Method 2: Extundelete">Method 2: Extundelete</a></li>
+                <li>
+                    <a href="#method-3testdiskhttpswwwcgsecurityorgwikitestdisk" aria-label="Method 3: TestDisk">Method 3: TestDisk</a></li>
+                <li>
+                    <a href="#method-4foremosthttpssourceforgenetprojectsforemost" aria-label="Method 4: Foremost">Method 4: Foremost</a></li>
+                <li>
+                    <a href="#method-5scalpelhttpsgithubcomsleuthkitscalpel" aria-label="Method 5: Scalpel">Method 5: Scalpel</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="computer-forensics-for-filerecovery">Computer Forensics for File Recovery<a hidden class="anchor" aria-hidden="true" href="#computer-forensics-for-filerecovery">#</a></h2>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*MnBiAcwiwaFGOOAe.jpg" alt=""  />
+
+<em><a href="https://edgy.app/wp-content/uploads/2018/04/dataleakhackerGorodenkoff-970x546.jpg">https://edgy.app/wp-content/uploads/2018/04/dataleakhackerGorodenkoff-970x546.jpg</a></em></p>
+<h1 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h1>
+<p>When a file is “deleted”, its contents aren’t typically erased from the storage device that it was stored on. More often than not, the blocks that stored the file are marked as unallocated and the filesystem pointers are removed from it. The implication is that the file still exists on the disk until it is overwritten.</p>
+<p>There are many methods to recovering the raw, unallocated data. <a href="https://forensics.wiki/tools_data_recovery/">This website</a> lists many tools that can be used for file recovery in different scenarios. In this article, I’ll be walking through 5 different tools that can be used to recover data.</p>
+<h1 id="setup">Setup<a hidden class="anchor" aria-hidden="true" href="#setup">#</a></h1>
+<p>I’ll be using doing forensic analysis on a drive that I created and attached to my Kali Linux VM. To see how this is done, you can reference <a href="https://opensource.com/article/19/4/create-filesystem-linux-partition">this article</a>. On this drive, I saved and then deleted an image file and text file.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*HRHkhSM5bBjI9ouCYNpU4w.png" alt="Image of commands I used to set up file system for forensic analysis"  />
+
+I’ll start by doing general enumeration on the disk image. Then, I’ll showcase a variety of file recovery techniques used by forensic analysts that allowed me to recover the deleted files. Many of the tools used will be from the <a href="http://sleuthkit.org/sleuthkit">Sleuth Kit</a> (TSK).</p>
+<p>Before starting, I’ll unmount the filesystem, create a duplicate of it, remove write permissions from the duplicate, and verify the integrity of the duplicate against the original hash of <code>/dev/sdb</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>$ cd ../ &amp;&amp; umount /mnt/secret # unmount /mnt/secret  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>$ dd if=/dev/sdb of=/home/kali/forensics/sdb.img # copy /dev/sdb into sdb.img  
+</span></span><span style="display:flex;"><span>22286+0 records in  
+</span></span><span style="display:flex;"><span>22286+0 records out  
+</span></span><span style="display:flex;"><span>11410432 bytes (11 MB, 11 MiB) copied, 0.0412053 s, 277 MB/s  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>$ chmod a-w /home/kali/forensics/sdb.img # remove write access to the image  
+</span></span><span style="display:flex;"><span>   
+</span></span><span style="display:flex;"><span>$ md5sum /home/kali/forensics/sdb.img /dev/sdb  
+</span></span><span style="display:flex;"><span>6c49fb21916d59e0df69453959392e23 /home/kali/forensics/sdb.img  
+</span></span><span style="display:flex;"><span>6c49fb21916d59e0df69453959392e23 /dev/sdb
+</span></span></code></pre></div><h1 id="enumeration">Enumeration<a hidden class="anchor" aria-hidden="true" href="#enumeration">#</a></h1>
+<h2 id="image-analysis">Image Analysis<a hidden class="anchor" aria-hidden="true" href="#image-analysis">#</a></h2>
+<p>Using the <code>file</code> command reveals that the image uses an ext4 file system.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*4gowWgQfJ4J1FXwjFHjhQg.png" alt=""  />
+
+Furthermore, the <code>stat</code> command displays information about the image such as its size, time stamps, and block details.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*_T8VXPuyfnuQ7Rm5WNIOsQ.png" alt="output of the stat command"  />
+
+With the information that the image uses ext4, the <code>fsstat</code> command can be used to extract more detailed information about the file system, metadata, content data, and block groups.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>$ fsstat -f ext4 sdb.img   
+</span></span><span style="display:flex;"><span>FILE SYSTEM INFORMATION  
+</span></span><span style="display:flex;"><span>--------------------------------------------  
+</span></span><span style="display:flex;"><span>File System Type: Ext4  
+</span></span><span style="display:flex;"><span>Volume Name:   
+</span></span><span style="display:flex;"><span>Volume ID: dc8a4fb36dce8eabee4c51cf01c2d52a  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>Last Written at: 2023-05-09 22:35:31 (EDT)  
+</span></span><span style="display:flex;"><span>Last Checked at: 2023-05-09 22:23:26 (EDT)  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>Last Mounted at: 2023-05-09 22:24:27 (EDT)  
+</span></span><span style="display:flex;"><span>Unmounted properly  
+</span></span><span style="display:flex;"><span>Last mounted on: /mnt/secret  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>Source OS: Linux  
+</span></span><span style="display:flex;"><span>Dynamic Structure  
+</span></span><span style="display:flex;"><span>Compat Features: Journal, Ext Attributes, Resize Inode, Dir Index  
+</span></span><span style="display:flex;"><span>InCompat Features: Filetype, Extents, 64bit, Flexible Block Groups,   
+</span></span><span style="display:flex;"><span>Read Only Compat Features: Sparse Super, Large File, Huge File, Extra Inode Size  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>Journal ID: 00  
+</span></span><span style="display:flex;"><span>Journal Inode: 8  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>METADATA INFORMATION  
+</span></span><span style="display:flex;"><span>--------------------------------------------  
+</span></span><span style="display:flex;"><span>Inode Range: 1 - 2785  
+</span></span><span style="display:flex;"><span>Root Directory: 2  
+</span></span><span style="display:flex;"><span>Free Inodes: 2773  
+</span></span><span style="display:flex;"><span>Inode Size: 256  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>CONTENT INFORMATION  
+</span></span><span style="display:flex;"><span>--------------------------------------------  
+</span></span><span style="display:flex;"><span>Block Groups Per Flex Group: 16  
+</span></span><span style="display:flex;"><span>Block Range: 0 - 11139  
+</span></span><span style="display:flex;"><span>Block Size: 1024  
+</span></span><span style="display:flex;"><span>Reserved Blocks Before Block Groups: 1  
+</span></span><span style="display:flex;"><span>Free Blocks: 9223  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>BLOCK GROUP INFORMATION  
+</span></span><span style="display:flex;"><span>--------------------------------------------  
+</span></span><span style="display:flex;"><span>Number of Block Groups: 2  
+</span></span><span style="display:flex;"><span>Inodes per group: 1392  
+</span></span><span style="display:flex;"><span>Blocks per group: 8192  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>Group: 0:  
+</span></span><span style="display:flex;"><span> Block Group Flags: [INODE\_ZEROED]   
+</span></span><span style="display:flex;"><span> Inode Range: 1 - 1392  
+</span></span><span style="display:flex;"><span> Block Range: 1 - 8192  
+</span></span><span style="display:flex;"><span> Layout:  
+</span></span><span style="display:flex;"><span> Super Block: 1 - 1  
+</span></span><span style="display:flex;"><span> Group Descriptor Table: 2 - 2  
+</span></span><span style="display:flex;"><span> Group Descriptor Growth Blocks: 3 - 89  
+</span></span><span style="display:flex;"><span> Data bitmap: 90 - 90  
+</span></span><span style="display:flex;"><span> Inode bitmap: 92 - 92  
+</span></span><span style="display:flex;"><span> Inode Table: 94 - 441  
+</span></span><span style="display:flex;"><span> Uninit Data Bitmaps: 92 - 105  
+</span></span><span style="display:flex;"><span> Uninit Inode Bitmaps: 94 - 107  
+</span></span><span style="display:flex;"><span> Uninit Inode Table: 790 - 5661  
+</span></span><span style="display:flex;"><span> Data Blocks: 5690 - 8192  
+</span></span><span style="display:flex;"><span> Free Inodes: 1381 (99%)  
+</span></span><span style="display:flex;"><span> Free Blocks: 6365 (77%)  
+</span></span><span style="display:flex;"><span> Total Directories: 2  
+</span></span><span style="display:flex;"><span> Stored Checksum: 0x7DEB  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>Group: 1:  
+</span></span><span style="display:flex;"><span> Block Group Flags: [INODE\_UNINIT, INODE\_ZEROED]   
+</span></span><span style="display:flex;"><span> Inode Range: 1393 - 2784  
+</span></span><span style="display:flex;"><span> Block Range: 8193 - 11139  
+</span></span><span style="display:flex;"><span> Layout:  
+</span></span><span style="display:flex;"><span> Super Block: 8193 - 8193  
+</span></span><span style="display:flex;"><span> Group Descriptor Table: 8194 - 8194  
+</span></span><span style="display:flex;"><span> Group Descriptor Growth Blocks: 8195 - 8281  
+</span></span><span style="display:flex;"><span> Data bitmap: 91 - 91  
+</span></span><span style="display:flex;"><span> Inode bitmap: 93 - 93  
+</span></span><span style="display:flex;"><span> Inode Table: 442 - 789  
+</span></span><span style="display:flex;"><span> Data Blocks: 8282 - 11139  
+</span></span><span style="display:flex;"><span> Free Inodes: 1392 (100%)  
+</span></span><span style="display:flex;"><span> Free Blocks: 2858 (96%)  
+</span></span><span style="display:flex;"><span> Total Directories: 0  
+</span></span><span style="display:flex;"><span> Stored Checksum: 0xDFA7
+</span></span></code></pre></div><p>Based on this output, it is clear that the block size is 1024 bits, there are 1113 total blocks, and there are 2785 inodes.</p>
+<p>In addition, <code>parted</code> can be used to find more information on the partition table, which can be useful when using scalpel.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*EAJIlLWQ5g3rEgqc5nPNbQ.png" alt=""  />
+
+Finally, running <code>strings</code> on the image gives more insight as to what is in the filesystem. It appears that my <code>secret.txt</code> file with the contents <code>Hello World</code> is appearing from the <code>strings</code> command in addition to a failed image download attempt.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*hINgjWeGy7ttVHl1qDs1EQ.png" alt=""  />
+
+In the command <code>strings -a --radix=d sdb.img</code>, <code>-a</code> is an option to scan the entire file and <code>--radix=d</code> tells <code>strings</code> to show the offset that the string was found at in base 10.</p>
+<h2 id="analyzing-thefiles">Analyzing the Files<a hidden class="anchor" aria-hidden="true" href="#analyzing-thefiles">#</a></h2>
+<p>This particular image does not have any files currently in it aside from deleted files, so there isn’t much information to gain from mounting it and analyzing the files. In cases where it is desireable to do so, the following command can be used:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>$ mount -o ro,loop,noexec,noatime sdb.img
+</span></span></code></pre></div><p>Below, I’ll explain what the options do:</p>
+<ul>
+<li><code>-o</code>: sets the options for mounting <code>sdb.img</code>.</li>
+<li><strong>ro</strong>: an option to mount the file system as being read-only</li>
+<li><strong>loop</strong>: mount the file system on a loop device</li>
+<li><strong>noexec</strong>: disallow execution</li>
+<li><strong>noatime</strong>: don’t change the access time of the files</li>
+</ul>
+<p>You can then continue to run <code>file</code> on the files within the mounted loop device and save their md5 hashes to verify integrity.</p>
+<h1 id="recovering-thefiles">Recovering the Files<a hidden class="anchor" aria-hidden="true" href="#recovering-thefiles">#</a></h1>
+<h2 id="method-1-using-sleuthkithttpsleuthkitorgsleuthkit">Method 1: Using <a href="http://sleuthkit.org/sleuthkit/">Sleuth Kit</a><a hidden class="anchor" aria-hidden="true" href="#method-1-using-sleuthkithttpsleuthkitorgsleuthkit">#</a></h2>
+<p>Often, if you have deleted files, they may be displayed with <code>fls sdb.img</code>, enumerated with <code>istat -o &lt;offset&gt; sdb.img &lt;inode_number&gt;</code>, and recovered with <code>icat -o &lt;offset&gt; sdb.img &lt;inode_number&gt;</code>. An example of the latter 2 steps are shown in the screenshot below.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*mc44fgKV8os0qCVpYYZiJQ.png" alt=""  />
+
+<em><a href="https://www.therootuser.com/wp-content/uploads/2017/11/Screenshot-2017-11-07-17.27.58.png">https://www.therootuser.com/wp-content/uploads/2017/11/Screenshot-2017-11-07-17.27.58.png</a></em></p>
+<p>This does not appear to be the case for me, however. My deleted files are not appearing from the <code>fls</code> command. Instead, I see a variable called <code>$OrphanFiles</code>.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*hQXtm0cZ7wge3IgQlexR-Q.png" alt=""  />
+
+<code>$OrphanFiles</code> are files that still exist in the image, but are no longer able to be accessed from the root directory. <code>$OrphanFiles</code> is not an actual directory on the image, it is Sleuth Kit’s virtual way to demonstrate that the file metadata still exists (<a href="https://wiki.sleuthkit.org/index.php?title=Orphan_Files">read more</a>).</p>
+<p>To recover these orphan files, I will attempt a few techniques starting with <code>extundelete</code>.</p>
+<h2 id="method-2-extundeletehttpsextundeletesourceforgenet">Method 2: <a href="https://extundelete.sourceforge.net/">Extundelete</a><a hidden class="anchor" aria-hidden="true" href="#method-2-extundeletehttpsextundeletesourceforgenet">#</a></h2>
+<p>This tool can be used to recover files on ext3 and ext4 filesystems. I was having some difficulties with the build from <code>apt</code>, so I build the program from source with the following commands to it working again:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>apt update &amp;&amp; apt install -y libext2fs-dev   
+</span></span><span style="display:flex;"><span>git clone https://github.com/cherojeong/extundelete.git  
+</span></span><span style="display:flex;"><span>./configure  
+</span></span><span style="display:flex;"><span>make  
+</span></span><span style="display:flex;"><span>src/extundelete --restore-all /path/to/image.img
+</span></span></code></pre></div><p><code>os &lt;&lt; “Directory ACL: “ &lt;&lt; inode.i_dir_acl &lt;&lt; std::endl;</code> with <code>os &lt;&lt; “Directory ACL: “ &lt;&lt; inode.i_file_acl &lt;&lt; std::endl;</code>.</p>
+<p>The command <code>extundelete --restore-all sdb.img</code> can be used to recover files.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*Ipv-ABMSCpXNtc6PZT5zqQ.png" alt=""  />
+
+As you can see in the screenshot above, the tool was unsuccessful in recovering the orphan files. This is still a viable option that can work in many scenarios which is why I decided to include it in this article.</p>
+<p>I’m not giving up yet. We’ll try again!</p>
+<h2 id="method-3testdiskhttpswwwcgsecurityorgwikitestdisk">Method 3: <a href="https://www.cgsecurity.org/wiki/TestDisk">TestDisk</a><a hidden class="anchor" aria-hidden="true" href="#method-3testdiskhttpswwwcgsecurityorgwikitestdisk">#</a></h2>
+<p>The <code>.tar.bz</code> file can be downloaded <a href="https://www.cgsecurity.org/wiki/TestDisk_Download">here</a>. I’m using version 7.2. Note that in order for <code>TestDisk</code> to work, you must run it in the download directory. Otherwise you might get an error like <code>*** Error in </code>/path/to/testdisk-7.2-WIP/photorec_static&rsquo;: malloc(): memory corruption: 0x0000000002617d29 ***`.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span># extract and run the file  
+</span></span><span style="display:flex;"><span>tar -xf testdisk-7.2-WIP.linux26-x86\_64.tar.bz2  
+</span></span><span style="display:flex;"><span>cd testdisk-7.2-WIP  
+</span></span><span style="display:flex;"><span>./photorec\_static /path/to/sdb.img /log 
+</span></span></code></pre></div><p>A help menu will appear. I’ll first select the image that I want to work with.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*vEuqI7RnAWsvLfrH9n88Pw.png" alt=""  />
+
+Then, I select the option for the partition table for the media. Mine does not have one, so I choose “None”. I verified that this was the only option that was able to list files for me.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*c5iJeI2oyLMdmRu_bBD5Qg.png" alt=""  />
+
+After this, I navigate to the “List” option at the bottom of the terminal and press <code>Enter</code>.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*jl17is949wOoNF0JEzBcIg.png" alt=""  />
+
+This leads me to the listing of the files on the image with the successfully recovered ones in <strong>red</strong> text.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*yYQEslxR1RWkUbkEX743Bg.png" alt=""  />
+
+As you can see in the screenshot, there are no new files there listed in red. This means that <code>TestDisk</code> was unsuccessful in recovering the deleted files.</p>
+<p>It’s okay, I still got a few more tricks up my sleeve.</p>
+<h2 id="method-4foremosthttpssourceforgenetprojectsforemost">Method 4: <a href="https://sourceforge.net/projects/foremost/">Foremost</a><a hidden class="anchor" aria-hidden="true" href="#method-4foremosthttpssourceforgenetprojectsforemost">#</a></h2>
+<p>Foremost can be installed with <code>apt</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>sudo apt install foremost
+</span></span></code></pre></div><p>This tool uses a technique known as <strong>file carving</strong> which involves searching through the raw data on a disk and carving out the values between the header and/or footer of the file.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*ayacIY6WQdxAYksd_nwT8g.png" alt=""  />
+
+Alas, we were able to recover a deleted image file from the drive with <code>foremost -t jpeg -o recovered-files -i sdb.img</code>. The recovered image renders as expected in the Image Viewer. What a pretty camp fire.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*kA2aubO7prDBFW9Xx0cGvQ.png" alt=""  />
+
+The fact that this worked while the previous 3 methods did not further demonstrates that different tools and techniques will be more effective at data recovery in different scenarios.</p>
+<p>It’s also worth mentioning that you can edit the <code>/etc/foremost.conf</code> file to contain your own custom headers and footers for the file you are looking for. Modifying these values will be explored in the next and final method.</p>
+<h2 id="method-5scalpelhttpsgithubcomsleuthkitscalpel">Method 5: <a href="https://github.com/sleuthkit/scalpel">Scalpel</a><a hidden class="anchor" aria-hidden="true" href="#method-5scalpelhttpsgithubcomsleuthkitscalpel">#</a></h2>
+<p>Scalpel is much like Foremost with added flexibility. You are not as limited on the file types and headers, although there is a way to modify foremost to have the same customization that scalpel provides.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>sudo apt install scalpel  
+</span></span><span style="display:flex;"><span>cp /etc/scalpel/scalpel.conf .  
+</span></span><span style="display:flex;"><span>vim scalpel.conf
+</span></span></code></pre></div><p>I’ll edit the config with the bit of background information that I have. I know that I’m attempting to recover a JPEG file and I also know that there was a text file that began with the word “Hello”. By using <code>xxd</code>, I can determine the file headers for a <code>.txt</code> file starting with the word “Hello”. In this case, it would be <code>\x48\x65\x6c\x6c\x6f</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>$ echo -n Hello | xxd   
+</span></span><span style="display:flex;"><span>00000000: 4865 6c6c 6f Hello.
+</span></span></code></pre></div><p>We will use this information to update the <code>scalpel.conf</code> file in <code>vim</code>. As explained in the comments at the top of the config file, the first column indicates the file extension. The second is whether the header and footer are case sensitive, the third is the header in hexadecimal bytes, the fourth column is an optional footer, and the fifth column is an optional parameter to search backwards from the header rather than just forward.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*Y6kTU1JxILxivTOYbHN5tQ.png" alt=""  />
+
+With these options set, <code>scalpel</code> can now be ran to extract these files from the drive.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>scalpel -o recovered-files\_scalpel -c scalpel.conf sdb.img
+</span></span></code></pre></div><p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*O3huS4-S2BausvT-s2KiYw.png" alt=""  />
+
+It appears that the text file was successfully recovered.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*jASCyrkTBYVfhWQxZkk3lg.png" alt=""  />
+
+The image was recovered as well.</p>
+<h1 id="conclusion"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*5ixUUenRR50lIavpZ0oyIw.png" alt=""  />
+
+Conclusion</h1>
+<p>There’s many ways to achieve the same outcome. The different tools showcased here have their specific applications where they perform best. Even though not all the methods outlined here worked for my particular situation, that doesn’t mean they won’t work for you. There are many factors that determine whether file recovery will be successful including the partitioning table type, how long it has been since they were deleted, the size of the file (smaller files are more likely to be recovered), the health of the storage device, and the operations that have been done on the drive since deleting the files such as reformatting the drive.</p>
+<p>I hope that through reading this article, you were able to deepen your understanding of file recovery and gain practical knowledge that you can apply in the real world. Thanks for reading and I’ll see you next time.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://localhost:1313/ally-petitt/en/tags/tutorial/">Tutorial</a></li>
+      <li><a href="http://localhost:1313/ally-petitt/en/tags/forensics/">Forensics</a></li>
+      <li><a href="http://localhost:1313/ally-petitt/en/tags/ctf/">CTF</a></li>
+      <li><a href="http://localhost:1313/ally-petitt/en/tags/linux/">Linux</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://localhost:1313/ally-petitt/en/posts/2023-06-01_5-ways-i-bypassed-your-web-application-firewall--waf--43852a43a1c2/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>5 Ways I Bypassed Your Web Application Firewall (WAF)</span>
+  </a>
+  <a class="next" href="http://localhost:1313/ally-petitt/en/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/">
+    <span class="title">Next »</span>
+    <br>
+    <span>How to Encrypt a Drive in Linux</span>
+  </a>
+</nav>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share 5 Ways I Found Your Deleted Files on x"
+            href="https://x.com/intent/tweet/?text=5%20Ways%20I%20Found%20Your%20Deleted%c2%a0Files&amp;url=http%3a%2f%2flocalhost%3a1313%2fally-petitt%2fen%2fposts%2f2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467%2f&amp;hashtags=Tutorial%2cForensics%2cCTF%2cLinux">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share 5 Ways I Found Your Deleted Files on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2flocalhost%3a1313%2fally-petitt%2fen%2fposts%2f2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467%2f&amp;title=5%20Ways%20I%20Found%20Your%20Deleted%c2%a0Files&amp;summary=5%20Ways%20I%20Found%20Your%20Deleted%c2%a0Files&amp;source=http%3a%2f%2flocalhost%3a1313%2fally-petitt%2fen%2fposts%2f2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share 5 Ways I Found Your Deleted Files on reddit"
+            href="https://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fally-petitt%2fen%2fposts%2f2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467%2f&title=5%20Ways%20I%20Found%20Your%20Deleted%c2%a0Files">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share 5 Ways I Found Your Deleted Files on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=http%3a%2f%2flocalhost%3a1313%2fally-petitt%2fen%2fposts%2f2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share 5 Ways I Found Your Deleted Files on whatsapp"
+            href="https://api.whatsapp.com/send?text=5%20Ways%20I%20Found%20Your%20Deleted%c2%a0Files%20-%20http%3a%2f%2flocalhost%3a1313%2fally-petitt%2fen%2fposts%2f2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share 5 Ways I Found Your Deleted Files on telegram"
+            href="https://telegram.me/share/url?text=5%20Ways%20I%20Found%20Your%20Deleted%c2%a0Files&amp;url=http%3a%2f%2flocalhost%3a1313%2fally-petitt%2fen%2fposts%2f2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467%2f">
+            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share 5 Ways I Found Your Deleted Files on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=5%20Ways%20I%20Found%20Your%20Deleted%c2%a0Files&u=http%3a%2f%2flocalhost%3a1313%2fally-petitt%2fen%2fposts%2f2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2024 <a href="http://localhost:1313/ally-petitt/en/">Ally Petitt</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

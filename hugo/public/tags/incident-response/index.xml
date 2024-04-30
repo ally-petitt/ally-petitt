@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Incident Response on Ally Petitt</title>
+    <link>http://localhost:1313/ally-petitt/tags/incident-response/</link>
+    <description>Recent content in Incident Response on Ally Petitt</description>
+    <generator>Hugo -- 0.125.4</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 09 Jul 2022 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/ally-petitt/tags/incident-response/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How Companies Respond to Cyber Attacks | The 6 Steps of an Incident Response Plan</title>
+      <link>http://localhost:1313/ally-petitt/posts/2022-07-09_how-companies-respond-to-cyber-attacks---the-6-steps-of-an-incident-response-plan-9c6f4267253e/</link>
+      <pubDate>Sat, 09 Jul 2022 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/posts/2022-07-09_how-companies-respond-to-cyber-attacks---the-6-steps-of-an-incident-response-plan-9c6f4267253e/</guid>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*NYCBo5F_MGeRvxzrEm1hsg.png&#34; alt=&#34;&#34;  /&gt;
+&lt;/p&gt;
+&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;This article contains information that I have gathered as I’ve done research on incident response. This aims to be actionable for red teamers to know what to look out for and for blue teamers to aid in the creation of an effective incident response plan.&lt;/p&gt;
+&lt;h1 id=&#34;key-roles&#34;&gt;Key Roles&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;the CISO ensures cyberattacks are promptly investigated.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;coordinating efforts of incident response during a cyberattack.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;investigating which data may have been stolen.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;containing and securing compromised systems to prevent further damage.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;working with stakeholders to determine incident response plan.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;this role involves ensuring all steps of a data exposure management plan are completed.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;reviewing applicable privacy laws with the General counsel and creating plans of action to ensure that the laws are adhered to.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;the Incident Response Coordinator will update the CISO and members about new events as they take place.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;provide guidance and directing effort in information gathering and documentation.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;gathering and documenting findings of security systems.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;documenting procedural information and appropriate data for Incident Management.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;providing expert opinions in data and technology.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;The ERT consists of officials with the authority to make key decisions in Incident Response.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;May consist of CISO, privacy officer, General Counsel, Representative(s) from the Office of the President, and head of the organization where the cyber incident occurred.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;1-preparation&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*b6BEiI2FjVfUf6e-zduodQ.png&#34; alt=&#34;Image outlining steps in incident response&#34;  /&gt;
+
+&lt;strong&gt;1. Preparation&lt;/strong&gt;&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Make sure there are people on the incident response team&lt;/li&gt;
+&lt;li&gt;Make sure the team is trained and has access to the services that they would need in the case of an incident&lt;/li&gt;
+&lt;li&gt;Have drills simulating an attack&lt;/li&gt;
+&lt;li&gt;Create a plan/playbook for the Security Operations team containing steps and actions to take when compromised.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;2-identification&#34;&gt;&lt;strong&gt;2. Identification&lt;/strong&gt;&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Find ways to detect deviations in the regular functioning of an application&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Software for this can include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;IDS/IPS&lt;/li&gt;
+&lt;li&gt;Security Incident Event Manager (SIEM)&lt;/li&gt;
+&lt;li&gt;Endpoint detection &amp;amp; response (EDR)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Alerts will typically be addressed by a Security Operations Center (SOC) analyst who will assess whether there is a threat or a false alarm.&lt;/p&gt;
+&lt;p&gt;Suspicious behavior might include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Unusual behavior from privileged attacks&lt;/li&gt;
+&lt;li&gt;Unauthorized users trying to access servers and data&lt;/li&gt;
+&lt;li&gt;Anomalies in outbound network traffic&lt;/li&gt;
+&lt;li&gt;Traffic sent to or from unknown locations&lt;/li&gt;
+&lt;li&gt;Excessive consumption of computing resources. Can be a sign of cryptojacking or running a heavy program&lt;/li&gt;
+&lt;li&gt;Changes in configuration&lt;/li&gt;
+&lt;li&gt;Hidden files&lt;/li&gt;
+&lt;li&gt;Unexpected changes like users getting locked out of their accounts or memberships changing&lt;/li&gt;
+&lt;li&gt;Suspicious registry entries&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Identify where the attacker initially got in.&lt;/p&gt;
+&lt;p&gt;Identify what programs were uploaded, which files were changed, which new processes are running, and if any new registry keys were created.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3. Containment&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Prevent any further damage from occurring by containing it.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Short-term&lt;/strong&gt; containment is isolating the affected devices from the rest of the network.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Long-term&lt;/strong&gt; containment may involve taking an image of the device and performing hard-disk forensics. For this you would want a Digital forensics analyst. This can be necessary when a deeper analysis is required.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;4. Eradication&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Undoing the changes that the adversary made&lt;/li&gt;
+&lt;li&gt;Installing patches&lt;/li&gt;
+&lt;li&gt;Disarming malware&lt;/li&gt;
+&lt;li&gt;Disabling compromised accounts&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;5. Recovery&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Return to normal service in the business.&lt;/li&gt;
+&lt;li&gt;If clean backups are available, these can be used to restore service&lt;/li&gt;
+&lt;li&gt;Compromised devices will need rebuilding to ensure recovery&lt;/li&gt;
+&lt;li&gt;Affected devices may need additional monitoring&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;6. Lessons learned&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;This is the final stage of incident response.&lt;/li&gt;
+&lt;li&gt;Have a post-incident review (PIR), or a meeting where representatives from each team discuss what went well and what could be improved. This is where the incident response plan can be refined.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;references&#34;&gt;References&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.microsoft.com/en-us/security/compass/incident-response-planning&#34;&gt;https://docs.microsoft.com/en-us/security/compass/incident-response-planning&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.varonis.com/blog/incident-response-plan&#34;&gt;https://www.varonis.com/blog/incident-response-plan&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://security.uconn.edu/incident-response-plan/&#34;&gt;https://security.uconn.edu/incident-response-plan/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+  </channel>
+</rss>
