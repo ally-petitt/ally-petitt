@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Posts on My new blog site</title>
+    <link>http://localhost:1313/posts/</link>
+    <description>Recent content in Posts on My new blog site</description>
+    <generator>Hugo -- 0.125.4</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 29 Apr 2024 16:15:06 -0700</lastBuildDate>
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hello World1</title>
+      <link>http://localhost:1313/posts/hello-world1/</link>
+      <pubDate>Mon, 29 Apr 2024 16:15:06 -0700</pubDate>
+      <guid>http://localhost:1313/posts/hello-world1/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Hello World</title>
+      <link>http://localhost:1313/posts/hello-world/</link>
+      <pubDate>Mon, 29 Apr 2024 15:54:58 -0700</pubDate>
+      <guid>http://localhost:1313/posts/hello-world/</guid>
+      <description>hi gys</description>
+    </item>
+  </channel>
+</rss>
