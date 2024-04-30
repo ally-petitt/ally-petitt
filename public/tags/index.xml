@@ -6,6 +6,287 @@
     <description>Recent content in Tags on Ally Petitt</description>
     <generator>Hugo -- 0.125.4</generator>
     <language>en-us</language>
+    <lastBuildDate>Tue, 30 Apr 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/ally-petitt/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Self-Hosting</title>
+      <link>http://localhost:1313/ally-petitt/tags/self-hosting/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/self-hosting/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Tutorial</title>
+      <link>http://localhost:1313/ally-petitt/tags/tutorial/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/tutorial/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>CVE</title>
+      <link>http://localhost:1313/ally-petitt/tags/cve/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/cve/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>GNU</title>
+      <link>http://localhost:1313/ally-petitt/tags/gnu/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/gnu/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Security Research</title>
+      <link>http://localhost:1313/ally-petitt/tags/security-research/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/security-research/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Writeup</title>
+      <link>http://localhost:1313/ally-petitt/tags/writeup/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/writeup/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Static Analysis</title>
+      <link>http://localhost:1313/ally-petitt/tags/static-analysis/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/static-analysis/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Autoconf</title>
+      <link>http://localhost:1313/ally-petitt/tags/autoconf/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/autoconf/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Informative</title>
+      <link>http://localhost:1313/ally-petitt/tags/informative/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/informative/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Linux</title>
+      <link>http://localhost:1313/ally-petitt/tags/linux/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/linux/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Tooling</title>
+      <link>http://localhost:1313/ally-petitt/tags/tooling/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/tooling/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Firmware</title>
+      <link>http://localhost:1313/ally-petitt/tags/firmware/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/firmware/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Supply Chain</title>
+      <link>http://localhost:1313/ally-petitt/tags/supply-chain/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/supply-chain/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Forensics</title>
+      <link>http://localhost:1313/ally-petitt/tags/forensics/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/forensics/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Reverse Engineering</title>
+      <link>http://localhost:1313/ally-petitt/tags/reverse-engineering/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/reverse-engineering/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Defense Evasion</title>
+      <link>http://localhost:1313/ally-petitt/tags/defense-evasion/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/defense-evasion/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>WAF</title>
+      <link>http://localhost:1313/ally-petitt/tags/waf/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/waf/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>CTF</title>
+      <link>http://localhost:1313/ally-petitt/tags/ctf/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/ctf/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Drive Encryption</title>
+      <link>http://localhost:1313/ally-petitt/tags/drive-encryption/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/drive-encryption/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Snort</title>
+      <link>http://localhost:1313/ally-petitt/tags/snort/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/snort/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Secure Boot</title>
+      <link>http://localhost:1313/ally-petitt/tags/secure-boot/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/secure-boot/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Blue Team</title>
+      <link>http://localhost:1313/ally-petitt/tags/blue-team/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/blue-team/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Data Loss Protection (DLP)</title>
+      <link>http://localhost:1313/ally-petitt/tags/data-loss-protection-dlp/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/data-loss-protection-dlp/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Troubleshooting</title>
+      <link>http://localhost:1313/ally-petitt/tags/troubleshooting/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/troubleshooting/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>NextCloud</title>
+      <link>http://localhost:1313/ally-petitt/tags/nextcloud/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/nextcloud/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>DNS Cache Poisoning</title>
+      <link>http://localhost:1313/ally-petitt/tags/dns-cache-poisoning/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/dns-cache-poisoning/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Lab</title>
+      <link>http://localhost:1313/ally-petitt/tags/lab/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/lab/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>OSCP</title>
+      <link>http://localhost:1313/ally-petitt/tags/oscp/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/oscp/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Pentesting</title>
+      <link>http://localhost:1313/ally-petitt/tags/pentesting/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/pentesting/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>VPN</title>
+      <link>http://localhost:1313/ally-petitt/tags/vpn/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/vpn/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>PEN-200</title>
+      <link>http://localhost:1313/ally-petitt/tags/pen-200/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/pen-200/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>News</title>
+      <link>http://localhost:1313/ally-petitt/tags/news/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/news/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Incident Response</title>
+      <link>http://localhost:1313/ally-petitt/tags/incident-response/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/incident-response/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Cheatsheet</title>
+      <link>http://localhost:1313/ally-petitt/tags/cheatsheet/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/cheatsheet/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>File Transfers</title>
+      <link>http://localhost:1313/ally-petitt/tags/file-transfers/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/file-transfers/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Active Directory</title>
+      <link>http://localhost:1313/ally-petitt/tags/active-directory/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/active-directory/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Kerberos</title>
+      <link>http://localhost:1313/ally-petitt/tags/kerberos/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/kerberos/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Networking</title>
+      <link>http://localhost:1313/ally-petitt/tags/networking/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/networking/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>TryHackMe</title>
+      <link>http://localhost:1313/ally-petitt/tags/tryhackme/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/tryhackme/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>XXE</title>
+      <link>http://localhost:1313/ally-petitt/tags/xxe/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/tags/xxe/</guid>
+      <description></description>
+    </item>
   </channel>
 </rss>
