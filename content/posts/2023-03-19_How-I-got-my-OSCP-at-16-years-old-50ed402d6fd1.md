@@ -2,6 +2,7 @@
 title = 'How I got my OSCP at 16 years old'
 date = 2023-03-19
 draft = false
+showtoc=true
 +++
 
 Wait, you can do that? The answer is a resounding “yes”. And I’m not the only one who got my OSCP at the age of 16. Meet [Mihai](https://www.offsec.com/offsec/meet-mihai-16-year-old-oscp-holder/), [Vanshal](https://vanshal.medium.com/my-oscp-journey-9a4041bab24a), [Grant](https://grants235.github.io/cybersecurity/oscp/), and [this person](https://www.reddit.com/r/oscp/comments/swmqs1/aced_it_at_16yrs/?utm_source=share&utm_medium=web2x&context=3) from Reddit. Admittedly, the number of us is few and far between when compared to the typical demographic of OSCP test-takers. To add to this, I’m a woman and I haven’t seen any other women my age do this. Still, people have done it and it  possible.

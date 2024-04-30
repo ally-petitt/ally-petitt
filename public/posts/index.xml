@@ -6,15 +6,8 @@
     <description>Recent content in Posts on Ally Petitt</description>
     <generator>Hugo -- 0.125.4</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 29 Apr 2024 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 21 Mar 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/ally-petitt/posts/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Hello World</title>
-      <link>http://localhost:1313/ally-petitt/posts/hello-world/</link>
-      <pubDate>Mon, 29 Apr 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/ally-petitt/posts/hello-world/</guid>
-      <description>Testing</description>
-    </item>
     <item>
       <title>How I Found 3 CVEs in 2 Days</title>
       <link>http://localhost:1313/ally-petitt/posts/2024-03-21_how-i-found-3-cves-in-2-days-8a135eb924d3/</link>

@@ -113,7 +113,23 @@ If your /usr/include folder is also looking more empty than the shelves during C
     <div class="post-meta"><span title='2023-04-13 00:00:00 +0000 UTC'>April 13, 2023</span>
 
 </div>
-  </header> 
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#getting-kernelheaders" aria-label="Getting Kernel Headers">Getting Kernel Headers</a></li>
+                <li>
+                    <a href="#restoring-additional-missingfiles" aria-label="Restoring Additional Missing Files">Restoring Additional Missing Files</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
   <div class="post-content"><p>Hi guys, I made a mistake. In my frustration trying to debug my C program, I inadvertently deleted all the files within my <code>/usr/include</code> folder. I didn’t realize at the time that this was a very important folder! As explained <a href="https://www.kernel.org/doc/Documentation/kbuild/headers_install.txt">here</a>, it stores the Linux kernel’s libc header files! Rookie mistake, but luckily for us, there’s ways to fix it.</p>
 <p>If your <code>/usr/include</code> folder is also looking more empty than the shelves during COVID, I come bearing the solution.</p>
 <h1 id="getting-kernelheaders">Getting Kernel Headers<a hidden class="anchor" aria-hidden="true" href="#getting-kernelheaders">#</a></h1>

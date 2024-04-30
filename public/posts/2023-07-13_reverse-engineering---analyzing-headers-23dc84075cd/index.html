@@ -113,7 +113,36 @@ objdump -x ./heapedit Executable and Linkable Format (ELF) files are a common fi
     <div class="post-meta"><span title='2023-07-13 00:00:00 +0000 UTC'>July 13, 2023</span>
 
 </div>
-  </header> 
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul><ul>
+                <li>
+                    <a href="#file-header" aria-label="File Header">File Header</a></li>
+                <li>
+                    <a href="#program-headers" aria-label="Program Headers">Program Headers</a></li>
+                <li>
+                    <a href="#dynamic-section" aria-label="Dynamic Section">Dynamic Section</a></li>
+                <li>
+                    <a href="#version-references" aria-label="Version References">Version References</a></li>
+                <li>
+                    <a href="#sections" aria-label="Sections">Sections</a></li>
+                <li>
+                    <a href="#symbol-table" aria-label="Symbol Table">Symbol Table</a></li>
+                <li>
+                    <a href="#conclusion" aria-label="Conclusion">Conclusion</a></li></ul>
+                    
+                <li>
+                    <a href="#more-reading" aria-label="More Reading">More Reading</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
   <div class="post-content"><p><code>objdump</code> is a command line tool that can be used to gain insight into an executable binary. In this article, the tool will be used to dump all of the headers of the ELF binary <code>heapedit</code> with the command below. Then, we will analyze and explain each section of output from the top to the bottom.</p>
 <pre tabindex="0"><code>objdump -x ./heapedit
 </code></pre><p>Executable and Linkable Format (ELF) files are a common file format for object files, executable binaries, core dumps, and shared libraries. It provides a standardized format for storing executable and object code, symbol information, and other metadata necessary for proper software execution. It may be helpful to first get an overview of an ELF file structure which can be seen in this image:</p>

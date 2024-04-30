@@ -2,6 +2,7 @@
 title = 'How to safely convert to LVM without losing your data'
 date = 2023-08-19
 draft = false
+showtoc=true
 +++
 
 ![](https://cdn-images-1.medium.com/max/800/0*es1LJrnEBsSNgXZM.png)

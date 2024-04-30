@@ -113,7 +113,53 @@ In this article, I’ll go over some of the first steps of installing, configuri
     <div class="post-meta"><span title='2023-05-02 00:00:00 +0000 UTC'>May 2, 2023</span>
 
 </div>
-  </header> 
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#introduction" aria-label="Introduction">Introduction</a></li>
+                <li>
+                    <a href="#quick-install" aria-label="Quick Install">Quick Install</a><ul>
+                        
+                <li>
+                    <a href="#kali-linux" aria-label="Kali Linux">Kali Linux</a></li></ul>
+                </li>
+                <li>
+                    <a href="#building-fromsource" aria-label="Building From Source">Building From Source</a><ul>
+                        
+                <li>
+                    <a href="#installing-dependencies" aria-label="Installing Dependencies">Installing Dependencies</a></li>
+                <li>
+                    <a href="#daq" aria-label="DAQ">DAQ</a></li>
+                <li>
+                    <a href="#hwloc" aria-label="hwloc">hwloc</a></li>
+                <li>
+                    <a href="#openssl" aria-label="OpenSSL">OpenSSL</a></li>
+                <li>
+                    <a href="#snort-install" aria-label="Snort Install">Snort Install</a></li></ul>
+                </li>
+                <li>
+                    <a href="#configuration" aria-label="Configuration">Configuration</a><ul>
+                        
+                <li>
+                    <a href="#capturing-all-networktraffic" aria-label="Capturing all Network Traffic">Capturing all Network Traffic</a></li>
+                <li>
+                    <a href="#modifying-the-configuration-file" aria-label="Modifying the Configuration File">Modifying the Configuration File</a></li></ul>
+                </li>
+                <li>
+                    <a href="#running-snort" aria-label="Running Snort">Running Snort</a></li>
+                <li>
+                    <a href="#moving-forward" aria-label="Moving Forward">Moving Forward</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
   <div class="post-content"><h1 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h1>
 <p>Snort is an open source Intrusion Prevention System (IPS) that detects malicious network traffic by comparing the network packets to a set of rules, often created by Snort and the community. Snort can be used as a packet sniffer, packet logger, and intrusion prevention system.</p>
 <p>In this article, I’ll go over some of the first steps of installing, configuring, and running Snort so that new users have a place to branch off of.</p>

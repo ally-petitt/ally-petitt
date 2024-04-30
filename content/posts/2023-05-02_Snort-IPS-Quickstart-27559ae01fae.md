@@ -2,6 +2,7 @@
 title = 'Snort IPS Quickstart'
 date = 2023-05-02
 draft = false
+showtoc=true
 +++
 
 Introduction

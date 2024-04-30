@@ -2,6 +2,7 @@
 title = 'How to Find more Vulnerabilities — Source Code Auditing Explained'
 date = 2024-01-01
 draft = false
+showtoc=true
 +++
 
 ![](https://cdn-images-1.medium.com/max/800/0*jDmBerRWYf3eZh2J)

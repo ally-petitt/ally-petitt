@@ -2,6 +2,7 @@
 title = 'Beyond the Screen: The Hidden World of Firmware Security'
 date = 2023-08-05
 draft = false
+showtoc=true
 +++
 
 ![https://www.istockphoto.com/photo/man-using-laptop-with-update-software-computer-program-upgrade-business-technology-gm1449779856-486876929](https://cdn-images-1.medium.com/max/800/1*UA4-sPgJH7Fhk9jbvvRafQ.jpeg)

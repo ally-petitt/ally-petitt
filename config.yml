@@ -21,8 +21,6 @@ buildDrafts: false
 buildFuture: false
 buildExpired: false
 
-#googleAnalytics: UA-123-45
-
 paginate: 15 # articles per page
 
 minify:
@@ -38,100 +36,26 @@ defaultContentLanguageInSubdir: true
 
 languages:
     en:
-        languageName: "English🇨🇦"
-        contentDir: content/English
+        languageName: "English"
         weight: 1
-        profileMode:
-            enabled: true
-            title: Kyrie Xie
-            subtitle: "Welcome to my site!"
-            # imageUrl: "Avatar.png"
-            imageUrl: "Selfie.png"
-            imageTitle: Selfie
-            imageWidth: 150
-            imageHeight: 150
-            buttons:
-                - name: About
-                  url: about
-                - name: Project
-                  url: projects
-                - name: Resume
-                  url: resume.pdf
-
+        taxonomies:
+          category: categories
+          tag: tags
+          series: series
         menu:
             main:
-                - identifier: About
-                  name: About
-                  url: about
-                  weight: 1
-                - identifier: Projects
-                  name: Project
-                  url: projects
-                  weight: 2
-                - identifier: Resume
-                  name: Resume
-                  url: resume.pdf
-                  weight: 3
-                - identifier: Blog
-                  name: Blogs
-                  url: blog
-                  weight: 4
-                - identifier: Search
-                  name: Search
-                  url: search
+                - name: Archive
+                  url: archives
                   weight: 5
+                - name: Search
+                  url: search/
+                  weight: 10
+                - name: Tags
+                  url: tags/
+                  weight: 10
+                - name: "About Me"
+                  url: about-me/
 
-    zh:
-        languageName: "中文🇨🇳"
-        contentDir: content/Chinese
-        weight: 2
-        profileMode:
-            enabled: true
-            title: 谢坤洋
-            subtitle: "欢迎来到我的网站！"
-            # imageUrl: "Avatar.png"
-            imageUrl: "Selfie.png"
-            imageTitle: Selfie
-            imageWidth: 150
-            imageHeight: 150
-            buttons:
-                - name: 关于
-                  url: about
-                - name: 博客
-                  url: blog
-                - name: 简历
-                  url: resume.pdf
-
-        menu:
-            main:
-                - identifier: About
-                  name: 关于
-                  url: about
-                  weight: 1
-                - identifier: Projects
-                  name: 项目
-                  url: projects
-                  weight: 2
-                - identifier: Resume
-                  name: 简历
-                  url: resume.pdf
-                  weight: 3
-                - identifier: Blog
-                  name: 博客
-                  url: blog
-                  weight: 4
-                - identifier: Comments
-                  name: 留言板
-                  url: comment/comments
-                  weight: 5
-                - identifier: Links
-                  name: 友链
-                  url: links
-                  weight: 6
-                - identifier: Search
-                  name: 搜索
-                  url: search
-                  weight: 7
 
 outputs:
     home:
@@ -140,51 +64,79 @@ outputs:
         - JSON
 
 params:
-    title: Ally Petitt
-    author: Ally Petitt
+  title: Ally Petitt
+  author: Ally Petitt
+  env: production
+  description: "Ally Petitt Personal Website"
 
-    defaultTheme: dark # defaultTheme: light or dark
-    disableThemeToggle: false
-    DateFormat: "2006-01-02"
-    ShowShareButtons: true
-    ShowReadingTime: true
-    # disableSpecialistPost: true
-    disableScrollToTop: false
-    displayFullLangName: true
-    ShowPostNavLinks: true
-    ShowBreadCrumbs: true
-    ShowCodeCopyButtons: true
-    hideFooter: false # hide foot
-    ShowWordCounts: true
-    VisitCount: true
+  homeInfoParams:
+    Title: Welcome to my blog!
+    Content: Testing information
+  
+  socialIcons:
+    - name: github
+      title: View GitHub Profile
+      url: "https://github.com/ally-petitt"
+    - name: linkedin
+      title: View LinkedIn Profile
+      url: "https://www.linkedin.com/in/ally-petitt/"
+    - name: rss
+      title: View RSS Feed
+      url: "https://ally-petitt.gihub.com/ally-petitt/index.xml"
 
-    ShowLastMod: true
+  profileMode:
+    enabled: false
+  ShowFullTextinRSS: true
 
-    ShowToc: true
-    TocOpen: true
+
+  defaultTheme: dark # defaultTheme: light or dark
+  disableThemeToggle: false
+  DateFormat: "2006-01-02"
+  ShowShareButtons: true
+  ShowReadingTime: true
+  # disableSpecialistPost: true
+  disableScrollToTop: false
+  displayFullLangName: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true
+  hideFooter: false # hide foot
+  ShowWordCounts: true
+  VisitCount: true
+
+  ShowLastMod: true
+
+  ShowToc: true
+  TocOpen: true
+
+  cover:
+    linkFullImages: true
 
 
-    assets:
-        favicon: "k-48.png"
-        favicon16x16: "k-48.png"
-        favicon32x32: "k-48.png"
-        apple_touch_icon: "k-48.png"
-        safari_pinned_tab: "k-48.png"
 
-    label:
-        text: "Home"
+  assets:
+    disableHLJS: true
+    favicon: "assets/favicon.ico"
+    favicon16x16: "assets/favicon-16x16.png"
+    favicon32x32: "assets/favicon-32x32.png"
+    apple_touch_icon: "assets/apple-touch-icon.png"
 
-    fuseOpts:
-        isCaseSensitive: false
-        shouldSort: true
-        location: 0
-        distance: 1000
-        threshold: 1
-        minMatchCharLength: 0
-        keys: ["title", "permalink", "summary"]
+  label:
+      text: "Home"
 
-    twikoo:
-        version: 1.4.11
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    findAllMatches: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 2
+    # limit: 10 # refer: https://www.fusejs.io/api/methods.html#search
+    keys: ["title", "date", "permalink", "summary", "content"]
+
+  twikoo:
+      version: 1.4.11
 
 taxonomies:
     category: categories

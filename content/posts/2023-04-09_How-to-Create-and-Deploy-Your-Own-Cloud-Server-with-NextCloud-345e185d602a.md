@@ -2,6 +2,7 @@
 title = 'How to Create and Deploy Your Own Cloud Server with NextCloud'
 date = 2023-04-09
 draft = false
+showtoc=true
 +++
 
 ![](https://cdn-images-1.medium.com/max/800/0*-WVjY5h4EpphjjX7)

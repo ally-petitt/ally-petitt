@@ -113,7 +113,43 @@ Disclaimer: This is not an area that I have much experience in so if details are
     <div class="post-meta"><span title='2023-05-05 00:00:00 +0000 UTC'>May 5, 2023</span>
 
 </div>
-  </header> 
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul><ul>
+                <li>
+                    <a href="#introduction" aria-label="Introduction">Introduction</a></li>
+                <li>
+                    <a href="#creating-a-new-partition" aria-label="Creating a new partition">Creating a new partition</a></li>
+                <li>
+                    <a href="#encrypting-thedrive" aria-label="Encrypting the Drive">Encrypting the Drive</a></li>
+                <li>
+                    <a href="#decrypting-thedrive" aria-label="Decrypting the Drive">Decrypting the Drive</a></li>
+                <li>
+                    <a href="#mounting-the-partition" aria-label="Mounting the Partition">Mounting the Partition</a></li>
+                <li>
+                    <a href="#unmounting-the-partition" aria-label="Unmounting the Partition">Unmounting the Partition</a></li>
+                <li>
+                    <a href="#closing-and-re-encrypting-the-partition" aria-label="Closing and Re-encrypting the Partition">Closing and Re-encrypting the Partition</a></li></ul>
+                    
+                <li>
+                    <a href="#digging-deeper" aria-label="Digging Deeper">Digging Deeper</a><ul>
+                        
+                <li>
+                    <a href="#file-systemmetadata" aria-label="File System Metadata">File System Metadata</a></li>
+                <li>
+                    <a href="#duplicating-the-encrypted-drive" aria-label="Duplicating the Encrypted Drive">Duplicating the Encrypted Drive</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
   <div class="post-content"><h2 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h2>
 <p>Hey everyone, this is a pretty quick article on LUKS drive encryption on Linux with the <code>cryptsetup</code> library. By following the steps outlined here, you will be able to encrypt a drive, decrypt it, and mount it. This was done in a Kali Linux VM and commands may vary for other distributions.</p>
 <p>Disclaimer: This is not an area that I have much experience in so if details are inaccurate, I apologize in advance.</p>

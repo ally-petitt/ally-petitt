@@ -2,6 +2,7 @@
 title = 'How Companies Respond to Cyber Attacks | The 6 Steps of an Incident Response Plan'
 date = 2022-07-09
 draft = false
+showtoc=true
 +++
 ![](https://cdn-images-1.medium.com/max/800/1*NYCBo5F_MGeRvxzrEm1hsg.png)
 

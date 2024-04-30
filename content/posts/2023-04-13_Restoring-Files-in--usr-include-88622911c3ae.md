@@ -2,6 +2,7 @@
 title = 'Restoring Files in /usr/include'
 date = 2023-04-13
 draft = false
+showtoc=true
 +++
 
 Hi guys, I made a mistake. In my frustration trying to debug my C program, I inadvertently deleted all the files within my `/usr/include` folder. I didn’t realize at the time that this was a very important folder! As explained [here](https://www.kernel.org/doc/Documentation/kbuild/headers_install.txt), it stores the Linux kernel’s libc header files! Rookie mistake, but luckily for us, there’s ways to fix it.

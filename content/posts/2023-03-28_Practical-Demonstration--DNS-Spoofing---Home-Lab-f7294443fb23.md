@@ -2,6 +2,7 @@
 title = 'Practical Demonstration: DNS Spoofing + Home Lab'
 date = 2023-03-28
 draft = false
+showtoc=true
 +++
 
 DNS Cache Poisoning on Home Lab Walkthrough

@@ -2,6 +2,7 @@
 title = 'VPN Troubleshooting: How to fix “Inactivity Timeout ( — ping-restart)”'
 date = 2022-11-12
 draft = false
+showtoc=true
 +++
 
 If your VPN log looks something like this:
