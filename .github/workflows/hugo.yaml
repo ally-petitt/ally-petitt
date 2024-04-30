@@ -60,8 +60,8 @@ jobs:
           hugo \
             --gc \
             --minify \
-            --baseURL "https://ally-petitt.github.com/ally-petitt/" \
-            --config ../config.yml,../hugo.toml"          
+            --baseURL "${{ steps.pages.outputs.base_url }}/" \
+            --config ../config.yml,../hugo.toml          
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
