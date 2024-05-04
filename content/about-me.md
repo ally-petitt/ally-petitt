@@ -6,4 +6,4 @@ summary: "about me"
 layout: "baseof"
 ---
 
-UNDER CONSTRUCTION
+Under Construction

@@ -2,4 +2,5 @@ util/*
 .venv/*
 previous_blogs/*
 README.md
-content/posts/2024-04*
+content/posts/drafts/*
+public/en/posts/drafts/*

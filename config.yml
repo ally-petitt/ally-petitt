@@ -1,7 +1,7 @@
 baseURL: "https://ally-petitt.github.io/ally-petitt/"
 title: Ally Petitt
 paginate: 5
-theme: PaperMod
+theme: hugo-PaperMod
 
 
 # for the search functionality
@@ -67,11 +67,13 @@ params:
   title: Ally Petitt
   author: Ally Petitt
   env: production
-  description: "Ally Petitt Personal Website"
+  description: "Ally Petitt Personal Website and Blog"
 
   homeInfoParams:
-    Title: Welcome to my blog!
-    Content: Currently Under Construction
+    Title: "Welcome to my blog! \U0001F44B"
+    Content: "Thank you for stopping by. I am Ally Petitt, a proud security researcher on the Synack Red Team.\n\n
+    This website harbors the articles that I have written, beginning in 2022 to today covering topics such as offensive security, penetration testing, vulnerability research, and any other topics that I find interesting!\n\n
+    I hope that you enjoy reading my work as much as I have enjoyed writing it!"
   
   socialIcons:
     - name: github
@@ -82,7 +84,7 @@ params:
       url: "https://www.linkedin.com/in/ally-petitt/"
     - name: rss
       title: View RSS Feed
-      url: "https://ally-petitt.gihub.com/ally-petitt/index.xml"
+      url: "https://ally-petitt.gihub.io/ally-petitt/index.xml"
 
   profileMode:
     enabled: false
