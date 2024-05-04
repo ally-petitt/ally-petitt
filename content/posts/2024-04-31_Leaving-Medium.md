@@ -2,7 +2,7 @@
 title = "Goodbye World - Migrating Away From Medium | Graduation & Next Steps"
 date = 2024-05-02
 showtoc = true
-draft = true # add photos and conclusion
+draft = false
 tags= ["Self-hosting", "Tutorial", "Personal"]
 +++
 

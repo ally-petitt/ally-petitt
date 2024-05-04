@@ -6,4 +6,4 @@ summary: "about me"
 layout: "baseof"
 ---
 
-Under Construction
+High school student by day, hacker by night.
