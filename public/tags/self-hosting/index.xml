@@ -6,8 +6,45 @@
     <description>Recent content in Self-Hosting on Ally Petitt</description>
     <generator>Hugo -- 0.125.4</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 09 Apr 2023 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 03 May 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/ally-petitt/tags/self-hosting/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Goodbye World - Migrating Away From Medium | Graduation &amp; Next Steps</title>
+      <link>http://localhost:1313/ally-petitt/posts/2024-04-31_leaving-medium/</link>
+      <pubDate>Fri, 03 May 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/posts/2024-04-31_leaving-medium/</guid>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;http://localhost:1313/ally-petitt/ally-petitt/images/Medium-crossed.png&#34; alt=&#34;Medium logo crossed out&#34;  /&gt;
+&lt;/p&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;Hello everyone and welcome to the first exclusive post on my new personal website! I am very excited to be here and I hope that you are as well. The picture above is a bit dramatic, but communicates the message that I have decided to move forward. Those who have been following me will know that I first began my technical blog on Medium, which was an approachable outlet for sharing my knowledge as I first entered the field.&lt;/p&gt;
+&lt;p&gt;I will graduate from high school this month, which marks the beginning of a new chapter in my life. In the spirit of this transitional period of my life, I decided to make the shift from posting my technical articles on Medium to this personal website.&lt;/p&gt;
+&lt;p&gt;The technical details of how I migrated my blogs from Medium to here will be explained further down in this article.&lt;/p&gt;
+&lt;h2 id=&#34;why-im-leaving-medium&#34;&gt;Why I&amp;rsquo;m Leaving Medium&lt;/h2&gt;
+&lt;p&gt;I want to first express my gratitude for Medium and the supportive readers that the platform has allowed me to connect with. Medium is where I got my start in writing technical blogs and has been an instrumental outlet in sharing my knowledge as I was learning it.&lt;/p&gt;
+&lt;p&gt;With that in mind, my decision to leave Medium is multi-faceted.&lt;/p&gt;
+&lt;p&gt;Not only am I ascending into adulthood, I am maturing into a professional career doing work that I am extremely passionate about. I wanted that increased seriousness to be reflected in the articles that I write, which is more aptly served by a personal website than Medium (even more so with a custom domain, but that is a work in progress).&lt;/p&gt;
+&lt;p&gt;Additionally, this website offers a more authentic experience. I have purposefully omitted analytics for the benefit of my readers&amp;rsquo; privacy. As a result, these posts are more like a conversation with interested readers than a numbers game.&lt;/p&gt;
+&lt;p&gt;Finally, creating my own website affords me autonomy. My readers are no longer berated by banners and pop-ups to subscribe to get a Medium membership so that they can view other content on the site with the vast majority of it being pay-walled. I can provide my readers with a site that is free to access without distractions- something that I have come to appreciate in my own internet browsing.&lt;/p&gt;
+&lt;p&gt;I also understand that I have readers that prefer stay updated with their authors through RSS feed aggregators. For you, I added an &lt;a href=&#34;https://ally-petitt.github.io/ally-petitt/index.xml&#34;&gt;RSS feed&lt;/a&gt; to the site :).&lt;/p&gt;
+&lt;h2 id=&#34;next-steps&#34;&gt;Next Steps&lt;/h2&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn.vanderbilt.edu/vu-wpfsx/wp-content/uploads/sites/7/2024/04/09234832/commencement-topper-Image-2024-scaled.jpeg&#34; alt=&#34;Picture of a graduation&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;I am excited about the future. I used to be petrified about life after graduation, but I have learned to embrace the unknown. There is so much to learn, attempt, and experience and I am at this exciting point in my life where it is all novel. There are certain topics in cybersecurity that I wish I could re-learn again for the first time because I remember the potent feelings awe and inspiration of the moment I first read about them. Here&amp;rsquo;s to a future of continued discovery.&lt;/p&gt;
+&lt;p&gt;Regarding this blog, as I continue to perform security research and study new techniques, I plan to publish writeups or otherwise educational content. Writing will not be my main focus, so I will prioritize the articles I write based on what I find very interesting or if I think my audience would benefit from them.&lt;/p&gt;
+&lt;h2 id=&#34;creating-this-website&#34;&gt;Creating This Website&lt;/h2&gt;
+&lt;p&gt;I was recommended the static site generator, Hugo, by a colleague who I was discussing website-building with. After setting up a Hugo app, I found appreciation in the ease of setup and its customizability and decided to build this website to completion with it.&lt;/p&gt;
+&lt;p&gt;Since there are already a plethora of tutorials for Hugo, I will omit the initial app setup (those that are interested can view Hugo&amp;rsquo;s &lt;a href=&#34;https://gohugo.io/getting-started/quick-start/&#34;&gt;QuickStart Guide&lt;/a&gt;). Instead, I will focus on the technical challenges that were specific to this use case of converting a personal Medium blog to a Hugo-compatible markdown post.&lt;/p&gt;
+&lt;h3 id=&#34;how-i-transferred-previous-blog-posts&#34;&gt;How I Transferred Previous Blog Posts&lt;/h3&gt;
+&lt;p&gt;I had 26 published blogs on my Medium account, so transferring each manually would have taken an immense amount of time. Consequently, I used scripts to automate this process. The first was a tool developed by Oliver Ernst called &lt;a href=&#34;https://github.com/smrfeld/medium-to-markdown&#34;&gt;medium-to-markdown&lt;/a&gt;. The second was a tool was developed by myself: &lt;a href=&#34;https://github.com/ally-petitt/medium-to-hugo-post&#34;&gt;medium-to-hugo-post&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;My workflow involved chaining both of these scripts together such that the output directory of &lt;code&gt;medium-to-markdown&lt;/code&gt; was the input directory of &lt;code&gt;medium-to-hugo-post&lt;/code&gt; with &lt;code&gt;/md&lt;/code&gt; appended. As per the README instructions on &lt;code&gt;medium-to-markdown&lt;/code&gt;, I requested an export of my data from Medium, which I then fed into &lt;code&gt;medium-to-markdown&lt;/code&gt;. This converted my posts into markdown with the exception of image tags and their captions.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;python3 ./medium-to-markdown/run.py convert --posts-dir ./export/posts --output-dir ./output
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Following the markdown conversion, I noticed that the new markdown files required additional modifications to properly format on Hugo. To remedy this, I created &lt;code&gt;medium-to-hugo-post&lt;/code&gt; to add a &amp;ldquo;&lt;a href=&#34;https://gohugo.io/content-management/front-matter/&#34;&gt;Front Matter&lt;/a&gt;&amp;rdquo; to each post and finalize the conversion of images and their subtitles to markdown.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;python3 ./medium-to-hugo-post/medium-to-hugo-post.py --md-dir ./output/md --posts-dir ./content/posts
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;I outline these steps and the limitations of these tools in more detail in the medium-to-hugo-post &lt;a href=&#34;https://github.com/ally-petitt/medium-to-hugo-post/blob/main/README.md&#34;&gt;README.md&lt;/a&gt; file.&lt;/p&gt;
+&lt;h3 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h3&gt;
+&lt;p&gt;Migrating to this website is a symbol of a new beginning. I could not be more enthusiastic about this transformative period of my life as I transition into a full-time career doing the work that I love. Thank you to everyone who has supported me throughout this journey, and I can&amp;rsquo;t wait to see what the future has in store!&lt;/p&gt;
+</description>
+    </item>
     <item>
       <title>How to Create and Deploy Your Own Cloud Server with NextCloud</title>
       <link>http://localhost:1313/ally-petitt/posts/2023-04-09_how-to-create-and-deploy-your-own-cloud-server-with-nextcloud-345e185d602a/</link>

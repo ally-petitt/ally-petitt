@@ -6,12 +6,12 @@
     <description>Recent content on Ally Petitt</description>
     <generator>Hugo -- 0.125.4</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 02 May 2024 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 03 May 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/ally-petitt/en/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Goodbye World - Migrating Away From Medium | Graduation &amp; Next Steps</title>
       <link>http://localhost:1313/ally-petitt/en/posts/2024-04-31_leaving-medium/</link>
-      <pubDate>Thu, 02 May 2024 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 03 May 2024 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/ally-petitt/en/posts/2024-04-31_leaving-medium/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;http://localhost:1313/ally-petitt/ally-petitt/images/Medium-crossed.png&#34; alt=&#34;Medium logo crossed out&#34;  /&gt;
 &lt;/p&gt;
@@ -19,8 +19,10 @@
 &lt;p&gt;Hello everyone and welcome to the first exclusive post on my new personal website! I am very excited to be here and I hope that you are as well. The picture above is a bit dramatic, but communicates the message that I have decided to move forward. Those who have been following me will know that I first began my technical blog on Medium, which was an approachable outlet for sharing my knowledge as I first entered the field.&lt;/p&gt;
 &lt;p&gt;I will graduate from high school this month, which marks the beginning of a new chapter in my life. In the spirit of this transitional period of my life, I decided to make the shift from posting my technical articles on Medium to this personal website.&lt;/p&gt;
 &lt;p&gt;The technical details of how I migrated my blogs from Medium to here will be explained further down in this article.&lt;/p&gt;
+&lt;h3 id=&#34;appreciation&#34;&gt;Appreciation&lt;/h3&gt;
+&lt;p&gt;I want to first express my gratitude for Medium and the supportive readers that the platform has allowed me to connect with. Medium is where I got my start in writing technical blogs and has been an instrumental outlet in sharing my knowledge as I was learning it.&lt;/p&gt;
 &lt;h2 id=&#34;why-im-leaving-medium&#34;&gt;Why I&amp;rsquo;m Leaving Medium&lt;/h2&gt;
-&lt;p&gt;My decision to leave Medium is multi-faceted.&lt;/p&gt;
+&lt;p&gt;With that in mind, my decision to leave Medium is multi-faceted.&lt;/p&gt;
 &lt;p&gt;Not only am I ascending into adulthood, I am maturing into a professional career doing work that I am extremely passionate about. I wanted that increased seriousness to be reflected in the articles that I write, which is more aptly served by a personal website than Medium (even more so with a custom domain, but that is a work in progress).&lt;/p&gt;
 &lt;p&gt;Additionally, this website offers a more authentic experience. I have purposefully omitted analytics for the benefit of my readers&amp;rsquo; privacy. As a result, these posts are more like a conversation with interested readers than a numbers game.&lt;/p&gt;
 &lt;p&gt;Finally, creating my own website affords me autonomy. My readers are no longer berated by banners and pop-ups to subscribe to get a Medium membership so that they can view other content on the site with the vast majority of it being pay-walled. I can provide my readers with a site that is free to access without distractions- something that I have come to appreciate in my own internet browsing.&lt;/p&gt;
@@ -49,8 +51,10 @@
 <p>Hello everyone and welcome to the first exclusive post on my new personal website! I am very excited to be here and I hope that you are as well. The picture above is a bit dramatic, but communicates the message that I have decided to move forward. Those who have been following me will know that I first began my technical blog on Medium, which was an approachable outlet for sharing my knowledge as I first entered the field.</p>
 <p>I will graduate from high school this month, which marks the beginning of a new chapter in my life. In the spirit of this transitional period of my life, I decided to make the shift from posting my technical articles on Medium to this personal website.</p>
 <p>The technical details of how I migrated my blogs from Medium to here will be explained further down in this article.</p>
+<h3 id="appreciation">Appreciation</h3>
+<p>I want to first express my gratitude for Medium and the supportive readers that the platform has allowed me to connect with. Medium is where I got my start in writing technical blogs and has been an instrumental outlet in sharing my knowledge as I was learning it.</p>
 <h2 id="why-im-leaving-medium">Why I&rsquo;m Leaving Medium</h2>
-<p>My decision to leave Medium is multi-faceted.</p>
+<p>With that in mind, my decision to leave Medium is multi-faceted.</p>
 <p>Not only am I ascending into adulthood, I am maturing into a professional career doing work that I am extremely passionate about. I wanted that increased seriousness to be reflected in the articles that I write, which is more aptly served by a personal website than Medium (even more so with a custom domain, but that is a work in progress).</p>
 <p>Additionally, this website offers a more authentic experience. I have purposefully omitted analytics for the benefit of my readers&rsquo; privacy. As a result, these posts are more like a conversation with interested readers than a numbers game.</p>
 <p>Finally, creating my own website affords me autonomy. My readers are no longer berated by banners and pop-ups to subscribe to get a Medium membership so that they can view other content on the site with the vast majority of it being pay-walled. I can provide my readers with a site that is free to access without distractions- something that I have come to appreciate in my own internet browsing.</p>
@@ -72,6 +76,22 @@
 </span></span></code></pre></div><p>I outline these steps and the limitations of these tools in more detail in the medium-to-hugo-post <a href="https://github.com/ally-petitt/medium-to-hugo-post/blob/main/README.md">README.md</a> file.</p>
 <h3 id="conclusion">Conclusion</h3>
 <p>Migrating to this website is a symbol of a new beginning. I could not be more enthusiastic about this transformative period of my life as I transition into a full-time career doing the work that I love. Thank you to everyone who has supported me throughout this journey, and I can&rsquo;t wait to see what the future has in store!</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title></title>
+      <link>http://localhost:1313/ally-petitt/en/posts/drafts/quitting-social-media/</link>
+      <pubDate>Wed, 01 May 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/en/posts/drafts/quitting-social-media/</guid>
+      <description>&lt;p&gt;Our attention determines our actions, emotions, and by extension, life. I felt that in the midst of our technological revolution, I had lost complete control of my attention, which seemed to be in a constant tug-of-war between various social media platforms. Most of the media that I consumed I would forget within minutes or hours. It was mind-numbing and I knew that my digital consumption would interfere with my growth here in cybersecurity. As a result, I made a lifestyle change. I deleted all social media with the exception of LinkedIn and focused on regaining my focus. Remarkably, I have observed my life improve in nearly every concievable way.&lt;/p&gt;
+&lt;p&gt;What does this have to do with leaving Medium? Well, through this process, I learned the value of simplifying my life so that I can put more energy into the things that actually matter. Medium is chalked full of wonderfully detailed tools and analytics for authors to use. While I have appreciated knowing the demand for VPN troubleshooting articles (surprisingly, it was one of my most viewed posts!), there is an appeal in not knowing at all how well or poorly your post is doing.&lt;/p&gt;
+&lt;p&gt;There is something authentic about me typing this blog into a markdown file with no expectation of people reading or viewing this. Disconnected from the need to compete against the algorithm. This blog is just for people who are interested in what I have to say. I am not chasing followers, likes, or conversion rates, even more so since they no longer exist here. In fact, I have decidedly omitted any type of analytics from this website, both for my and the readers&amp;rsquo; benefit. Granted, many of my readers have likely equipped their browser with tooling to block such tracking anyway.&lt;/p&gt;
+&lt;p&gt;Additionally, creating my own website affords me autonomy. I can offer my readers here my information free of distraction in a simple format. This blog is just &amp;ldquo;as is&amp;rdquo;. My readers are no longer berated by banners and pop-ups to subscribe to get a Medium membership so that they can view the vast majority of paywalled content on the site. Everything I post here is free to access and always will be.&lt;/p&gt;
+</description>
+      <content:encoded><![CDATA[<p>Our attention determines our actions, emotions, and by extension, life. I felt that in the midst of our technological revolution, I had lost complete control of my attention, which seemed to be in a constant tug-of-war between various social media platforms. Most of the media that I consumed I would forget within minutes or hours. It was mind-numbing and I knew that my digital consumption would interfere with my growth here in cybersecurity. As a result, I made a lifestyle change. I deleted all social media with the exception of LinkedIn and focused on regaining my focus. Remarkably, I have observed my life improve in nearly every concievable way.</p>
+<p>What does this have to do with leaving Medium? Well, through this process, I learned the value of simplifying my life so that I can put more energy into the things that actually matter. Medium is chalked full of wonderfully detailed tools and analytics for authors to use. While I have appreciated knowing the demand for VPN troubleshooting articles (surprisingly, it was one of my most viewed posts!), there is an appeal in not knowing at all how well or poorly your post is doing.</p>
+<p>There is something authentic about me typing this blog into a markdown file with no expectation of people reading or viewing this. Disconnected from the need to compete against the algorithm. This blog is just for people who are interested in what I have to say. I am not chasing followers, likes, or conversion rates, even more so since they no longer exist here. In fact, I have decidedly omitted any type of analytics from this website, both for my and the readers&rsquo; benefit. Granted, many of my readers have likely equipped their browser with tooling to block such tracking anyway.</p>
+<p>Additionally, creating my own website affords me autonomy. I can offer my readers here my information free of distraction in a simple format. This blog is just &ldquo;as is&rdquo;. My readers are no longer berated by banners and pop-ups to subscribe to get a Medium membership so that they can view the vast majority of paywalled content on the site. Everything I post here is free to access and always will be.</p>
 ]]></content:encoded>
     </item>
     <item>

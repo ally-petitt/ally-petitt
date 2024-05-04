@@ -3,10 +3,28 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://localhost:1313/ally-petitt/en/</loc>
-    <lastmod>2024-05-02T00:00:00+00:00</lastmod>
+    <lastmod>2024-05-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/ally-petitt/en/posts/2024-04-31_leaving-medium/</loc>
+    <lastmod>2024-05-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/ally-petitt/en/tags/personal/</loc>
+    <lastmod>2024-05-03T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/ally-petitt/en/posts/</loc>
-    <lastmod>2024-05-02T00:00:00+00:00</lastmod>
+    <lastmod>2024-05-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/ally-petitt/en/tags/self-hosting/</loc>
+    <lastmod>2024-05-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/ally-petitt/en/tags/</loc>
+    <lastmod>2024-05-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/ally-petitt/en/tags/tutorial/</loc>
+    <lastmod>2024-05-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/ally-petitt/en/posts/drafts/quitting-social-media/</loc>
+    <lastmod>2024-05-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/ally-petitt/en/tags/cve/</loc>
     <lastmod>2024-03-21T00:00:00+00:00</lastmod>
@@ -20,9 +38,6 @@
     <loc>http://localhost:1313/ally-petitt/en/tags/security-research/</loc>
     <lastmod>2024-03-21T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/ally-petitt/en/tags/</loc>
-    <lastmod>2024-03-21T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>http://localhost:1313/ally-petitt/en/tags/writeup/</loc>
     <lastmod>2024-03-21T00:00:00+00:00</lastmod>
   </url><url>
@@ -30,9 +45,6 @@
     <lastmod>2024-01-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/ally-petitt/en/tags/static-analysis/</loc>
-    <lastmod>2024-01-01T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/ally-petitt/en/tags/tutorial/</loc>
     <lastmod>2024-01-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/ally-petitt/en/tags/autoconf/</loc>
@@ -126,9 +138,6 @@
     <lastmod>2023-04-09T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/ally-petitt/en/tags/nextcloud/</loc>
-    <lastmod>2023-04-09T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/ally-petitt/en/tags/self-hosting/</loc>
     <lastmod>2023-04-09T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/ally-petitt/en/tags/dns-cache-poisoning/</loc>

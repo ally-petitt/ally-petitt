@@ -1,6 +1,6 @@
 +++
 title = "Goodbye World - Migrating Away From Medium | Graduation & Next Steps"
-date = 2024-05-02
+date = 2024-05-03
 showtoc = true
 draft = false
 tags= ["Self-hosting", "Tutorial", "Personal"]
@@ -15,9 +15,13 @@ I will graduate from high school this month, which marks the beginning of a new 
 
 The technical details of how I migrated my blogs from Medium to here will be explained further down in this article.
 
+### Appreciation
+I want to first express my gratitude for Medium and the supportive readers that the platform has allowed me to connect with. Medium is where I got my start in writing technical blogs and has been an instrumental outlet in sharing my knowledge as I was learning it.
+
 
 ## Why I'm Leaving Medium
-My decision to leave Medium is multi-faceted. 
+
+With that in mind, my decision to leave Medium is multi-faceted. 
 
 Not only am I ascending into adulthood, I am maturing into a professional career doing work that I am extremely passionate about. I wanted that increased seriousness to be reflected in the articles that I write, which is more aptly served by a personal website than Medium (even more so with a custom domain, but that is a work in progress).
 
