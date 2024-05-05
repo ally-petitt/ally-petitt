@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Defense Evasion on Ally Petitt</title>
-    <link>https://ally-petitt.github.io:443/ally-petitt/en/tags/defense-evasion/</link>
+    <link>https://ally-petitt.github.io:443/en/tags/defense-evasion/</link>
     <description>Recent content in Defense Evasion on Ally Petitt</description>
     <generator>Hugo -- 0.125.4</generator>
     <language>en</language>
     <lastBuildDate>Thu, 01 Jun 2023 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://ally-petitt.github.io:443/ally-petitt/en/tags/defense-evasion/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ally-petitt.github.io:443/en/tags/defense-evasion/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>5 Ways I Bypassed Your Web Application Firewall (WAF)</title>
-      <link>https://ally-petitt.github.io:443/ally-petitt/en/posts/2023-06-01_5-ways-i-bypassed-your-web-application-firewall--waf--43852a43a1c2/</link>
+      <link>https://ally-petitt.github.io:443/en/posts/2023-06-01_5-ways-i-bypassed-your-web-application-firewall--waf--43852a43a1c2/</link>
       <pubDate>Thu, 01 Jun 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/ally-petitt/en/posts/2023-06-01_5-ways-i-bypassed-your-web-application-firewall--waf--43852a43a1c2/</guid>
+      <guid>https://ally-petitt.github.io:443/en/posts/2023-06-01_5-ways-i-bypassed-your-web-application-firewall--waf--43852a43a1c2/</guid>
       <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;This article will explain the tools and techniques used by web application penetration testers and security researchers to successfully bypass web application firewall (WAF) protections.&lt;/p&gt;
 &lt;p&gt;WAFs are a cybersecurity solution to filter and block malicious web traffic. Common vendors include CloudFlare, AWS, Citrix, Akamai, Radware, Microsoft Azure, and Barracuda.&lt;/p&gt;
@@ -326,9 +326,9 @@ The results from WhatWaf are consistent with those of Wafw00f.</p>
     </item>
     <item>
       <title>Antivirus Evasion: What it is and How to do it</title>
-      <link>https://ally-petitt.github.io:443/ally-petitt/en/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/</link>
+      <link>https://ally-petitt.github.io:443/en/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/</link>
       <pubDate>Mon, 30 May 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/ally-petitt/en/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/</guid>
+      <guid>https://ally-petitt.github.io:443/en/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*W1qjqIKKNMK9_QYWXGQzRw.png&#34; alt=&#34;picture of a bug&#34;  /&gt;
 &lt;/p&gt;
 &lt;h1 id=&#34;how-does-antivirus-software-actuallywork&#34;&gt;How Does Antivirus Software Actually Work?&lt;/h1&gt;

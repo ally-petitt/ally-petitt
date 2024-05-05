@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>DNS Cache Poisoning on Ally Petitt</title>
-    <link>https://ally-petitt.github.io:443/ally-petitt/en/tags/dns-cache-poisoning/</link>
+    <link>https://ally-petitt.github.io:443/en/tags/dns-cache-poisoning/</link>
     <description>Recent content in DNS Cache Poisoning on Ally Petitt</description>
     <generator>Hugo -- 0.125.4</generator>
     <language>en</language>
     <lastBuildDate>Tue, 28 Mar 2023 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://ally-petitt.github.io:443/ally-petitt/en/tags/dns-cache-poisoning/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ally-petitt.github.io:443/en/tags/dns-cache-poisoning/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Practical Demonstration: DNS Spoofing &#43; Home Lab</title>
-      <link>https://ally-petitt.github.io:443/ally-petitt/en/posts/2023-03-28_practical-demonstration--dns-spoofing---home-lab-f7294443fb23/</link>
+      <link>https://ally-petitt.github.io:443/en/posts/2023-03-28_practical-demonstration--dns-spoofing---home-lab-f7294443fb23/</link>
       <pubDate>Tue, 28 Mar 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/ally-petitt/en/posts/2023-03-28_practical-demonstration--dns-spoofing---home-lab-f7294443fb23/</guid>
+      <guid>https://ally-petitt.github.io:443/en/posts/2023-03-28_practical-demonstration--dns-spoofing---home-lab-f7294443fb23/</guid>
       <description>&lt;h2 id=&#34;dns-cache-poisoning-on-home-lab-walkthrough&#34;&gt;DNS Cache Poisoning on Home Lab Walkthrough&lt;/h2&gt;
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*P3ZahJWqz8AFbk9s.png&#34; alt=&#34;Basic DNS cache poisoning attack&#34;  /&gt;
 

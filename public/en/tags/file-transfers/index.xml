@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>File Transfers on Ally Petitt</title>
-    <link>https://ally-petitt.github.io:443/ally-petitt/en/tags/file-transfers/</link>
+    <link>https://ally-petitt.github.io:443/en/tags/file-transfers/</link>
     <description>Recent content in File Transfers on Ally Petitt</description>
     <generator>Hugo -- 0.125.4</generator>
     <language>en</language>
     <lastBuildDate>Wed, 08 Jun 2022 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://ally-petitt.github.io:443/ally-petitt/en/tags/file-transfers/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ally-petitt.github.io:443/en/tags/file-transfers/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Pentester’s Guide to Performing File Transfers</title>
-      <link>https://ally-petitt.github.io:443/ally-petitt/en/posts/2022-06-08_pentester-s-guide-to-performing-file-transfers-3c1a6a38dfc8/</link>
+      <link>https://ally-petitt.github.io:443/en/posts/2022-06-08_pentester-s-guide-to-performing-file-transfers-3c1a6a38dfc8/</link>
       <pubDate>Wed, 08 Jun 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/ally-petitt/en/posts/2022-06-08_pentester-s-guide-to-performing-file-transfers-3c1a6a38dfc8/</guid>
+      <guid>https://ally-petitt.github.io:443/en/posts/2022-06-08_pentester-s-guide-to-performing-file-transfers-3c1a6a38dfc8/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*HNC0lT4gPMDU8uH0fyjRyw.png&#34; alt=&#34;&#34;  /&gt;
 &lt;/p&gt;
 &lt;h1 id=&#34;foreword&#34;&gt;Foreword&lt;/h1&gt;
