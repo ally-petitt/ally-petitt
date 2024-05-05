@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Drive Encryption on Ally Petitt</title>
-    <link>http://localhost:1313/ally-petitt/en/tags/drive-encryption/</link>
+    <link>https://ally-petitt.github.io:443/ally-petitt/en/tags/drive-encryption/</link>
     <description>Recent content in Drive Encryption on Ally Petitt</description>
     <generator>Hugo -- 0.125.4</generator>
     <language>en</language>
     <lastBuildDate>Fri, 05 May 2023 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/ally-petitt/en/tags/drive-encryption/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ally-petitt.github.io:443/ally-petitt/en/tags/drive-encryption/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>How to Encrypt a Drive in Linux</title>
-      <link>http://localhost:1313/ally-petitt/en/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/</link>
+      <link>https://ally-petitt.github.io:443/ally-petitt/en/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/</link>
       <pubDate>Fri, 05 May 2023 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/ally-petitt/en/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/</guid>
+      <guid>https://ally-petitt.github.io:443/ally-petitt/en/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/</guid>
       <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;Hey everyone, this is a pretty quick article on LUKS drive encryption on Linux with the &lt;code&gt;cryptsetup&lt;/code&gt; library. By following the steps outlined here, you will be able to encrypt a drive, decrypt it, and mount it. This was done in a Kali Linux VM and commands may vary for other distributions.&lt;/p&gt;
 &lt;p&gt;Disclaimer: This is not an area that I have much experience in so if details are inaccurate, I apologize in advance.&lt;/p&gt;

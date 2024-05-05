@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Firmware on Ally Petitt</title>
-    <link>http://localhost:1313/ally-petitt/en/tags/firmware/</link>
+    <link>https://ally-petitt.github.io:443/ally-petitt/en/tags/firmware/</link>
     <description>Recent content in Firmware on Ally Petitt</description>
     <generator>Hugo -- 0.125.4</generator>
     <language>en</language>
     <lastBuildDate>Sat, 05 Aug 2023 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/ally-petitt/en/tags/firmware/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ally-petitt.github.io:443/ally-petitt/en/tags/firmware/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Beyond the Screen: The Hidden World of Firmware Security</title>
-      <link>http://localhost:1313/ally-petitt/en/posts/2023-08-05_beyond-the-screen--the-hidden-world-of-firmware-security-87b0ea6a20a4/</link>
+      <link>https://ally-petitt.github.io:443/ally-petitt/en/posts/2023-08-05_beyond-the-screen--the-hidden-world-of-firmware-security-87b0ea6a20a4/</link>
       <pubDate>Sat, 05 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/ally-petitt/en/posts/2023-08-05_beyond-the-screen--the-hidden-world-of-firmware-security-87b0ea6a20a4/</guid>
+      <guid>https://ally-petitt.github.io:443/ally-petitt/en/posts/2023-08-05_beyond-the-screen--the-hidden-world-of-firmware-security-87b0ea6a20a4/</guid>
       <description>&lt;h1 id=&#34;introduction&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*UA4-sPgJH7Fhk9jbvvRafQ.jpeg&#34; alt=&#34;https://www.istockphoto.com/photo/man-using-laptop-with-update-software-computer-program-upgrade-business-technology-gm1449779856-486876929&#34;  /&gt;
 
 Introduction&lt;/h1&gt;

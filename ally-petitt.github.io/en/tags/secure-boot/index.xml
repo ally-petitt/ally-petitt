@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Secure Boot on Ally Petitt</title>
+    <link>http://localhost:1313/ally-petitt/en/tags/secure-boot/</link>
+    <description>Recent content in Secure Boot on Ally Petitt</description>
+    <generator>Hugo -- 0.125.4</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 29 Apr 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/ally-petitt/en/tags/secure-boot/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Digging into the Linux Secure Boot Process</title>
+      <link>http://localhost:1313/ally-petitt/en/posts/2023-04-29_digging-into-the-linux-secure-boot-process-9631a70b158b/</link>
+      <pubDate>Sat, 29 Apr 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ally-petitt/en/posts/2023-04-29_digging-into-the-linux-secure-boot-process-9631a70b158b/</guid>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*6T29Pwj4dMhQiPRW.png&#34; alt=&#34;&#34;  /&gt;
+
+&lt;em&gt;Linux Penguin&lt;/em&gt;&lt;/p&gt;
+&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;This article will begin with a high-level overview of the Ubuntu boot process and will continue to dig deeper into the role of SecureBoot in it when enabled. Some of the concepts I will be covering include shim, EFI variables, and MOKs. The information presented here was aggregated from the sources listed at the bottom of this article. Commands and example output will also be included to help present the topic in a more comprehensive way.&lt;/p&gt;
+&lt;p&gt;Understanding the boot process along with SecureBoot is important because without adequate understanding of the inner-workings of a Linux system, it can be very easy to accidentally brick the system when attempting to enable settings such as SecureBoot. These are low-level operations that can do a lot of damage.&lt;/p&gt;
+&lt;p&gt;I would encourage Windows users to reference &lt;a href=&#34;https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/oem-secure-boot&#34;&gt;this documentation&lt;/a&gt; for Secure Boot information relating to Windows.&lt;/p&gt;
+&lt;h2 id=&#34;typical-bootprocess&#34;&gt;Typical Boot Process&lt;/h2&gt;
+&lt;p&gt;When an Ubuntu machine boots, it goes through &lt;a href=&#34;https://wiki.ubuntu.com/Booting&#34;&gt;4 main phases&lt;/a&gt;.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;BIOS phase&lt;/strong&gt;- firmware on motherboard, typically stored as a form of read only memory (ROM), contains code to initialize the hardware components of the computer and obtain the code for the bootloader.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Bootloader phase&lt;/strong&gt;- loads the operating system into memory along with an inital ram disk filesystem (&lt;a href=&#34;https://www.kernel.org/doc/html/latest/admin-guide/initrd.html&#34;&gt;initrd&lt;/a&gt;).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Kernel phase&lt;/strong&gt;- the kernel executes the init script inside the initrd filesystem. This loads hardware drivers and mounts the root partition.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;System startup&lt;/strong&gt;- the operating system loads system daemons and services, sets up the network, mounts file systems, starts system logging, and performs other initialization tasks.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;It is common for a 512-bit partition to be present on Linux systems called the Master Boot Record (MBR). This partition contains the bootloader (GRUB, LILO, yaboot, or others) and boot records. This is one of the places that Linux can be booted from. Other locations include a bootloader from a storage device like USB flash drive or CDR or a bootloader that is transferred over the network such as with Preboot Execution Environment (&lt;a href=&#34;https://en.wikipedia.org/wiki/Preboot_Execution_Environment&#34;&gt;PXE&lt;/a&gt;).&lt;/p&gt;
+&lt;h2 id=&#34;secure-boot&#34;&gt;Secure Boot&lt;/h2&gt;
+&lt;p&gt;Secure Boot is a security standard. When the computer is turned on, the Secure Boot process begins with firmware in the motherboard, which will check the cryptographic signatures of each of the boot files. This includes UEFI firmware drivers (aka optional ROMs), EFI applications, and the operating system. Once verified, the computer boots and the firmware gives control to the operating system.&lt;/p&gt;
+&lt;h2 id=&#34;shim&#34;&gt;Shim&lt;/h2&gt;
+&lt;p&gt;When enabling Secure Boot, it is important to understand shim. In the context of SecureBoot, a shim is a pre-bootloader program that is designed to work with Secure Boot firmware. It allows for bootloaders and kernel modules to be loaded and executed if they are not included in the Secure Boot database. In Ubuntu, the shim loader is pre-installed and signed by the Microsoft certificate authority.&lt;/p&gt;
+&lt;p&gt;Secure Boot uses asymmetrical cryptography, meaning that a public and private key are used. The key pair can be generated by the user and the private key is used to sign all programs that are allowed to run, including the GRUB bootloader. The firmware on the BIOS or UEFI will use the public key to verify the checksums and signatures of programs before allowing them to execute.&lt;/p&gt;
+&lt;p&gt;You can check the signatures of your own shim loader with the &lt;code&gt;sbverify&lt;/code&gt; command that comes with the &lt;code&gt;sbsigntool&lt;/code&gt; package.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;# locate your shim binary  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ SHIM=$(sudo find /boot/efi/EFI/ -iname &amp;#34;shim*&amp;#34; 2&amp;gt;/dev/null)  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ sbverify $SHIM  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Signature verification OK
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;uefi-variables&#34;&gt;UEFI variables&lt;/h2&gt;
+&lt;p&gt;Another concept to be familiar with is the UEFI variables which are stored in firmware non-volatile RAM (NV-RAM). These variables store various data such as boot order preferences, timeout values, network settings, storage device details, and Secure Boot settings. Each UEFI variable will have its own binary file under &lt;code&gt;/sys/firmware/efi/efivars/&lt;/code&gt;. The naming convention for these files is the variable name followed by the vendor GUID. For example,&lt;code&gt;SecureBoot-8be4df61–93ca-11d2-aa0d-00e098032b8c&lt;/code&gt;may be used to store whether Secure Boot is enabled (0x01) or disabled (0x00).&lt;/p&gt;
+&lt;p&gt;You can view some of these variables by either listing the contents of &lt;code&gt;/sys/firmware/efi/efivars/&lt;/code&gt; or using the &lt;code&gt;[efivarfs](https://manpages.org/efivar)&lt;/code&gt; tool to list and read the values.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; sudo apt&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;get install efivar   
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; sudo efivar &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;p &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;n &lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;be4df61&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;93&lt;/span&gt;ca&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;11&lt;/span&gt;d2&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;aa0d&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;00e098032&lt;/span&gt;b8c&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;SecureBoot &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;⨯&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*NorYyiqugzWJsb0pbGlbmA.png&#34; alt=&#34;&#34;  /&gt;
+
+&lt;em&gt;Example output of the above command&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;In this particular example, the value of the UEFI variable &lt;code&gt;SecureBoot&lt;/code&gt; is 0x01, which indicates that it is currently enabled. Some of the other important variables for Secure Boot are the following:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;8be4df61-93ca-11d2-aa0d-00e098032b8c-PKDefault  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;8be4df61-93ca-11d2-aa0d-00e098032b8c-KEKDefault  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;8be4df61-93ca-11d2-aa0d-00e098032b8c-dbDefault  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;8be4df61-93ca-11d2-aa0d-00e098032b8c-dbxDefault
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;These values pertain to the key databases which are used to determine whether or not a module is safe to load.&lt;/p&gt;
+&lt;h2 id=&#34;secure-boot-databases&#34;&gt;Secure Boot Databases&lt;/h2&gt;
+&lt;p&gt;Secure Boot utilizes 4 key databases. You can read more about them in the &lt;a href=&#34;https://uefi.org/sites/default/files/resources/UEFI_Spec_2_9_2021_03_18.pdf&#34;&gt;official specifications&lt;/a&gt; or see a summary here:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Allowed Signature Database (db)&lt;/strong&gt;- contains a list of cryptographic signatures that are allowed to load during the boot process.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Disallowed Signature Database (dbx)&lt;/strong&gt;- contains a list of the cryptographic signatures that are not allowed to be loaded during the boot process.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Key Enrollment Key Database (KEK)&lt;/strong&gt;- contains the key exchange keys used to authenticate other databases.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Platform Key Database (PK)&lt;/strong&gt;- contains the public key that is used to verify the signature of any bootloader or firmware that has been signed with its corresponding private key. The recommended platform key on UEFI is RSA-2048.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The key databases essentially set the rules for which signatures are allowed to be loaded and which are not. This is important in Secure Boot because it helps to verify the integrity of modules before they are executed.&lt;/p&gt;
+&lt;h2 id=&#34;machine-owner-keysmoks&#34;&gt;Machine Owner Keys (MOKs)&lt;/h2&gt;
+&lt;p&gt;Another component of the boot process is Machine Owner Keys (MOKs). MOKs are an extra database of keys that can be managed by the user. This is separate from the certificate authority key that comes shipped with shim. They give the user more control over which modules can be loaded. For example, when a user enrolls a MOK on the system, the key associated with it is added to the allowed signature database (db). This means that any binary signed with that key will be trusted by the firmware during the boot process.&lt;/p&gt;
+&lt;p&gt;These are typically located in the&lt;code&gt;/var/lib/shim-signed/mok/&lt;/code&gt; directory under the names &lt;code&gt;MOK.der&lt;/code&gt;, &lt;code&gt;MOK.pem&lt;/code&gt; or &lt;code&gt;MOK.priv&lt;/code&gt;. If you don’t have MOK keys and would like to generate them, the following commands can be used:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# mkdir -p /var/lib/shim-signed/mok/  &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# cd /var/lib/shim-signed/mok/  &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# openssl req -new -x509 -newkey rsa:2048 -keyout MOK.priv -outform DER -out MOK.der -days 36500 -subj &amp;#34;/CN=My Name/&amp;#34;  &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# openssl x509 -inform der -in MOK.der -out MOK.pem&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;By default, shim provides a management utility called MokManager that can be used to, “enroll keys, remove trusted keys, enroll binary hashes and toggle Secure Boot validation at the shim level,” as described by the &lt;a href=&#34;https://wiki.ubuntu.com/UEFI/SecureBoot&#34;&gt;Ubuntu documentation&lt;/a&gt;. Note that a password is typically required when using the MokManager to authenticate the user that is using it.&lt;/p&gt;
+&lt;p&gt;MokManager will help to properly configure the keys when key management is required. Once key management has been completed, the system will reboot to enable the key management changes. If things go well, it will continue to boot as expected without a MokManager screen.&lt;/p&gt;
+&lt;h2 id=&#34;bootloader-configurations-and-information&#34;&gt;Bootloader Configurations and Information&lt;/h2&gt;
+&lt;p&gt;You can futher investigate your Linux machine’s boot process. One way to do this is to view the &lt;code&gt;/proc/cmdline&lt;/code&gt; file. This contains the kernel boot command line arguments that were passed to the kernel during the boot process.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ cat /proc/cmdline  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;# example output  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;BOOT\_IMAGE=/boot/vmlinuz-5.11.0-16-generic root=UUID=12345678-1234-1234-1234-1234567890AB ro quiet splash
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This command will output the path to the kernel image file that is loaded by the bootloader via &lt;code&gt;BOOT_IMAGE&lt;/code&gt;. The &lt;code&gt;quiet splash&lt;/code&gt; option at the end is commonly used by the GRUB bootloader to specify to suppress verbose boot messages and display a graphical boot splash screen.&lt;/p&gt;
+&lt;p&gt;A &lt;strong&gt;kernel image&lt;/strong&gt; is a binary file of the operating system core. It contains contains the necessary code and data structures to boot the system, manage memory, handle input/output operations, and execute user programs. They can be used by the bootloader to start the OS. The name of the kernel image will typically represent its version and architecture. For instance, the kernel image &lt;code&gt;vmlinuz-5.4.0–1042-aws&lt;/code&gt; is version &lt;code&gt;5.4.0–1042&lt;/code&gt; running on AWS archtecture.&lt;/p&gt;
+&lt;p&gt;The bootloader contains its own file system drivers (initramfs) that you can view if you know the &lt;code&gt;/boot/initrd*&lt;/code&gt; file that corresponds to the kernel image in use. The easiest way to do this is with the tools from &lt;code&gt;[initramfs-tools-core](https://packages.debian.org/initramfs-tools-core &amp;quot;DebianPackage&amp;quot;)&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;## list files inside the initramfs  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ lsinitramfs /boot/initrd.img-$(uname -r)  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;.  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kernel  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kernel/x86  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;.  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;bin  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;conf  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;conf/arch.conf  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;conf/conf.d  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;conf/conf.d/resume  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-- snip --  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;## extract files from the initramfs  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ unmkinitramfs /boot/initrd.img-$(uname -r) initramfs/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This allows you to navigate the initramfs filesystem and gain a deeper understanding of how things are working as the system boots. If you extracted &lt;code&gt;initramfs&lt;/code&gt;, you’ll notice that upon looking in the directory &lt;code&gt;./initramfs&lt;/code&gt;, there are 3 folders: &lt;code&gt;early&lt;/code&gt;, &lt;code&gt;early2&lt;/code&gt;, and &lt;code&gt;main&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ ls initramfs  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;early early2 main
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In the context of initramfs, &lt;code&gt;early&lt;/code&gt; and &lt;code&gt;early2&lt;/code&gt; refer to the first and second stage of the initial RAM filesystem. During the first stage, the minimal set of drivers and utilities that are needed to initialize the hardware and mount the real root filesystem are loaded. In the second stage, &lt;code&gt;early2&lt;/code&gt;, loads additional drivers and utilities needed to fully initialize the system.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;main&lt;/code&gt; folder of initramfs contains the actual root filesystem image, as well as any additional tools or drivers that may be needed during the boot process. Once the root filesystem has been mounted, the system can proceed to load the regular set of services and daemons needed to run the operating system.&lt;/p&gt;
+&lt;h2 id=&#34;checking-signatures-manually&#34;&gt;Checking Signatures Manually&lt;/h2&gt;
+&lt;p&gt;You can check which modules are digitally signed using the &lt;code&gt;modinfo&lt;/code&gt; command where a kernel’s signature will appear as a long string of hexadecimal values separated by colons.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ modinfo example.ko  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;filename: /lib/modules/5.10.0-5-amd64/kernel/drivers/misc/example.ko  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;version: 1.0.0  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;license: GPL  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;description: Example kernel module  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;author: John Doe &amp;lt;jdoe@example.com&amp;gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;srcversion: 12AB34CD5678EF90ABCD1234  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sig\_key: A0:3B:22:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sig\_hashalgo: sha256  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;signature: 12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;Thanks for reading this overview of Secure Boot. I would encourage you to do further reading in the sources linked below because this article only scratched the surface. I hope that from this article you were able to come to appreciate the beautifully complex system of a Linux machine turning on.&lt;/p&gt;
+&lt;h1 id=&#34;sources&#34;&gt;Sources&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://wiki.ubuntu.com/UEFI/SecureBoot&#34;&gt;Ubuntu’s wiki&lt;/a&gt; on Secure Boot (detailed)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://wiki.ubuntu.com/Booting&#34;&gt;Ubuntu’s wiki on Booting Process&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.kernel.org/doc/html/latest/admin-guide/module-signing.html&#34;&gt;Linux Documentation- Kernel Module Signing&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://youtu.be/WRFnOh_pqX8&#34;&gt;Mike Danslegio Explains Secure Boot&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/User_space_and_kernel_space&#34;&gt;User Space and Kernel Space in Linux&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.kernel.org/doc/html/latest/filesystems/ramfs-rootfs-initramfs.html&#34;&gt;Kernel.org- Ramfs, rootfs, and initramfs&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://wiki.debian.org/SecureBoot&#34;&gt;SecureBoot Debian Wiki&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://itsfoss.com/check-uefi-or-bios/&#34;&gt;Check UEFI or BIOS&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.kernel.org/doc/html/latest/admin-guide/initrd.html&#34;&gt;Using the initial RAM disk (initrd)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.ubuntupit.com/linux-boot-process-explained-step-by-step-for-beginners/&#34;&gt;Linux Boot Process Explained&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Preboot_Execution_Environment&#34;&gt;Preboot Execution Environment&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://unix.stackexchange.com/questions/414799/efi-variable-entries-in-sys-firmware-efi-efivars&#34;&gt;EFI Variables- Stack Exchange&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://uefi.org/sites/default/files/resources/UEFI_Spec_2_9_2021_03_18.pdf&#34;&gt;UEFI Specification Version 2.9 (March 2021)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://wiki.debian.org/initramfs&#34;&gt;Initramfs Debian Wiki&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      <content:encoded><![CDATA[<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*6T29Pwj4dMhQiPRW.png" alt=""  />
+
+<em>Linux Penguin</em></p>
+<h1 id="introduction">Introduction</h1>
+<p>This article will begin with a high-level overview of the Ubuntu boot process and will continue to dig deeper into the role of SecureBoot in it when enabled. Some of the concepts I will be covering include shim, EFI variables, and MOKs. The information presented here was aggregated from the sources listed at the bottom of this article. Commands and example output will also be included to help present the topic in a more comprehensive way.</p>
+<p>Understanding the boot process along with SecureBoot is important because without adequate understanding of the inner-workings of a Linux system, it can be very easy to accidentally brick the system when attempting to enable settings such as SecureBoot. These are low-level operations that can do a lot of damage.</p>
+<p>I would encourage Windows users to reference <a href="https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/oem-secure-boot">this documentation</a> for Secure Boot information relating to Windows.</p>
+<h2 id="typical-bootprocess">Typical Boot Process</h2>
+<p>When an Ubuntu machine boots, it goes through <a href="https://wiki.ubuntu.com/Booting">4 main phases</a>.</p>
+<ol>
+<li><strong>BIOS phase</strong>- firmware on motherboard, typically stored as a form of read only memory (ROM), contains code to initialize the hardware components of the computer and obtain the code for the bootloader.</li>
+<li><strong>Bootloader phase</strong>- loads the operating system into memory along with an inital ram disk filesystem (<a href="https://www.kernel.org/doc/html/latest/admin-guide/initrd.html">initrd</a>).</li>
+<li><strong>Kernel phase</strong>- the kernel executes the init script inside the initrd filesystem. This loads hardware drivers and mounts the root partition.</li>
+<li><strong>System startup</strong>- the operating system loads system daemons and services, sets up the network, mounts file systems, starts system logging, and performs other initialization tasks.</li>
+</ol>
+<p>It is common for a 512-bit partition to be present on Linux systems called the Master Boot Record (MBR). This partition contains the bootloader (GRUB, LILO, yaboot, or others) and boot records. This is one of the places that Linux can be booted from. Other locations include a bootloader from a storage device like USB flash drive or CDR or a bootloader that is transferred over the network such as with Preboot Execution Environment (<a href="https://en.wikipedia.org/wiki/Preboot_Execution_Environment">PXE</a>).</p>
+<h2 id="secure-boot">Secure Boot</h2>
+<p>Secure Boot is a security standard. When the computer is turned on, the Secure Boot process begins with firmware in the motherboard, which will check the cryptographic signatures of each of the boot files. This includes UEFI firmware drivers (aka optional ROMs), EFI applications, and the operating system. Once verified, the computer boots and the firmware gives control to the operating system.</p>
+<h2 id="shim">Shim</h2>
+<p>When enabling Secure Boot, it is important to understand shim. In the context of SecureBoot, a shim is a pre-bootloader program that is designed to work with Secure Boot firmware. It allows for bootloaders and kernel modules to be loaded and executed if they are not included in the Secure Boot database. In Ubuntu, the shim loader is pre-installed and signed by the Microsoft certificate authority.</p>
+<p>Secure Boot uses asymmetrical cryptography, meaning that a public and private key are used. The key pair can be generated by the user and the private key is used to sign all programs that are allowed to run, including the GRUB bootloader. The firmware on the BIOS or UEFI will use the public key to verify the checksums and signatures of programs before allowing them to execute.</p>
+<p>You can check the signatures of your own shim loader with the <code>sbverify</code> command that comes with the <code>sbsigntool</code> package.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span># locate your shim binary  
+</span></span><span style="display:flex;"><span>$ SHIM=$(sudo find /boot/efi/EFI/ -iname &#34;shim*&#34; 2&gt;/dev/null)  
+</span></span><span style="display:flex;"><span>$ sbverify $SHIM  
+</span></span><span style="display:flex;"><span>Signature verification OK
+</span></span></code></pre></div><h2 id="uefi-variables">UEFI variables</h2>
+<p>Another concept to be familiar with is the UEFI variables which are stored in firmware non-volatile RAM (NV-RAM). These variables store various data such as boot order preferences, timeout values, network settings, storage device details, and Secure Boot settings. Each UEFI variable will have its own binary file under <code>/sys/firmware/efi/efivars/</code>. The naming convention for these files is the variable name followed by the vendor GUID. For example,<code>SecureBoot-8be4df61–93ca-11d2-aa0d-00e098032b8c</code>may be used to store whether Secure Boot is enabled (0x01) or disabled (0x00).</p>
+<p>You can view some of these variables by either listing the contents of <code>/sys/firmware/efi/efivars/</code> or using the <code>[efivarfs](https://manpages.org/efivar)</code> tool to list and read the values.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#f92672">$</span> sudo apt<span style="color:#f92672">-</span>get install efivar   
+</span></span><span style="display:flex;"><span><span style="color:#f92672">$</span> sudo efivar <span style="color:#f92672">-</span>p <span style="color:#f92672">-</span>n <span style="color:#ae81ff">8</span>be4df61<span style="color:#f92672">-</span><span style="color:#ae81ff">93</span>ca<span style="color:#f92672">-</span><span style="color:#ae81ff">11</span>d2<span style="color:#f92672">-</span>aa0d<span style="color:#f92672">-</span><span style="color:#ae81ff">00e098032</span>b8c<span style="color:#f92672">-</span>SecureBoot <span style="color:#ae81ff">1</span> <span style="color:#960050;background-color:#1e0010">⨯</span>
+</span></span></code></pre></div><p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*NorYyiqugzWJsb0pbGlbmA.png" alt=""  />
+
+<em>Example output of the above command</em></p>
+<p>In this particular example, the value of the UEFI variable <code>SecureBoot</code> is 0x01, which indicates that it is currently enabled. Some of the other important variables for Secure Boot are the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>8be4df61-93ca-11d2-aa0d-00e098032b8c-PKDefault  
+</span></span><span style="display:flex;"><span>8be4df61-93ca-11d2-aa0d-00e098032b8c-KEKDefault  
+</span></span><span style="display:flex;"><span>8be4df61-93ca-11d2-aa0d-00e098032b8c-dbDefault  
+</span></span><span style="display:flex;"><span>8be4df61-93ca-11d2-aa0d-00e098032b8c-dbxDefault
+</span></span></code></pre></div><p>These values pertain to the key databases which are used to determine whether or not a module is safe to load.</p>
+<h2 id="secure-boot-databases">Secure Boot Databases</h2>
+<p>Secure Boot utilizes 4 key databases. You can read more about them in the <a href="https://uefi.org/sites/default/files/resources/UEFI_Spec_2_9_2021_03_18.pdf">official specifications</a> or see a summary here:</p>
+<ul>
+<li><strong>Allowed Signature Database (db)</strong>- contains a list of cryptographic signatures that are allowed to load during the boot process.</li>
+<li><strong>Disallowed Signature Database (dbx)</strong>- contains a list of the cryptographic signatures that are not allowed to be loaded during the boot process.</li>
+<li><strong>Key Enrollment Key Database (KEK)</strong>- contains the key exchange keys used to authenticate other databases.</li>
+<li><strong>Platform Key Database (PK)</strong>- contains the public key that is used to verify the signature of any bootloader or firmware that has been signed with its corresponding private key. The recommended platform key on UEFI is RSA-2048.</li>
+</ul>
+<p>The key databases essentially set the rules for which signatures are allowed to be loaded and which are not. This is important in Secure Boot because it helps to verify the integrity of modules before they are executed.</p>
+<h2 id="machine-owner-keysmoks">Machine Owner Keys (MOKs)</h2>
+<p>Another component of the boot process is Machine Owner Keys (MOKs). MOKs are an extra database of keys that can be managed by the user. This is separate from the certificate authority key that comes shipped with shim. They give the user more control over which modules can be loaded. For example, when a user enrolls a MOK on the system, the key associated with it is added to the allowed signature database (db). This means that any binary signed with that key will be trusted by the firmware during the boot process.</p>
+<p>These are typically located in the<code>/var/lib/shim-signed/mok/</code> directory under the names <code>MOK.der</code>, <code>MOK.pem</code> or <code>MOK.priv</code>. If you don’t have MOK keys and would like to generate them, the following commands can be used:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#75715e"># mkdir -p /var/lib/shim-signed/mok/  </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># cd /var/lib/shim-signed/mok/  </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># openssl req -new -x509 -newkey rsa:2048 -keyout MOK.priv -outform DER -out MOK.der -days 36500 -subj &#34;/CN=My Name/&#34;  </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># openssl x509 -inform der -in MOK.der -out MOK.pem</span>
+</span></span></code></pre></div><p>By default, shim provides a management utility called MokManager that can be used to, “enroll keys, remove trusted keys, enroll binary hashes and toggle Secure Boot validation at the shim level,” as described by the <a href="https://wiki.ubuntu.com/UEFI/SecureBoot">Ubuntu documentation</a>. Note that a password is typically required when using the MokManager to authenticate the user that is using it.</p>
+<p>MokManager will help to properly configure the keys when key management is required. Once key management has been completed, the system will reboot to enable the key management changes. If things go well, it will continue to boot as expected without a MokManager screen.</p>
+<h2 id="bootloader-configurations-and-information">Bootloader Configurations and Information</h2>
+<p>You can futher investigate your Linux machine’s boot process. One way to do this is to view the <code>/proc/cmdline</code> file. This contains the kernel boot command line arguments that were passed to the kernel during the boot process.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>$ cat /proc/cmdline  
+</span></span><span style="display:flex;"><span># example output  
+</span></span><span style="display:flex;"><span>BOOT\_IMAGE=/boot/vmlinuz-5.11.0-16-generic root=UUID=12345678-1234-1234-1234-1234567890AB ro quiet splash
+</span></span></code></pre></div><p>This command will output the path to the kernel image file that is loaded by the bootloader via <code>BOOT_IMAGE</code>. The <code>quiet splash</code> option at the end is commonly used by the GRUB bootloader to specify to suppress verbose boot messages and display a graphical boot splash screen.</p>
+<p>A <strong>kernel image</strong> is a binary file of the operating system core. It contains contains the necessary code and data structures to boot the system, manage memory, handle input/output operations, and execute user programs. They can be used by the bootloader to start the OS. The name of the kernel image will typically represent its version and architecture. For instance, the kernel image <code>vmlinuz-5.4.0–1042-aws</code> is version <code>5.4.0–1042</code> running on AWS archtecture.</p>
+<p>The bootloader contains its own file system drivers (initramfs) that you can view if you know the <code>/boot/initrd*</code> file that corresponds to the kernel image in use. The easiest way to do this is with the tools from <code>[initramfs-tools-core](https://packages.debian.org/initramfs-tools-core &quot;DebianPackage&quot;)</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>## list files inside the initramfs  
+</span></span><span style="display:flex;"><span>$ lsinitramfs /boot/initrd.img-$(uname -r)  
+</span></span><span style="display:flex;"><span>.  
+</span></span><span style="display:flex;"><span>kernel  
+</span></span><span style="display:flex;"><span>kernel/x86  
+</span></span><span style="display:flex;"><span>.  
+</span></span><span style="display:flex;"><span>bin  
+</span></span><span style="display:flex;"><span>conf  
+</span></span><span style="display:flex;"><span>conf/arch.conf  
+</span></span><span style="display:flex;"><span>conf/conf.d  
+</span></span><span style="display:flex;"><span>conf/conf.d/resume  
+</span></span><span style="display:flex;"><span>-- snip --  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>## extract files from the initramfs  
+</span></span><span style="display:flex;"><span>$ unmkinitramfs /boot/initrd.img-$(uname -r) initramfs/
+</span></span></code></pre></div><p>This allows you to navigate the initramfs filesystem and gain a deeper understanding of how things are working as the system boots. If you extracted <code>initramfs</code>, you’ll notice that upon looking in the directory <code>./initramfs</code>, there are 3 folders: <code>early</code>, <code>early2</code>, and <code>main</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>$ ls initramfs  
+</span></span><span style="display:flex;"><span>early early2 main
+</span></span></code></pre></div><p>In the context of initramfs, <code>early</code> and <code>early2</code> refer to the first and second stage of the initial RAM filesystem. During the first stage, the minimal set of drivers and utilities that are needed to initialize the hardware and mount the real root filesystem are loaded. In the second stage, <code>early2</code>, loads additional drivers and utilities needed to fully initialize the system.</p>
+<p>The <code>main</code> folder of initramfs contains the actual root filesystem image, as well as any additional tools or drivers that may be needed during the boot process. Once the root filesystem has been mounted, the system can proceed to load the regular set of services and daemons needed to run the operating system.</p>
+<h2 id="checking-signatures-manually">Checking Signatures Manually</h2>
+<p>You can check which modules are digitally signed using the <code>modinfo</code> command where a kernel’s signature will appear as a long string of hexadecimal values separated by colons.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>$ modinfo example.ko  
+</span></span><span style="display:flex;"><span>filename: /lib/modules/5.10.0-5-amd64/kernel/drivers/misc/example.ko  
+</span></span><span style="display:flex;"><span>version: 1.0.0  
+</span></span><span style="display:flex;"><span>license: GPL  
+</span></span><span style="display:flex;"><span>description: Example kernel module  
+</span></span><span style="display:flex;"><span>author: John Doe &lt;jdoe@example.com&gt;  
+</span></span><span style="display:flex;"><span>srcversion: 12AB34CD5678EF90ABCD1234  
+</span></span><span style="display:flex;"><span>sig\_key: A0:3B:22:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF  
+</span></span><span style="display:flex;"><span>sig\_hashalgo: sha256  
+</span></span><span style="display:flex;"><span>signature: 12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF
+</span></span></code></pre></div><h1 id="conclusion">Conclusion</h1>
+<p>Thanks for reading this overview of Secure Boot. I would encourage you to do further reading in the sources linked below because this article only scratched the surface. I hope that from this article you were able to come to appreciate the beautifully complex system of a Linux machine turning on.</p>
+<h1 id="sources">Sources</h1>
+<ul>
+<li><a href="https://wiki.ubuntu.com/UEFI/SecureBoot">Ubuntu’s wiki</a> on Secure Boot (detailed)</li>
+<li><a href="https://wiki.ubuntu.com/Booting">Ubuntu’s wiki on Booting Process</a></li>
+<li><a href="https://www.kernel.org/doc/html/latest/admin-guide/module-signing.html">Linux Documentation- Kernel Module Signing</a></li>
+<li><a href="https://youtu.be/WRFnOh_pqX8">Mike Danslegio Explains Secure Boot</a></li>
+<li><a href="https://en.wikipedia.org/wiki/User_space_and_kernel_space">User Space and Kernel Space in Linux</a></li>
+<li><a href="https://www.kernel.org/doc/html/latest/filesystems/ramfs-rootfs-initramfs.html">Kernel.org- Ramfs, rootfs, and initramfs</a></li>
+<li><a href="https://wiki.debian.org/SecureBoot">SecureBoot Debian Wiki</a></li>
+<li><a href="https://itsfoss.com/check-uefi-or-bios/">Check UEFI or BIOS</a></li>
+<li><a href="https://www.kernel.org/doc/html/latest/admin-guide/initrd.html">Using the initial RAM disk (initrd)</a></li>
+<li><a href="https://www.ubuntupit.com/linux-boot-process-explained-step-by-step-for-beginners/">Linux Boot Process Explained</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Preboot_Execution_Environment">Preboot Execution Environment</a></li>
+<li><a href="https://unix.stackexchange.com/questions/414799/efi-variable-entries-in-sys-firmware-efi-efivars">EFI Variables- Stack Exchange</a></li>
+<li><a href="https://uefi.org/sites/default/files/resources/UEFI_Spec_2_9_2021_03_18.pdf">UEFI Specification Version 2.9 (March 2021)</a></li>
+<li><a href="https://wiki.debian.org/initramfs">Initramfs Debian Wiki</a></li>
+</ul>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

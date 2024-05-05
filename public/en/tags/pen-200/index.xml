@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>PEN-200 on Ally Petitt</title>
-    <link>http://localhost:1313/ally-petitt/en/tags/pen-200/</link>
+    <link>https://ally-petitt.github.io:443/ally-petitt/en/tags/pen-200/</link>
     <description>Recent content in PEN-200 on Ally Petitt</description>
     <generator>Hugo -- 0.125.4</generator>
     <language>en</language>
     <lastBuildDate>Wed, 02 Nov 2022 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/ally-petitt/en/tags/pen-200/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ally-petitt.github.io:443/ally-petitt/en/tags/pen-200/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>What the Pen-200 Has Taught Me About Pentesting Methodology</title>
-      <link>http://localhost:1313/ally-petitt/en/posts/2022-11-02_what-the-pen-200-has-taught-me-about-pentesting-methodology-1fd67760be5c/</link>
+      <link>https://ally-petitt.github.io:443/ally-petitt/en/posts/2022-11-02_what-the-pen-200-has-taught-me-about-pentesting-methodology-1fd67760be5c/</link>
       <pubDate>Wed, 02 Nov 2022 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/ally-petitt/en/posts/2022-11-02_what-the-pen-200-has-taught-me-about-pentesting-methodology-1fd67760be5c/</guid>
+      <guid>https://ally-petitt.github.io:443/ally-petitt/en/posts/2022-11-02_what-the-pen-200-has-taught-me-about-pentesting-methodology-1fd67760be5c/</guid>
       <description>&lt;p&gt;The Pen-200 is the prerequisite course for the OSCP exam. As such, the writeups for the labs are incredibly difficult to find. As someone who has relied heavily on the accessibility of HTB walkthroughs, I’ve never been in an environment where I wasn’t one Google search away from figuring out the next step in solving a box. Needless to say, 0xdf couldn’t help me much with the Pen-200 labs.&lt;/p&gt;
 &lt;p&gt;The Pen-200 labs were a struggle not because I was incompetent, but because I didn’t have enough practice reaching dead ends. I didn’t spend enough time in rabbit holes, therefore I wouldn’t realize when I was in one. I didn’t know how to search for details that I might have missed on my first look. When trying to solve a box, I learned that sometimes the vulnerability could be found just by Googling a word that I was not entirely familiar with on the&lt;code&gt;nmap&lt;/code&gt; scan.&lt;/p&gt;
 &lt;p&gt;My journey began with referencing writeups on HTB, but when I no longer could, I learned how to use cheatsheets on the internet. Some of my most notable mentions are &lt;a href=&#34;https://book.hacktricks.xyz/welcome/readme&#34;&gt;HackTricks&lt;/a&gt; and &lt;a href=&#34;https://kashz.gitbook.io/kashz-jewels/&#34;&gt;Kashz Jewels&lt;/a&gt;. When I found an open port, I would ensure that I went through every enumeration step that I found on these cheat sheets. It was still a slight crutch, but it did allow me to develop methodologies that I wasn’t getting by relying solely on writeups.&lt;/p&gt;
