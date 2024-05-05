@@ -84,7 +84,7 @@ params:
       url: "https://www.linkedin.com/in/ally-petitt/"
     - name: rss
       title: View RSS Feed
-      url: "https://ally-petitt.github.io/ally-petitt/index.xml"
+      url: "https://ally-petitt.github.io/en/ally-petitt/index.xml"
 
   profileMode:
     enabled: false
