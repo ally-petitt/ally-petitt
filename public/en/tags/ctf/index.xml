@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>CTF on Ally Petitt</title>
-    <link>https://ally-petitt.github.io/ally-petitt/en/en/tags/ctf/</link>
+    <link>https://ally-petitt.github.io:443/en/tags/ctf/</link>
     <description>Recent content in CTF on Ally Petitt</description>
     <generator>Hugo -- 0.125.4</generator>
     <language>en</language>
     <lastBuildDate>Sat, 13 May 2023 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://ally-petitt.github.io/ally-petitt/en/en/tags/ctf/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ally-petitt.github.io:443/en/tags/ctf/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>5 Ways I Found Your Deleted Files</title>
-      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</link>
+      <link>https://ally-petitt.github.io:443/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</link>
       <pubDate>Sat, 13 May 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</guid>
+      <guid>https://ally-petitt.github.io:443/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</guid>
       <description>&lt;h2 id=&#34;computer-forensics-for-filerecovery&#34;&gt;Computer Forensics for File Recovery&lt;/h2&gt;
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*MnBiAcwiwaFGOOAe.jpg&#34; alt=&#34;&#34;  /&gt;
 
@@ -444,9 +444,9 @@ Conclusion</h1>
     </item>
     <item>
       <title>Windows Remoting: Difference between psexec, wmiexec, atexec, *exec</title>
-      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2022-12-09_windows-remoting--difference-between-psexec--wmiexec--atexec---exec-bf7d1edb5986/</link>
+      <link>https://ally-petitt.github.io:443/en/posts/2022-12-09_windows-remoting--difference-between-psexec--wmiexec--atexec---exec-bf7d1edb5986/</link>
       <pubDate>Fri, 09 Dec 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2022-12-09_windows-remoting--difference-between-psexec--wmiexec--atexec---exec-bf7d1edb5986/</guid>
+      <guid>https://ally-petitt.github.io:443/en/posts/2022-12-09_windows-remoting--difference-between-psexec--wmiexec--atexec---exec-bf7d1edb5986/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*2pekupqLLWtBkgpl&#34; alt=&#34;&#34;  /&gt;
 
 &lt;em&gt;&lt;a href=&#34;https://images.pexels.com/photos/3760778/pexels-photo-3760778.jpeg?auto=compress&amp;amp;cs=tinysrgb&amp;amp;w=1260&amp;amp;h=750&amp;amp;dpr=1&#34;&gt;https://images.pexels.com/photos/3760778/pexels-photo-3760778.jpeg?auto=compress&amp;amp;cs=tinysrgb&amp;amp;w=1260&amp;amp;h=750&amp;amp;dpr=1&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
@@ -610,9 +610,9 @@ Conclusion</h1>
     </item>
     <item>
       <title>Mustacchio Walkthrough | Try Hack Me | Ally Petitt</title>
-      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2022-02-18_mustacchio-walkthrough---try-hack-me---ally-petitt-6295dfbbfb1b/</link>
+      <link>https://ally-petitt.github.io:443/en/posts/2022-02-18_mustacchio-walkthrough---try-hack-me---ally-petitt-6295dfbbfb1b/</link>
       <pubDate>Fri, 18 Feb 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2022-02-18_mustacchio-walkthrough---try-hack-me---ally-petitt-6295dfbbfb1b/</guid>
+      <guid>https://ally-petitt.github.io:443/en/posts/2022-02-18_mustacchio-walkthrough---try-hack-me---ally-petitt-6295dfbbfb1b/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*F19asfqgh7o-jFDVwsTizA.png&#34; alt=&#34;&#34;  /&gt;
 &lt;/p&gt;
 &lt;h1 id=&#34;introduction&#34;&gt;&lt;strong&gt;Introduction&lt;/strong&gt;&lt;/h1&gt;

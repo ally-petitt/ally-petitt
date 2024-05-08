@@ -1,3 +1,3 @@
 User-agent: *
 Disallow:
-Sitemap: https://ally-petitt.github.io/ally-petitt/en/sitemap.xml
+Sitemap: https://ally-petitt.github.io:443/sitemap.xml
