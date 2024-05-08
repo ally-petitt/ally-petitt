@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/ally-petitt/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=ally-petitt/livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>How I Found 3 CVEs in 2 Days | Ally Petitt</title>
+<meta name="keywords" content="CVE, Security Research, Writeup, GNU">
+<meta name="description" content="Author: Ally Petitt
+Introduction Christmas break is notoriously refreshing for high schoolers like myself, however, unlike most high school students, I got to spend mine doing the most fascinating work in the world: security research.
+I had previously used Savannah, a GNU bug tracker, to submit a bug report, so when I noticed that the underlying technology, Savane, was open source, I knew I had to put it on my list of research projects.">
+<meta name="author" content="">
+<link rel="canonical" href="https://ally-petitt.github.io/ally-petitt/posts/2024-03-21_how-i-found-3-cves-in-2-days-8a135eb924d3/">
+<link crossorigin="anonymous" href="/ally-petitt/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://ally-petitt.github.io/ally-petitt/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://ally-petitt.github.io/ally-petitt/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://ally-petitt.github.io/ally-petitt/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://ally-petitt.github.io/ally-petitt/apple-touch-icon.png">
+<link rel="mask-icon" href="https://ally-petitt.github.io/ally-petitt/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://ally-petitt.github.io/ally-petitt/posts/2024-03-21_how-i-found-3-cves-in-2-days-8a135eb924d3/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://ally-petitt.github.io/ally-petitt/" accesskey="h" title="Ally Petitt (Alt + H)">Ally Petitt</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      How I Found 3 CVEs in 2 Days
+    </h1>
+    <div class="post-meta"><span title='2024-03-21 00:00:00 +0000 UTC'>March 21, 2024</span>
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#introduction" aria-label="Introduction">Introduction</a></li>
+                <li>
+                    <a href="#methodology" aria-label="Methodology">Methodology</a></li>
+                <li>
+                    <a href="#account-management" aria-label="Account Management">Account Management</a><ul>
+                        
+                <li>
+                    <a href="#cve-202427631csrf-cwe-352" aria-label="CVE-2024–27631 — CSRF (CWE-352)">CVE-2024–27631 — CSRF (CWE-352)</a></li>
+                <li>
+                    <a href="#cve-202427632bad-seed-cwe-335" aria-label="CVE-2024–27632 — Bad Seed (CWE-335)">CVE-2024–27632 — Bad Seed (CWE-335)</a></li></ul>
+                </li>
+                <li>
+                    <a href="#group-management-functionalities" aria-label="Group Management Functionalities">Group Management Functionalities</a><ul>
+                        
+                <li>
+                    <a href="#cve-202427630idor-cwe-639" aria-label="CVE-2024–27630 — IDOR (CWE-639)">CVE-2024–27630 — IDOR (CWE-639)</a></li>
+                <li>
+                    <a href="#thanks" aria-label="Thanks">Thanks</a></li></ul>
+                </li>
+                <li>
+                    <a href="#conclusion" aria-label="Conclusion">Conclusion</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*wGuRqNuBuFV5u69n.png" alt=""  />
+
+Author: Ally Petitt</p>
+<h1 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h1>
+<p>Christmas break is notoriously refreshing for high schoolers like myself, however, unlike most high school students, I got to spend mine doing the most fascinating work in the world: security research.</p>
+<p>I had previously used Savannah, a GNU bug tracker, to submit a bug report, so when I noticed that the underlying technology, <a href="https://git.savannah.nongnu.org/cgit/administration/savane.git/">Savane</a>, was open source, I knew I had to put it on my list of research projects. To my surprise, I was able to discover 3 CVEs within the span of 2 days including insecure access control, cross-site request forgery (CSRF), and a bad seed vulnerability in Savane v3.12 and prior versions.</p>
+<p>Testing Environment:</p>
+<ul>
+<li>Firefox v103.0 (64-bit)</li>
+<li>Debian 12, stable-slim Docker container</li>
+<li>PHP development server</li>
+</ul>
+<p>Note that these aren’t all-encompassing results as my short audit of this application was only over the course of a few days.</p>
+<h1 id="methodology">Methodology<a hidden class="anchor" aria-hidden="true" href="#methodology">#</a></h1>
+<p>This audit consisted of both dynamic and static analysis. The majority of my source code analysis methodology can be found <a href="https://medium.com/@allypetitt/how-to-find-more-vulnerabilities-source-code-auditing-explained-2c8a10896374">here</a>. For the sake of brevity, I will only include relevant details for this article. My first step was configuring a local development environment via a <a href="https://gist.github.com/ally-petitt/3490c857b4c6eeea860c6e094ce47ce3">Dockerfile I</a> created.</p>
+<p>With a running instance of Savane, I shifted my focus to source code analysis, pinpointing files of particular interest for security issues including <code>utils.php</code>, <code>upload.php</code>, and <code>users.php</code>. While there were interesting leads, many of them did not pan out how I had hoped, so I began to parse through functionalities with more potential for impact. This led me to authenticated functionalities since any user can create an account and expands the attack surface drastically.</p>
+<h1 id="account-management">Account Management<a hidden class="anchor" aria-hidden="true" href="#account-management">#</a></h1>
+<p>I began by assessing account management functionalities such as updating passwords and changing email addresses for Cross-Site Request Forgery (CSRF) or access control vulnerabilities since they happened to be at the forefront of my mind at the time of this audit.</p>
+<p>The majority of the critical account management functionalities appeared to be protected by a<code>form_id</code> parameter, which contained a randomized string in each request. In effect, <code>form_id</code> acted as a CSRF token.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*Q3BI1WCSQj8kJmb7iCEh4g.png" alt=""  />
+
+Additionally, attempting to change the password required the previous user password to be known, which provided no advantage over attempting to brute-force their password to begin with.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*IcA_HpVxf3LP9FlM7miVUw.png" alt=""  />
+
+<em>http://172.17.0.2:7890/my/admin/change.php?item=password</em></p>
+<p>With these precautions in place, it was evident that further investigation was required.</p>
+<h2 id="cve-202427631csrf-cwe-352">CVE-2024–27631 — CSRF (CWE-<strong>352)</strong><a hidden class="anchor" aria-hidden="true" href="#cve-202427631csrf-cwe-352">#</a></h2>
+<p>I suspected that there may be additional critical vulnerabilities without CSRF protection. Specifically, I began to look inside of admin folders in the source code, eventually finding <code>siteadmin/usergroup.php</code>, which enabled superusers to edit of any user’s profile.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*_stvfUY2HtkR9wda-TgZQQ.png" alt=""  />
+
+<em>Example of /siteadmin/usergroup.php to edit the account of user 60079</em></p>
+<p>This page contained three unprotected functionalities of interest. The first was a function that can be used to grant a user admin flags, leading to privilege escalation without account takeover.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*TDquE7S3UnTHXilR4TYrVA.png" alt=""  />
+
+<em>frontend/php/siteadmin/usergroup.php</em></p>
+<p>The second and third functionalities could be leveraged for account takeover by either changing the email address of a user’s account:</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*HvHtu0HaoxRLzojL3vjfPQ.png" alt=""  />
+
+<em>frontend/php/siteadmin/usergroup.php</em></p>
+<p>Or, changing the password of any user’s account.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*-N45bZ7BrPdguKZWsQs0cw.png" alt=""  />
+
+<em>frontend/php/siteadmin/user_changepw.php</em></p>
+<p>Given these promising leads, I began to develop a Proof-of-Concept (PoC) to demonstrate that the vulnerability existed in practice. (I have found that with static analysis, sometimes a detail in the code can be overlooked that actually mitigates the vulnerability.) The following is what I came up with and successfully tested:</p>
+<pre tabindex="0"><code>&lt;!-- The efficacy of this payload is browser-dependent --&gt;  
+&lt;form id=&#34;autosubmit&#34; action=&#34;http://&lt;savane\_instance&gt;/siteadmin/user\_changepw.php&#34; method=&#34;POST&#34;&gt;  
+  
+ &lt;input name=&#34;form\_pw&#34; type=&#34;hidden&#34; value=&#34;Password1!&#34; /&gt;  
+ &lt;input name=&#34;form\_pw2&#34; type=&#34;hidden&#34; value=&#34;Password1!&#34; /&gt;  
+ &lt;input name=&#34;user\_id&#34; type=&#34;hidden&#34; value=&#34;&lt;user\_id&gt;&#34; /&gt;  
+ &lt;input name=&#34;update&#34; type=&#34;hidden&#34; value=&#34;Update&#34; /&gt;  
+ &lt;input type=&#34;submit&#34; value=&#34;Submit Request&#34; /&gt;  
+&lt;/form&gt;  
+  
+&lt;script&gt;  
+ document.getElementById(&#34;autosubmit&#34;).submit();  
+&lt;/script&gt;
+</code></pre><p>Thus, I discovered CVE-2024–27631! A patch was implemented in <a href="https://git.savannah.nongnu.org/cgit/administration/savane.git/commit/?h=i18n&amp;id=d3962d3feb75467489b869204db98e2dffaaaf09">this commit</a>.</p>
+<h2 id="cve-202427632bad-seed-cwe-335">CVE-2024–27632 — Bad Seed (CWE-335)<a hidden class="anchor" aria-hidden="true" href="#cve-202427632bad-seed-cwe-335">#</a></h2>
+<p>While tracing CSRF-related functionalities in the code, I came across the logic for generating and serving the CSRF tokens, or form IDs. The execution flow is as follows:</p>
+<ol>
+<li>Protected PHP pages contain a call to <code>form_header()</code>.</li>
+<li>The <code>form_header()</code> function seeds the current Unix timestamp.</li>
+<li>A random number is chosen and hashed to create <code>form_id</code>.</li>
+<li>The form ID is added as a hidden element in the form on the protected page.</li>
+</ol>
+<p>The definition of <code>form_header()</code> can be seen in the image below.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*Zs5bxl01fMcxsXTfZd4mzw.png" alt=""  />
+
+<em>frontend/php/include/form.php</em></p>
+<p>I was particularly interested in the mechanism behind seeding the Pseudo-Random Number Generator (<a href="https://en.wikipedia.org/wiki/Pseudorandom_number_generator">PRNG</a>), which occured in <code>utils_srand()</code>.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*SIBvRLsqwT0QVwFI1ZczrA.png" alt=""  />
+
+<em>frontend/php/include/utils.php</em></p>
+<p>It was apparent that <code>[mt\_srand()](https://www.php.net/manual/en/function.mt-srand.php)</code> was used to seed the <a href="https://www.php.net/manual/en/function.microtime.php">Unix timestamp</a> (learn more about PRNGs <a href="https://www.geeksforgeeks.org/pseudo-random-number-generator-prng/">here</a>). Since this function is called when a protected page is loaded, the seed is renewed with the current time upon visiting the page. If the timestamp that a victim visited a page is known, can be approximated, or can be otherwise triggered, it is possible to independently generate the exact same form ID token, passing the CSRF check! This would allow for CSRF attacks on arbitrary form submissions, leading to potential account takeover.</p>
+<p>Savane v3.13 contains a patch implemented in this <a href="https://git.savannah.nongnu.org/cgit/administration/savane.git/commit/?h=i18n&amp;id=dee5195d18f9ab16c860e8114819083673f66b95">commit</a>.</p>
+<h1 id="group-management-functionalities">Group Management Functionalities<a hidden class="anchor" aria-hidden="true" href="#group-management-functionalities">#</a></h1>
+<p>Another class of functionalities I began to explore was group management. I tested CRUD (Create, Read, Update, and Delete) functionalities utilized when submitting a bug report to a group. I was unable to exploit file uploads in bug reports (I may address this in a future article if enough people are interested), however, I was vigilant on access control issues when I observed the web traffic for deleting an uploaded attachment.</p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*4Pup6AnABk8L9bM8QGeGow.png" alt=""  />
+
+<em>Deleting a file attachment with ID 40225</em></p>
+<h2 id="cve-202427630idor-cwe-639">CVE-2024–27630 — IDOR (<strong>CWE-639</strong>)<a hidden class="anchor" aria-hidden="true" href="#cve-202427630idor-cwe-639">#</a></h2>
+<p>Upon submitting a bug report, uploaded files are deposited in the uploads directory (<code>/var/lib/savane/trackers_attachments</code>) with a file name equivalent to the file’s ID.</p>
+<p>Naturally, I began to investigate the process of deleting a file, a function only accessible to tracker admins. The following function is responsible for handling file deletion on attachments (<code>frontend/php/include/trackers/data.php:2417</code>):</p>
+<pre tabindex="0"><code>function trackers\_data\_delete\_file ($group\_id, $item\_id, $file\_id)  
+{  
+ global $sys\_trackers\_attachments\_dir;  
+ # Make sure the attachment belongs to the group.  
+ $res = db\_execute (&#34;  
+ SELECT bug\_id from &#34; . ARTIFACT . &#34; WHERE bug\_id = ? AND group\_id = ?&#34;,  
+ [$item\_id, $group\_id]  
+ );  
+ if (db\_numrows ($res) &lt;= 0)  
+ {  
+ # TRANSLATORS: the argument is item id (a number).  
+ $msg = sprintf (  
+ \_(&#34;Item #%s doesn&#39;t belong to project&#34;), $item\_id  
+ );  
+ fb ($msg, 1);  
+ return;  
+ }  
+  
+ $result = false;  
+ # Delete the attachment.  
+ if (unlink (&#34;$sys\_trackers\_attachments\_dir/$file\_id&#34;))   
+ $result = db\_execute (&#34;  
+ DELETE FROM trackers\_file WHERE item\_id = ? AND file\_id = ?&#34;,  
+ [$item\_id, $file\_id]  
+ );
+</code></pre><p>The user can control the <code>$item_id</code> and <code>$file_id</code> parameters through the URI. Can you spot the vulnerability? It is subtle.</p>
+<p>Note that there is input validation ensure the <code>$file_id</code> is a number. Otherwise, there would be a directory traversal vulnerability allowing for arbitrary file deletion.</p>
+<p>The function first checks if the user is part of the group corresponding to the <code>$item_id</code> and proceeds to delete the attachment before running a SQL query updating the database. The <code>$file_id</code> is not checked at all! This means that as long as the attacker is an admin of the group referenced in <code>$item_id</code>, they could delete any file.</p>
+<p>I was quite surprised to have spotted this discrepency, but very pleased. The following steps can be taken to reproduce the vulnerability:</p>
+<ol>
+<li>Have an account that is an admin of a group with a bugtracker (attacker account).</li>
+<li>With a separate user account (victim), upload a file attachment in a bug report to a group that the attacker is not an admin of. A sample of the subsequent upload directory is as follows:</li>
+</ol>
+<pre tabindex="0"><code>root@60ae93fe131f:/var/lib/savane/trackers\_attachments# ls  
+40226 40227 40230 40231
+</code></pre><ol start="3">
+<li>
+<p>Visit the homepage of the group that the attacker is an admin of. Then, visit Bugs &gt; Browse and note a valid Item ID on the leftmost column of the table. This ID will be used in the next step.</p>
+</li>
+<li>
+<p>As the attacker, make a get request to the path <code>/bugs/index.php?func=delete_file&amp;item_id=&lt;ATTACKER_ITEM_ID&gt;&amp;item_file_id=&lt;FILE_ID_TO_DELETE&gt;</code>.</p>
+</li>
+</ol>
+<ul>
+<li>In my case, this looks like <a href="http://172.17.0.2:7890/bugs/index.php?func=delete_file&amp;item_id=50697&amp;item_file_id=40231">http://172.17.0.2:7890/bugs/index.php?func=delete_file&amp;item_id=50697&amp;item_file_id=40231</a>.</li>
+</ul>
+<ol start="5">
+<li>Verify that the victim’s file (from a group the attacker doesn’t have privileges on) has been deleted.</li>
+</ol>
+<pre tabindex="0"><code>root@60ae93fe131f:/var/lib/savane/trackers\_attachments# ls  
+40226 40227 40230
+</code></pre><p>Due to the incremental file names, it is possible for an attacker to iteratively delete every file attachment on the web server! Since recently uploaded files harbor the highest file ID numbers, an attacker can upload a file, observe the ID, and delete every ID below that number as one would in an Insecure Direct Object Reference (IDOR) vulnerabillity. This vulnerability was patched <a href="https://git.savannah.nongnu.org/cgit/administration/savane.git/commit/?h=i18n&amp;id=39180aea8f38425035b4d1e73819b58007ac6e83">here</a>.</p>
+<h2 id="thanks">Thanks<a hidden class="anchor" aria-hidden="true" href="#thanks">#</a></h2>
+<p>Special thanks to Ineiev, the maintainer of Savane. He was very receptive to my responsible disclosure and helped take steps to patch it.</p>
+<h1 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h1>
+<p>Combing through Savane’s source code was one of the highlights of my Christmas break. While discovering 3 CVEs came as a surprise, I am appreciative of the educational value of this experience. I hope that you learned something from this writeup. If you have any questions or comments, feel free to reach out to me on <a href="https://www.linkedin.com/in/ally-petitt/">LinkedIn</a>!</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://ally-petitt.github.io/ally-petitt/tags/cve/">CVE</a></li>
+      <li><a href="https://ally-petitt.github.io/ally-petitt/tags/security-research/">Security Research</a></li>
+      <li><a href="https://ally-petitt.github.io/ally-petitt/tags/writeup/">Writeup</a></li>
+      <li><a href="https://ally-petitt.github.io/ally-petitt/tags/gnu/">GNU</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2024 <a href="https://ally-petitt.github.io/ally-petitt/">Ally Petitt</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

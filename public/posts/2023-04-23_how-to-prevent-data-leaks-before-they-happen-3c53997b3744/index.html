@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/ally-petitt/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=ally-petitt/livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>How to Prevent Data Leaks Before they Happen | Ally Petitt</title>
+<meta name="keywords" content="Data Loss Protection (DLP), Blue team">
+<meta name="description" content="Data Loss Prevention
+What is Data Loss Prevention? Data Loss Prevention (DLP) is a strategy for preventing data exfiltration and destruction. Examples of data include financial information, customer data, trade secrets, and other confidential information that could harm a company or its customers if exposed.
+Common causes of data loss include:
+Human error- accidental deletion of sensitive files, misconfiguring security settings, or being the victim of a social engineering attack. Insider threats- unauthorized saving and distribution of sensitive files by those with access to corporate systems.">
+<meta name="author" content="">
+<link rel="canonical" href="https://ally-petitt.github.io/ally-petitt/posts/2023-04-23_how-to-prevent-data-leaks-before-they-happen-3c53997b3744/">
+<link crossorigin="anonymous" href="/ally-petitt/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://ally-petitt.github.io/ally-petitt/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://ally-petitt.github.io/ally-petitt/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://ally-petitt.github.io/ally-petitt/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://ally-petitt.github.io/ally-petitt/apple-touch-icon.png">
+<link rel="mask-icon" href="https://ally-petitt.github.io/ally-petitt/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://ally-petitt.github.io/ally-petitt/posts/2023-04-23_how-to-prevent-data-leaks-before-they-happen-3c53997b3744/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://ally-petitt.github.io/ally-petitt/" accesskey="h" title="Ally Petitt (Alt + H)">Ally Petitt</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      How to Prevent Data Leaks Before they Happen
+    </h1>
+    <div class="post-meta"><span title='2023-04-23 00:00:00 +0000 UTC'>April 23, 2023</span>
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#steps-of-data-loss-prevention" aria-label="Steps of Data Loss Prevention">Steps of Data Loss Prevention</a></li>
+                <li>
+                    <a href="#conclusion" aria-label="Conclusion">Conclusion</a></li>
+                <li>
+                    <a href="#more-reading" aria-label="More Reading">More Reading</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>Data Loss Prevention</p>
+<h1 id="what-is-data-loss-prevention"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*65eSMdR110wv_HGg" alt=""  />
+
+What is Data Loss Prevention?</h1>
+<p>Data Loss Prevention (DLP) is a strategy for preventing data exfiltration and destruction. Examples of data include financial information, customer data, trade secrets, and other confidential information that could harm a company or its customers if exposed.</p>
+<p>Common causes of data loss include:</p>
+<ul>
+<li><strong>Human error</strong>- accidental deletion of sensitive files, misconfiguring security settings, or being the victim of a social engineering attack.</li>
+<li><strong>Insider threats</strong>- unauthorized saving and distribution of sensitive files by those with access to corporate systems.</li>
+<li><strong>Malware</strong>- programs that infect a system and steal or corrupt data.</li>
+<li><strong>Physical damage</strong>- natural disasters, hardware failures, and power outages can all result in the loss of data.</li>
+<li><strong>Theft or loss of devices</strong>- data on the device at the time of being stolen/lost may be compromised.</li>
+</ul>
+<h1 id="steps-of-data-loss-prevention">Steps of Data Loss Prevention<a hidden class="anchor" aria-hidden="true" href="#steps-of-data-loss-prevention">#</a></h1>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*3VYpuFQz25D0HYRxMrEyMg.png" alt=""  />
+
+<em><a href="https://cdn.sketchbubble.com/pub/media/catalog/product/optimized1/7/f/7f3f224484e9abfed723832a1fee08a73cdf27c9b5eb2b177a645fcc3c2c7261/data-loss-prevention-slide2.png">https://cdn.sketchbubble.com/pub/media/catalog/product/optimized1/7/f/7f3f224484e9abfed723832a1fee08a73cdf27c9b5eb2b177a645fcc3c2c7261/data-loss-prevention-slide2.png</a></em></p>
+<ol>
+<li>Data Classification</li>
+</ol>
+<hr>
+<p>Data classification falls under the broad umbrella of data governance. This is essentially the process of determining which data is considered to be sensitive so that it can be protected. It is an important prerequisite step to a successful DLP program.</p>
+<ol start="2">
+<li>Data Mapping</li>
+</ol>
+<hr>
+<p>This is the process of determining how data is transferred, where data is stored, how it is processed, and who has access to it. The goal of data mapping is to create a comprehensive inventory of an organization’s data assets.</p>
+<p>Data is often in one of two states: in transit or at rest. It is typical that an audit will be performed on all the systems and applications that contain data at rest including file servers, cloud storage, databases, email systems, and other data repositories. Once this has been completed, it is common to create a map illustrating the flow of data through an organization. This includes identifying how data is processed, transmitted, and stored, as well as who has access to it at each stage of the process. The information collected through data mapping can be used to develop DLP policies and controls to protect sensitive data.</p>
+<ol start="3">
+<li>Protect Data</li>
+</ol>
+<hr>
+<p>Data protection involves implementing controls in order to maintain the confidentiality of the information classified in step 1. Common data protection methods include:</p>
+<ul>
+<li><strong>Encryption</strong>- the robustness and scope of encryption used will be determined by the assets that it is aiming to protect and how sensitive they are.</li>
+<li><strong>Access Control</strong>- limiting user permissions, enforcing multi-factor authentication (MFA), and potentially monitoring user behavior to detect suspicious activity</li>
+<li><strong>Security Policy</strong>- social media policy, clear desk policy, acceptable use policy, and end user policy are all potential ways to enforce operational security.</li>
+<li><strong>Employee Training</strong>- employees should be trained on data handling best practices, strong password policy, and identifying social engineering schemes. Regular awareness campaigns can reinforce the importance of data security.</li>
+</ul>
+<ol start="4">
+<li>DLP Software Solutions</li>
+</ol>
+<hr>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/0*hwsT5tgv1e1AHF6S" alt=""  />
+
+<em><a href="https://innovative.land/wp-content/uploads/2020/08/Data-Loss-Prevention-DLP.jpg">https://innovative.land/wp-content/uploads/2020/08/Data-Loss-Prevention-DLP.jpg</a></em></p>
+<p>Commercial tools can be used to prevent data loss the methods mentioned previously. DLP software can be found from cloud platforms and email providers as native implementations. Commercial solutions include Symantec CloudSOC CASB, Symantec DLP, McAfee Total Protection for DLP, and Digital Guardian to name a few.</p>
+<p>As explained by CloudFlare, DLP solutions may detect sensitive data through data fingerprinting, keyword matching in files, pattern matching, file matching, and exact data matching. By comparing the unique identifiers of sensitive data, the software is able to determine whether the sensitive data is being exfiltrated and enact measures to prevent it. For example, the DLP program may block suspicious outgoing emails.</p>
+<h1 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h1>
+<p>Data loss prevention is an essential element of any organization’s cybersecurity strategy, as it helps protect sensitive data from loss or theft. By implementing a comprehensive DLP program, organizations can reduce the risk of data breaches and maintain the trust of their customers and stakeholders. However, it’s important to remember that DLP requires ongoing monitoring, evaluation, and improvement to ensure its effectiveness over time.</p>
+<h1 id="more-reading">More Reading<a hidden class="anchor" aria-hidden="true" href="#more-reading">#</a></h1>
+<ul>
+<li><a href="https://www.cloudflare.com/learning/access-management/what-is-dlp/">https://www.cloudflare.com/learning/access-management/what-is-dlp/</a></li>
+<li><a href="https://www.youtube.com/watch?v=TPU6VrBa0Fs">https://www.youtube.com/watch?v=TPU6VrBa0Fs</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Data_loss">https://en.wikipedia.org/wiki/Data_loss</a></li>
+<li><a href="https://www.secureworld.io/industry-news/data-loss-prevention-next-gen-dlp">https://www.secureworld.io/industry-news/data-loss-prevention-next-gen-dlp</a></li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://ally-petitt.github.io/ally-petitt/tags/data-loss-protection-dlp/">Data Loss Protection (DLP)</a></li>
+      <li><a href="https://ally-petitt.github.io/ally-petitt/tags/blue-team/">Blue Team</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2024 <a href="https://ally-petitt.github.io/ally-petitt/">Ally Petitt</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

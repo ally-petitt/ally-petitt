@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/ally-petitt/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=ally-petitt/livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Antivirus Evasion: What it is and How to do it | Ally Petitt</title>
+<meta name="keywords" content="Defense Evasion, Tutorial">
+<meta name="description" content="How Does Antivirus Software Actually Work? Antivirus software acts as a defense from trojans, viruses, ransomware, spyware, adware, and much more. There are 3 main ways that it detects malware: signature-based detection, heuristic-based detection, and anomaly-based detection.
+Signature-Based Detection The scanner will search for specific strings in a program and check for them in a database of known viruses. The strings are often the payload of the malicious code. If the signatures match, the activity is flagged for suspicious activity.">
+<meta name="author" content="">
+<link rel="canonical" href="https://ally-petitt.github.io/ally-petitt/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/">
+<link crossorigin="anonymous" href="/ally-petitt/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://ally-petitt.github.io/ally-petitt/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://ally-petitt.github.io/ally-petitt/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://ally-petitt.github.io/ally-petitt/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://ally-petitt.github.io/ally-petitt/apple-touch-icon.png">
+<link rel="mask-icon" href="https://ally-petitt.github.io/ally-petitt/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://ally-petitt.github.io/ally-petitt/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://ally-petitt.github.io/ally-petitt/" accesskey="h" title="Ally Petitt (Alt + H)">Ally Petitt</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Antivirus Evasion: What it is and How to do it
+    </h1>
+    <div class="post-meta"><span title='2022-05-30 00:00:00 +0000 UTC'>May 30, 2022</span>
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#how-does-antivirus-software-actuallywork" aria-label="How Does Antivirus Software Actually Work?">How Does Antivirus Software Actually Work?</a><ul>
+                        
+                <li>
+                    <a href="#on-disk-evasion" aria-label="On-Disk Evasion">On-Disk Evasion</a></li>
+                <li>
+                    <a href="#in-memory-evasion" aria-label="In-Memory Evasion">In-Memory Evasion</a></li></ul>
+                </li>
+                <li>
+                    <a href="#going-deeper" aria-label="Going Deeper">Going Deeper</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*W1qjqIKKNMK9_QYWXGQzRw.png" alt="picture of a bug"  />
+</p>
+<h1 id="how-does-antivirus-software-actuallywork">How Does Antivirus Software Actually Work?<a hidden class="anchor" aria-hidden="true" href="#how-does-antivirus-software-actuallywork">#</a></h1>
+<p>Antivirus software acts as a defense from trojans, viruses, ransomware, spyware, adware, and much more. There are 3 main ways that it detects malware: signature-based detection, heuristic-based detection, and anomaly-based detection.</p>
+<h2 id="signature-based-detection"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*ehROjARifrRnkEITjkFwMw.png" alt=""  />
+
+Signature-Based Detection</h2>
+<p>The scanner will search for specific strings in a program and check for them in a database of known viruses. The strings are often the payload of the malicious code. If the signatures match, the activity is flagged for suspicious activity. Many of these databases store over 250,000 different signatures.</p>
+<p>Downsides to this approach:</p>
+<ul>
+<li>The database only stores the values of known signatures</li>
+<li>Newer variations of malware may go undetected if their new signature is not stored in the database</li>
+<li>Viruses can be easily and quickly altered to change their signature</li>
+</ul>
+<h2 id="anomaly-based-detection"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*8jt-Qw_ai_h_GCSJV15fuQ.png" alt=""  />
+
+Anomaly-Based Detection</h2>
+<p>Instead of referencing a static database that needs to be continuously updated, this type of detection checks the running program for patterns of . This can be referred to as an expert system. Often, these detection systems will utilize a <strong>machine learning model</strong> that was trained using data from the past years of the company using the antivirus software.</p>
+<h2 id="heuristic-based-detection"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*meCStYsucAG7XXY88Lnj0w.jpeg" alt=""  />
+
+Heuristic-Based Detection</h2>
+<p>This is one of the few methods capable of detecting polymorphic viruses. Heuristic analysis may consist of multiple different methods, including static heuristic analysis. This technique deals with decompiling a program and comparing the source code to the source code of known viruses stored in a database.</p>
+<p>Additionally, heuristic analysis may include dynamic heuristics, a method of containing the program in a virtual machine to test what happens when the code is executed. The running program is monitored for suspicious activity such as overwriting files or self-replication.</p>
+<h1 id="how-to-evade-antivirus-detection"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*VY6GEFR7NyUkIPcXNT49bg.jpeg" alt=""  />
+
+How to Evade Antivirus Detection</h1>
+<h2 id="on-disk-evasion"><strong>On-Disk Evasion</strong><a hidden class="anchor" aria-hidden="true" href="#on-disk-evasion">#</a></h2>
+<p>The following are techniques used for on-disk evasion:</p>
+<ul>
+<li><strong>Obfuscation</strong>- this method involves rewriting the code to appear more confusing and harder to read.</li>
+<li><strong>Cryptography</strong>- the code will be encrypted with the decryption key stored in a stub. The program will be decrypted in memory.</li>
+<li><strong>Packing</strong>- the code is condensed into a smaller binary file which results in a different signature on the payload.</li>
+<li><strong>Encoding</strong>- the payload may be encoded as base64, hexadecimal, or other types of encodings.</li>
+</ul>
+<h2 id="in-memory-evasion">In-Memory Evasion<a hidden class="anchor" aria-hidden="true" href="#in-memory-evasion">#</a></h2>
+<p>The following is a technique used for in-memory evasion:</p>
+<ul>
+<li>Use Windows APIs to inject a payload into a running process</li>
+<li>Payload is executed in the memory of running process in a separate thread</li>
+</ul>
+<h2 id="command-line-tools"><img loading="lazy" src="https://cdn-images-1.medium.com/max/800/1*H6l629Qydy1pFxjjyoQn9A.jpeg" alt=""  />
+
+Command-Line Tools</h2>
+<p>Here is a list of tools that can help craft undetectable payloads to bypass the antivirus software:</p>
+<ul>
+<li>Veil-Evasion</li>
+<li>Shellter</li>
+<li>Invoke-Obfuscation</li>
+</ul>
+<h1 id="going-deeper">Going Deeper<a hidden class="anchor" aria-hidden="true" href="#going-deeper">#</a></h1>
+<p>Here are some resources for those who are looking for a deeper understanding of antivirus evasion.</p>
+<ul>
+<li><a href="https://youtu.be/iz1twCSJZyo">Veil-Evasion Complete Tutorial</a></li>
+<li><a href="https://dmcxblue.gitbook.io/red-team-notes-2-0/red-team-techniques/defense-evasion">Defense Evasion — Red Team Notes 2.0</a></li>
+<li><a href="https://youtu.be/V3_vc7BO9lU">Malware Analysis Bootcamp - Extracting Strings</a></li>
+<li><a href="https://youtu.be/WmJcbDfy9L4">ATT&amp;CK Deep Dive: Defense Evasion</a></li>
+<li><a href="https://www.linode.com/docs/guides/windows-red-team-defense-evasion-techniques/">Windows Red Team Defense Evasion Techniques</a></li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://ally-petitt.github.io/ally-petitt/tags/defense-evasion/">Defense Evasion</a></li>
+      <li><a href="https://ally-petitt.github.io/ally-petitt/tags/tutorial/">Tutorial</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2024 <a href="https://ally-petitt.github.io/ally-petitt/">Ally Petitt</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

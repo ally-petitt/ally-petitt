@@ -2,18 +2,94 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Posts on Ally Petitt</title>
-    <link>https://ally-petitt.github.io:443/en/posts/</link>
+    <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/</link>
     <description>Recent content in Posts on Ally Petitt</description>
     <generator>Hugo -- 0.125.4</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 03 May 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://ally-petitt.github.io:443/en/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 07 May 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://ally-petitt.github.io/ally-petitt/en/en/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How I became a hacker before I finished high school [Repost]</title>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2024-05-07_how-i-became-a-hacker-before-i-finished-high-school/</link>
+      <pubDate>Tue, 07 May 2024 00:00:00 +0000</pubDate>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2024-05-07_how-i-became-a-hacker-before-i-finished-high-school/</guid>
+      <description>&lt;p&gt;&lt;em&gt;Author&amp;rsquo;s note: This article was initially published on &lt;a href=&#34;https://readme.synack.com/how-i-became-a-hacker-before-i-finished-high-school&#34;&gt;Synack&amp;rsquo;s README&lt;/a&gt;. They have great content and I recommend that you browse their articles if you are interested cybersecurity.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://22524429.fs1.hubspotusercontent-na1.net/hubfs/22524429/victor-_qXjdWm8YEo-unsplash.jpg&#34; alt=&#34;Picture of a maze from above from Unsplash&#34;  /&gt;
+&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Editor&amp;rsquo;s note: This post from Ally Petitt describes her journey towards earning the vaunted OSCP at 16 &amp;gt; and being an active part of the Synack Red Team at 17. Check out Ally&amp;rsquo;s blog for more of her write-ups &amp;gt; on vulnerabilities she&amp;rsquo;s discovered, hacking techniques and more.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;life-before-coding&#34;&gt;Life before coding&lt;/h2&gt;
+&lt;p&gt;I was 3 years old when I first declared I was going to be a doctor, my mother told me. When I was 8, I had finally done enough chores around the house to earn $20, and I deposited the total into a college fund. I was 9 years old when I began secretly staying up past my bedtime to read the human anatomy textbook from my father’s bookshelf. When I was 10 I set my sights on getting admitted to Harvard Medical School and becoming a neurosurgeon. This was also the year that I attempted surgery on my arm with a pencil to see what the different layers of skin looked like. As expected from a fifth grader, this was done without anesthesia and, yes, it got infected. When I was 13, however, I survived a global pandemic and that all changed, setting me on a path that would ultimately see me earn my OffSec Certified Professional (OSCP) certification and get my first CVEs as an ethical hacker.&lt;/p&gt;
+&lt;p&gt;With COVID-19 came remote school, which meant the schoolwork that took approximately seven hours on campus could now be completed in 40 minutes from my own room. Without the increased time commitment of fixed class periods, I was now free to explore education on my own, without a syllabus or any restrictions.&lt;/p&gt;
+&lt;p&gt;I began to ask questions that I had never allowed myself the freedom to ask previously. Becoming a doctor is a prestigious profession. But when I researched the burnout, the relentless schedules, rigorous schooling, student debt and stress that these essential workers experience, I realized a doctor’s lifestyle would not be a good fit for me.&lt;/p&gt;
+&lt;p&gt;Doubts about a career as a doctor led to more questions. I used the internet to learn subjects that my middle school didn’t offer: economics, physics, investing, astronomy, trigonometry, neuroscience and Russian. I noticed a trend that I was drawn towards career options that included themes of learning, making connections and investigation. I considered becoming a theoretical physicist, an investigative journalist and many more professions. While enticing, there were aspects of each that made me wary of committing to them.&lt;/p&gt;
+&lt;p&gt;This brings me to December 2020, the month that I ran an experiment to test the coding ability I could attain in only 20 hours of learning. I wanted to see what I was capable of and I did not expect how humbling it would be. I recall that my first five or six hours were spent attempting to troubleshoot my Python installation. The next three were me trying to figure out why my “Hello World” program was not running in VSCode. (It turned out that I had forgotten the “.py” file extension.) By the end of the 20 hours, however, I had gotten the basics of coding down and was able to create simple projects such as mad-libs. I decided to continue for another week and completed a terminal-based tic-tac-toe game. This was a career trajectory I could see myself in.&lt;/p&gt;
+&lt;h2 id=&#34;life-after-coding-to-oscp&#34;&gt;Life after coding to OSCP&lt;/h2&gt;
+&lt;p&gt;I built a humble portfolio of coding projects and within three months landed an internship as a software engineer. Navigating this new environment with my new team was a challenge. I was tasked with writing a Java API to take input from a machine learning backend and utilize it to spin up EC2 spot instances (or their equivalent) across three different cloud providers. I took the responsibility of independently learning Java so that I could better contribute to the project. It was also at this time that I began to share resources and techniques with my teammates who were struggling. I began to assist in delegating tasks and working with everyone’s schedule. Because of this, I was promoted to team lead two months after joining.&lt;/p&gt;
+&lt;p&gt;Fast-forward 1.5 years, I had purchased and built my own PC and served in three internships where I authored programs to decrease website load time by 2 seconds, parse 2,212 PDFs, save 70% of company expenses on cloud computing, scrape and preserve five critical websites, and I designed and developed a company website from scratch.&lt;/p&gt;
+&lt;p&gt;Despite the seemingly rapid success, I had received hundreds of rejections on the basis of my youth, which I tracked on a spreadsheet. I became extremely discouraged due to the limited opportunities available at 16 and considered giving up.&lt;/p&gt;
+&lt;p&gt;After deliberate thought, I decided that if I was going to give up, it would be for a reason other than self-doubt or fear. I shifted my focus to what I could do instead of what I couldn’t. I forged ahead, reaching a total of 985 GitHub commits by the end of 2022.&lt;/p&gt;
+&lt;p&gt;I continued to seek out experience and opportunities in software engineering. During my third software engineering internship, I developed a deeper interest in how wireless communication worked, and whether knowing how to code really meant that I could hack into a router like I used to think (spoiler: it does not).&lt;/p&gt;
+&lt;p&gt;My cybersecurity journey began by reviewing entry-level TryHackMe modules and learning the basics of networking. It had occurred to me that the OSCP would be a far-reaching certification to obtain, especially with its prestige and notoriety, however, with the limitations that my age had already offered me, I was skeptical in believing that I could obtain it. After further investigation, however, I found that achieving the OSCP at 16 had been done at least once before!&lt;/p&gt;
+&lt;p&gt;With the money I had saved from that internship, I purchased an exam voucher for the OSCP and began my lengthy process of consistent and deliberate preparation over a period of approximately seven months. This story can be found on my personal blog.&lt;/p&gt;
+&lt;p&gt;Earning the OSCP meant more to me than the opportunities it afforded me. It was a symbol of my relentless desire to follow through with the goals that I set for myself and persevere through crippling levels of self-doubt. The OSCP, however, was just the beginning of my journey into infosec.&lt;/p&gt;
+&lt;h2 id=&#34;experience-the-city-synack-cve-and-data-breach&#34;&gt;Experience (the city, Synack, CVE and data breach)&lt;/h2&gt;
+&lt;p&gt;I learned of an opportunity to intern at the City of Bakersfield over the summer for clerical positions, however, I was interested in a more technical pathway. I found that the city had a job opening for a security analyst. I applied with a flicker of hope that I could help to fill that role during my internship. In the interview process, I explained that I would be willing to take on some of the responsibilities of the analyst as an intern. Shortly thereafter, a thick packet about me was placed on the desk of my future supervisor and he decided to give me an opportunity.&lt;/p&gt;
+&lt;p&gt;Despite having obtained the OSCP at such an early age, my imposter syndrome was still present. I had come to believe that once I achieved more success, I would have less imposter syndrome, however, in practice, I found that it only became more severe. Now, with the opportunity to work for the city, I was face-to-face with my own self-doubts.&lt;/p&gt;
+&lt;p&gt;Ultimately, I took my responsibilities one step at a time. I fell back on my methodology. First, scanning the hundreds of hosts within scope. Then, looking for low-hanging fruits and subsequently narrowing my focus to more granular details, taking thorough notes as I went.&lt;/p&gt;
+&lt;p&gt;Upon my first external penetration test at the city, I was manually testing Click2Gov  when I noticed an ID being sent in one of the POST requests that I intercepted in my HTTP proxy. I created a second account and tested that this ID could be modified to be that of another user to make changes to another user’s account. My hypothesis was proven correct, and thus, I had discovered CVE-2023-40362. Additionally, I discovered an insecure direct object reference (IDOR) and multiple cross-site scripting (XSS) vulnerabilities that were more complex to exploit. Following these discoveries, I corresponded with Central Square in order to responsibly disclose the issues so they could be patched. Months later, after a patch was shipped, I publicized the CVE. The vendor then added a reference to the CVE correlating the vulnerability I found to a Click2Gov data breach affecting 300,000 people that led to a class-action lawsuit. I was absolutely shocked that something I found would be associated with such big news.&lt;/p&gt;
+&lt;p&gt;After this assessment, I did an internal security audit on our printers, where I made the revolutionary discovery that adding a “test.txt” file to the printer’s FTP server would cause that file to print. My co-workers were very confused as to why the word “test” was repeatedly printing when they went to collect their papers until I realized what was happening. Additionally, I helped to extract the password hashes of our municipal enterprise domain containing thousands of accounts, cracking as many as I could to demonstrate the strength of our passwords. Finally, I audited our Active Directory domain, mapping out potential privilege escalation paths that could be used by attackers. These four assessments were completed in the span of only six weeks.&lt;/p&gt;
+&lt;p&gt;After my term at the city concluded, I continued to perform independent research, leading to the discovery of CVE-2023-43154 and CVE-2023-44792, which were authentication bypass and SQL injection vulnerabilities, respectively. In December 2023, I discovered CVE-2024-27630, CVE-2024-27631 and CVE-2024-27632 in Savane, the web-based software hosting system used by the Savannah bug tracker. It coordinates bug-related information in 405 official GNU projects that have been estimated to be used by millions of people worldwide.&lt;/p&gt;
+&lt;p&gt;By now, I was beginning to gain more confidence in my abilities as an offensive security professional. I began to apply to more job openings, starting with Synack, where I was grateful to have the opportunity to join the Synack Red Team (SRT) of security researchers.&lt;/p&gt;
+&lt;h3 id=&#34;sqli-waf-bypass&#34;&gt;SQLi WAF bypass&lt;/h3&gt;
+&lt;p&gt;Being surrounded by so many knowledgeable security researchers really allowed me to grow my own skills. Two weeks into working for the SRT, I discovered an intriguing authentication bypass flaw. Recently, I discovered a SQL injection vulnerability – however, my SQLi payloads were being monitored by a reputable firewall. I attempted different techniques and bypasses for several days before eventually running out of ideas.&lt;/p&gt;
+&lt;p&gt;Luckily, I didn’t have to go it alone: I partnered with SRT members Moey and NukeDX in order to construct an initial payload to validate the SQL injection. From there, Moey – who happens to have also joined the SRT at a young age – and I tested the firewall for hours. We tested payloads in online SQL editor sandboxes and read through documentation to find different ways to accomplish data exfiltration. While we were unable to find a payload to extract all the data, we crafted a payload to extract part of it by turning our traditional SQLi into a boolean attack. From there, we brute-forced our way into demonstrating impact with the vulnerability.&lt;/p&gt;
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;As a current senior in high school, balancing school life with my professional aspirations has been a persistent challenge, however, it is an immensely rewarding journey. Ultimately, my success thus far is a product of the individuals who saw potential in me and gave me a chance or simply a listening ear. In my continuous mission to learn and contribute to this industry, I plan to research more open-source projects, firmware, and otherwise intriguing cyber assets in addition to obtaining more technical certifications in my transition from high school to a career in security research. Although this scar on my arm from my self-imposed “surgery” is fading, its symbolism remains eternal as it represents the insatiable curiosity and unwavering perseverance that has led me to discover and thrive in a field that I am proud to be a part of.&lt;/p&gt;
+</description>
+      <content:encoded><![CDATA[<p><em>Author&rsquo;s note: This article was initially published on <a href="https://readme.synack.com/how-i-became-a-hacker-before-i-finished-high-school">Synack&rsquo;s README</a>. They have great content and I recommend that you browse their articles if you are interested cybersecurity.</em></p>
+<p><img loading="lazy" src="https://22524429.fs1.hubspotusercontent-na1.net/hubfs/22524429/victor-_qXjdWm8YEo-unsplash.jpg" alt="Picture of a maze from above from Unsplash"  />
+</p>
+<blockquote>
+<p>Editor&rsquo;s note: This post from Ally Petitt describes her journey towards earning the vaunted OSCP at 16 &gt; and being an active part of the Synack Red Team at 17. Check out Ally&rsquo;s blog for more of her write-ups &gt; on vulnerabilities she&rsquo;s discovered, hacking techniques and more.</p>
+</blockquote>
+<h2 id="life-before-coding">Life before coding</h2>
+<p>I was 3 years old when I first declared I was going to be a doctor, my mother told me. When I was 8, I had finally done enough chores around the house to earn $20, and I deposited the total into a college fund. I was 9 years old when I began secretly staying up past my bedtime to read the human anatomy textbook from my father’s bookshelf. When I was 10 I set my sights on getting admitted to Harvard Medical School and becoming a neurosurgeon. This was also the year that I attempted surgery on my arm with a pencil to see what the different layers of skin looked like. As expected from a fifth grader, this was done without anesthesia and, yes, it got infected. When I was 13, however, I survived a global pandemic and that all changed, setting me on a path that would ultimately see me earn my OffSec Certified Professional (OSCP) certification and get my first CVEs as an ethical hacker.</p>
+<p>With COVID-19 came remote school, which meant the schoolwork that took approximately seven hours on campus could now be completed in 40 minutes from my own room. Without the increased time commitment of fixed class periods, I was now free to explore education on my own, without a syllabus or any restrictions.</p>
+<p>I began to ask questions that I had never allowed myself the freedom to ask previously. Becoming a doctor is a prestigious profession. But when I researched the burnout, the relentless schedules, rigorous schooling, student debt and stress that these essential workers experience, I realized a doctor’s lifestyle would not be a good fit for me.</p>
+<p>Doubts about a career as a doctor led to more questions. I used the internet to learn subjects that my middle school didn’t offer: economics, physics, investing, astronomy, trigonometry, neuroscience and Russian. I noticed a trend that I was drawn towards career options that included themes of learning, making connections and investigation. I considered becoming a theoretical physicist, an investigative journalist and many more professions. While enticing, there were aspects of each that made me wary of committing to them.</p>
+<p>This brings me to December 2020, the month that I ran an experiment to test the coding ability I could attain in only 20 hours of learning. I wanted to see what I was capable of and I did not expect how humbling it would be. I recall that my first five or six hours were spent attempting to troubleshoot my Python installation. The next three were me trying to figure out why my “Hello World” program was not running in VSCode. (It turned out that I had forgotten the “.py” file extension.) By the end of the 20 hours, however, I had gotten the basics of coding down and was able to create simple projects such as mad-libs. I decided to continue for another week and completed a terminal-based tic-tac-toe game. This was a career trajectory I could see myself in.</p>
+<h2 id="life-after-coding-to-oscp">Life after coding to OSCP</h2>
+<p>I built a humble portfolio of coding projects and within three months landed an internship as a software engineer. Navigating this new environment with my new team was a challenge. I was tasked with writing a Java API to take input from a machine learning backend and utilize it to spin up EC2 spot instances (or their equivalent) across three different cloud providers. I took the responsibility of independently learning Java so that I could better contribute to the project. It was also at this time that I began to share resources and techniques with my teammates who were struggling. I began to assist in delegating tasks and working with everyone’s schedule. Because of this, I was promoted to team lead two months after joining.</p>
+<p>Fast-forward 1.5 years, I had purchased and built my own PC and served in three internships where I authored programs to decrease website load time by 2 seconds, parse 2,212 PDFs, save 70% of company expenses on cloud computing, scrape and preserve five critical websites, and I designed and developed a company website from scratch.</p>
+<p>Despite the seemingly rapid success, I had received hundreds of rejections on the basis of my youth, which I tracked on a spreadsheet. I became extremely discouraged due to the limited opportunities available at 16 and considered giving up.</p>
+<p>After deliberate thought, I decided that if I was going to give up, it would be for a reason other than self-doubt or fear. I shifted my focus to what I could do instead of what I couldn’t. I forged ahead, reaching a total of 985 GitHub commits by the end of 2022.</p>
+<p>I continued to seek out experience and opportunities in software engineering. During my third software engineering internship, I developed a deeper interest in how wireless communication worked, and whether knowing how to code really meant that I could hack into a router like I used to think (spoiler: it does not).</p>
+<p>My cybersecurity journey began by reviewing entry-level TryHackMe modules and learning the basics of networking. It had occurred to me that the OSCP would be a far-reaching certification to obtain, especially with its prestige and notoriety, however, with the limitations that my age had already offered me, I was skeptical in believing that I could obtain it. After further investigation, however, I found that achieving the OSCP at 16 had been done at least once before!</p>
+<p>With the money I had saved from that internship, I purchased an exam voucher for the OSCP and began my lengthy process of consistent and deliberate preparation over a period of approximately seven months. This story can be found on my personal blog.</p>
+<p>Earning the OSCP meant more to me than the opportunities it afforded me. It was a symbol of my relentless desire to follow through with the goals that I set for myself and persevere through crippling levels of self-doubt. The OSCP, however, was just the beginning of my journey into infosec.</p>
+<h2 id="experience-the-city-synack-cve-and-data-breach">Experience (the city, Synack, CVE and data breach)</h2>
+<p>I learned of an opportunity to intern at the City of Bakersfield over the summer for clerical positions, however, I was interested in a more technical pathway. I found that the city had a job opening for a security analyst. I applied with a flicker of hope that I could help to fill that role during my internship. In the interview process, I explained that I would be willing to take on some of the responsibilities of the analyst as an intern. Shortly thereafter, a thick packet about me was placed on the desk of my future supervisor and he decided to give me an opportunity.</p>
+<p>Despite having obtained the OSCP at such an early age, my imposter syndrome was still present. I had come to believe that once I achieved more success, I would have less imposter syndrome, however, in practice, I found that it only became more severe. Now, with the opportunity to work for the city, I was face-to-face with my own self-doubts.</p>
+<p>Ultimately, I took my responsibilities one step at a time. I fell back on my methodology. First, scanning the hundreds of hosts within scope. Then, looking for low-hanging fruits and subsequently narrowing my focus to more granular details, taking thorough notes as I went.</p>
+<p>Upon my first external penetration test at the city, I was manually testing Click2Gov  when I noticed an ID being sent in one of the POST requests that I intercepted in my HTTP proxy. I created a second account and tested that this ID could be modified to be that of another user to make changes to another user’s account. My hypothesis was proven correct, and thus, I had discovered CVE-2023-40362. Additionally, I discovered an insecure direct object reference (IDOR) and multiple cross-site scripting (XSS) vulnerabilities that were more complex to exploit. Following these discoveries, I corresponded with Central Square in order to responsibly disclose the issues so they could be patched. Months later, after a patch was shipped, I publicized the CVE. The vendor then added a reference to the CVE correlating the vulnerability I found to a Click2Gov data breach affecting 300,000 people that led to a class-action lawsuit. I was absolutely shocked that something I found would be associated with such big news.</p>
+<p>After this assessment, I did an internal security audit on our printers, where I made the revolutionary discovery that adding a “test.txt” file to the printer’s FTP server would cause that file to print. My co-workers were very confused as to why the word “test” was repeatedly printing when they went to collect their papers until I realized what was happening. Additionally, I helped to extract the password hashes of our municipal enterprise domain containing thousands of accounts, cracking as many as I could to demonstrate the strength of our passwords. Finally, I audited our Active Directory domain, mapping out potential privilege escalation paths that could be used by attackers. These four assessments were completed in the span of only six weeks.</p>
+<p>After my term at the city concluded, I continued to perform independent research, leading to the discovery of CVE-2023-43154 and CVE-2023-44792, which were authentication bypass and SQL injection vulnerabilities, respectively. In December 2023, I discovered CVE-2024-27630, CVE-2024-27631 and CVE-2024-27632 in Savane, the web-based software hosting system used by the Savannah bug tracker. It coordinates bug-related information in 405 official GNU projects that have been estimated to be used by millions of people worldwide.</p>
+<p>By now, I was beginning to gain more confidence in my abilities as an offensive security professional. I began to apply to more job openings, starting with Synack, where I was grateful to have the opportunity to join the Synack Red Team (SRT) of security researchers.</p>
+<h3 id="sqli-waf-bypass">SQLi WAF bypass</h3>
+<p>Being surrounded by so many knowledgeable security researchers really allowed me to grow my own skills. Two weeks into working for the SRT, I discovered an intriguing authentication bypass flaw. Recently, I discovered a SQL injection vulnerability – however, my SQLi payloads were being monitored by a reputable firewall. I attempted different techniques and bypasses for several days before eventually running out of ideas.</p>
+<p>Luckily, I didn’t have to go it alone: I partnered with SRT members Moey and NukeDX in order to construct an initial payload to validate the SQL injection. From there, Moey – who happens to have also joined the SRT at a young age – and I tested the firewall for hours. We tested payloads in online SQL editor sandboxes and read through documentation to find different ways to accomplish data exfiltration. While we were unable to find a payload to extract all the data, we crafted a payload to extract part of it by turning our traditional SQLi into a boolean attack. From there, we brute-forced our way into demonstrating impact with the vulnerability.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>As a current senior in high school, balancing school life with my professional aspirations has been a persistent challenge, however, it is an immensely rewarding journey. Ultimately, my success thus far is a product of the individuals who saw potential in me and gave me a chance or simply a listening ear. In my continuous mission to learn and contribute to this industry, I plan to research more open-source projects, firmware, and otherwise intriguing cyber assets in addition to obtaining more technical certifications in my transition from high school to a career in security research. Although this scar on my arm from my self-imposed “surgery” is fading, its symbolism remains eternal as it represents the insatiable curiosity and unwavering perseverance that has led me to discover and thrive in a field that I am proud to be a part of.</p>
+]]></content:encoded>
+    </item>
     <item>
       <title>Goodbye World - Migrating Away From Medium | Graduation &amp; Next Steps</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2024-04-31_leaving-medium/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2024-04-31_leaving-medium/</link>
       <pubDate>Fri, 03 May 2024 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2024-04-31_leaving-medium/</guid>
-      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://ally-petitt.github.io:443/ally-petitt/images/Medium-crossed.png&#34; alt=&#34;Medium logo crossed out&#34;  /&gt;
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2024-04-31_leaving-medium/</guid>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://ally-petitt.github.io/ally-petitt/en/ally-petitt/images/Medium-crossed.png&#34; alt=&#34;Medium logo crossed out&#34;  /&gt;
 &lt;/p&gt;
 &lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;Hello everyone and welcome to the first exclusive post on my new personal website! I am very excited to be here and I hope that you are as well. The picture above is a bit dramatic, but communicates the message that I have decided to move forward. Those who have been following me will know that I first began my technical blog on Medium, which was an approachable outlet for sharing my knowledge as I first entered the field.&lt;/p&gt;
@@ -80,9 +156,9 @@
     </item>
     <item>
       <title>How I Found 3 CVEs in 2 Days</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2024-03-21_how-i-found-3-cves-in-2-days-8a135eb924d3/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2024-03-21_how-i-found-3-cves-in-2-days-8a135eb924d3/</link>
       <pubDate>Thu, 21 Mar 2024 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2024-03-21_how-i-found-3-cves-in-2-days-8a135eb924d3/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2024-03-21_how-i-found-3-cves-in-2-days-8a135eb924d3/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*wGuRqNuBuFV5u69n.png&#34; alt=&#34;&#34;  /&gt;
 
 Author: Ally Petitt&lt;/p&gt;
@@ -368,9 +444,9 @@ Additionally, attempting to change the password required the previous user passw
     </item>
     <item>
       <title>How to Find more Vulnerabilities — Source Code Auditing Explained</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2024-01-01_how-to-find-more-vulnerabilities---source-code-auditing-explained-2c8a10896374/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2024-01-01_how-to-find-more-vulnerabilities---source-code-auditing-explained-2c8a10896374/</link>
       <pubDate>Mon, 01 Jan 2024 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2024-01-01_how-to-find-more-vulnerabilities---source-code-auditing-explained-2c8a10896374/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2024-01-01_how-to-find-more-vulnerabilities---source-code-auditing-explained-2c8a10896374/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*jDmBerRWYf3eZh2J&#34; alt=&#34;&#34;  /&gt;
 
 &lt;em&gt;&lt;a href=&#34;https://images.pexels.com/photos/374559/pexels-photo-374559.jpeg?auto=compress&amp;amp;cs=tinysrgb&amp;amp;w=1260&amp;amp;h=750&amp;amp;dpr=1&#34;&gt;https://images.pexels.com/photos/374559/pexels-photo-374559.jpeg?auto=compress&amp;amp;cs=tinysrgb&amp;amp;w=1260&amp;amp;h=750&amp;amp;dpr=1&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
@@ -472,9 +548,9 @@ Tooling</h1>
     </item>
     <item>
       <title>Stealthy Exploit Opens Door for Pre-Compilation Code Execution</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2023-12-02_stealthy-exploit-opens-door-for-pre-compilation-code-execution-17a57b9585cb/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-12-02_stealthy-exploit-opens-door-for-pre-compilation-code-execution-17a57b9585cb/</link>
       <pubDate>Sat, 02 Dec 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2023-12-02_stealthy-exploit-opens-door-for-pre-compilation-code-execution-17a57b9585cb/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-12-02_stealthy-exploit-opens-door-for-pre-compilation-code-execution-17a57b9585cb/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*XwuUEqGz-1xT_v_j.jpg&#34; alt=&#34;&#34;  /&gt;
 
 &lt;em&gt;&lt;a href=&#34;https://img.rasset.ie/001babea-1600.jpg&#34;&gt;https://img.rasset.ie/001babea-1600.jpg&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
@@ -570,9 +646,9 @@ For example, hackers can embed a malicious payload within the <code>configure.ac
     </item>
     <item>
       <title>How I Found an Authentication Bypass Vulnerability — CVE-2023–43154</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2023-09-29_how-i-found-authentication-bypass-vulnerability---cve-2023-43154-b55dee7c876b/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-09-29_how-i-found-authentication-bypass-vulnerability---cve-2023-43154-b55dee7c876b/</link>
       <pubDate>Fri, 29 Sep 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2023-09-29_how-i-found-authentication-bypass-vulnerability---cve-2023-43154-b55dee7c876b/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-09-29_how-i-found-authentication-bypass-vulnerability---cve-2023-43154-b55dee7c876b/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*3hIZtNoj0lfZ86_b&#34; alt=&#34;&#34;  /&gt;
 
 &lt;em&gt;&lt;a href=&#34;https://images.pexels.com/photos/5483149/pexels-photo-5483149.jpeg?auto=compress&amp;amp;cs=tinysrgb&amp;amp;w=1260&amp;amp;h=750&amp;amp;dpr=1&#34;&gt;https://images.pexels.com/photos/5483149/pexels-photo-5483149.jpeg?auto=compress&amp;amp;cs=tinysrgb&amp;amp;w=1260&amp;amp;h=750&amp;amp;dpr=1&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
@@ -836,9 +912,9 @@ Conclusion</h1>
     </item>
     <item>
       <title>How to safely convert to LVM without losing your data</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2023-08-19_how-to-safely-convert-to-lvm-without-losing-your-data-258ce044448/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-08-19_how-to-safely-convert-to-lvm-without-losing-your-data-258ce044448/</link>
       <pubDate>Sat, 19 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2023-08-19_how-to-safely-convert-to-lvm-without-losing-your-data-258ce044448/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-08-19_how-to-safely-convert-to-lvm-without-losing-your-data-258ce044448/</guid>
       <description>&lt;h1 id=&#34;introduction&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*es1LJrnEBsSNgXZM.png&#34; alt=&#34;&#34;  /&gt;
 
 Introduction&lt;/h1&gt;
@@ -1000,9 +1076,9 @@ Introduction</h1>
     </item>
     <item>
       <title>Beyond the Screen: The Hidden World of Firmware Security</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2023-08-05_beyond-the-screen--the-hidden-world-of-firmware-security-87b0ea6a20a4/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-08-05_beyond-the-screen--the-hidden-world-of-firmware-security-87b0ea6a20a4/</link>
       <pubDate>Sat, 05 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2023-08-05_beyond-the-screen--the-hidden-world-of-firmware-security-87b0ea6a20a4/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-08-05_beyond-the-screen--the-hidden-world-of-firmware-security-87b0ea6a20a4/</guid>
       <description>&lt;h1 id=&#34;introduction&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*UA4-sPgJH7Fhk9jbvvRafQ.jpeg&#34; alt=&#34;https://www.istockphoto.com/photo/man-using-laptop-with-update-software-computer-program-upgrade-business-technology-gm1449779856-486876929&#34;  /&gt;
 
 Introduction&lt;/h1&gt;
@@ -1250,9 +1326,9 @@ Baseboard Management Controllers (BMCs) are hardware components that are often s
     </item>
     <item>
       <title>Reverse Engineering — Analyzing Headers</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2023-07-13_reverse-engineering---analyzing-headers-23dc84075cd/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-07-13_reverse-engineering---analyzing-headers-23dc84075cd/</link>
       <pubDate>Thu, 13 Jul 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2023-07-13_reverse-engineering---analyzing-headers-23dc84075cd/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-07-13_reverse-engineering---analyzing-headers-23dc84075cd/</guid>
       <description>&lt;p&gt;&lt;code&gt;objdump&lt;/code&gt; is a command line tool that can be used to gain insight into an executable binary. In this article, the tool will be used to dump all of the headers of the ELF binary &lt;code&gt;heapedit&lt;/code&gt; with the command below. Then, we will analyze and explain each section of output from the top to the bottom.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;objdump -x ./heapedit
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Executable and Linkable Format (ELF) files are a common file format for object files, executable binaries, core dumps, and shared libraries. It provides a standardized format for storing executable and object code, symbol information, and other metadata necessary for proper software execution. It may be helpful to first get an overview of an ELF file structure which can be seen in this image:&lt;/p&gt;
@@ -1798,9 +1874,9 @@ Baseboard Management Controllers (BMCs) are hardware components that are often s
     </item>
     <item>
       <title>5 Ways I Bypassed Your Web Application Firewall (WAF)</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2023-06-01_5-ways-i-bypassed-your-web-application-firewall--waf--43852a43a1c2/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-06-01_5-ways-i-bypassed-your-web-application-firewall--waf--43852a43a1c2/</link>
       <pubDate>Thu, 01 Jun 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2023-06-01_5-ways-i-bypassed-your-web-application-firewall--waf--43852a43a1c2/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-06-01_5-ways-i-bypassed-your-web-application-firewall--waf--43852a43a1c2/</guid>
       <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;This article will explain the tools and techniques used by web application penetration testers and security researchers to successfully bypass web application firewall (WAF) protections.&lt;/p&gt;
 &lt;p&gt;WAFs are a cybersecurity solution to filter and block malicious web traffic. Common vendors include CloudFlare, AWS, Citrix, Akamai, Radware, Microsoft Azure, and Barracuda.&lt;/p&gt;
@@ -2114,9 +2190,9 @@ The results from WhatWaf are consistent with those of Wafw00f.</p>
     </item>
     <item>
       <title>5 Ways I Found Your Deleted Files</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</link>
       <pubDate>Sat, 13 May 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</guid>
       <description>&lt;h2 id=&#34;computer-forensics-for-filerecovery&#34;&gt;Computer Forensics for File Recovery&lt;/h2&gt;
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*MnBiAcwiwaFGOOAe.jpg&#34; alt=&#34;&#34;  /&gt;
 
@@ -2548,9 +2624,9 @@ Conclusion</h1>
     </item>
     <item>
       <title>How to Encrypt a Drive in Linux</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/</link>
       <pubDate>Fri, 05 May 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/</guid>
       <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;Hey everyone, this is a pretty quick article on LUKS drive encryption on Linux with the &lt;code&gt;cryptsetup&lt;/code&gt; library. By following the steps outlined here, you will be able to encrypt a drive, decrypt it, and mount it. This was done in a Kali Linux VM and commands may vary for other distributions.&lt;/p&gt;
 &lt;p&gt;Disclaimer: This is not an area that I have much experience in so if details are inaccurate, I apologize in advance.&lt;/p&gt;
@@ -2706,9 +2782,9 @@ Next Steps</h1>
     </item>
     <item>
       <title>Snort IPS Quickstart</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2023-05-02_snort-ips-quickstart-27559ae01fae/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-05-02_snort-ips-quickstart-27559ae01fae/</link>
       <pubDate>Tue, 02 May 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2023-05-02_snort-ips-quickstart-27559ae01fae/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-05-02_snort-ips-quickstart-27559ae01fae/</guid>
       <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;Snort is an open source Intrusion Prevention System (IPS) that detects malicious network traffic by comparing the network packets to a set of rules, often created by Snort and the community. Snort can be used as a packet sniffer, packet logger, and intrusion prevention system.&lt;/p&gt;
 &lt;p&gt;In this article, I’ll go over some of the first steps of installing, configuring, and running Snort so that new users have a place to branch off of.&lt;/p&gt;
@@ -2886,9 +2962,9 @@ To actually run Snort as a daemon, you would change the <code>-T</code> option t
     </item>
     <item>
       <title>Digging into the Linux Secure Boot Process</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2023-04-29_digging-into-the-linux-secure-boot-process-9631a70b158b/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-04-29_digging-into-the-linux-secure-boot-process-9631a70b158b/</link>
       <pubDate>Sat, 29 Apr 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2023-04-29_digging-into-the-linux-secure-boot-process-9631a70b158b/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-04-29_digging-into-the-linux-secure-boot-process-9631a70b158b/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*6T29Pwj4dMhQiPRW.png&#34; alt=&#34;&#34;  /&gt;
 
 &lt;em&gt;Linux Penguin&lt;/em&gt;&lt;/p&gt;
@@ -3128,9 +3204,9 @@ To actually run Snort as a daemon, you would change the <code>-T</code> option t
     </item>
     <item>
       <title>How to Prevent Data Leaks Before they Happen</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2023-04-23_how-to-prevent-data-leaks-before-they-happen-3c53997b3744/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-04-23_how-to-prevent-data-leaks-before-they-happen-3c53997b3744/</link>
       <pubDate>Sun, 23 Apr 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2023-04-23_how-to-prevent-data-leaks-before-they-happen-3c53997b3744/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-04-23_how-to-prevent-data-leaks-before-they-happen-3c53997b3744/</guid>
       <description>&lt;p&gt;Data Loss Prevention&lt;/p&gt;
 &lt;h1 id=&#34;what-is-data-loss-prevention&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*65eSMdR110wv_HGg&#34; alt=&#34;&#34;  /&gt;
 
@@ -3250,9 +3326,9 @@ What is Data Loss Prevention?</h1>
     </item>
     <item>
       <title>Restoring Files in /usr/include</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2023-04-13_restoring-files-in--usr-include-88622911c3ae/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-04-13_restoring-files-in--usr-include-88622911c3ae/</link>
       <pubDate>Thu, 13 Apr 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2023-04-13_restoring-files-in--usr-include-88622911c3ae/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-04-13_restoring-files-in--usr-include-88622911c3ae/</guid>
       <description>&lt;p&gt;Hi guys, I made a mistake. In my frustration trying to debug my C program, I inadvertently deleted all the files within my &lt;code&gt;/usr/include&lt;/code&gt; folder. I didn’t realize at the time that this was a very important folder! As explained &lt;a href=&#34;https://www.kernel.org/doc/Documentation/kbuild/headers_install.txt&#34;&gt;here&lt;/a&gt;, it stores the Linux kernel’s libc header files! Rookie mistake, but luckily for us, there’s ways to fix it.&lt;/p&gt;
 &lt;p&gt;If your &lt;code&gt;/usr/include&lt;/code&gt; folder is also looking more empty than the shelves during COVID, I come bearing the solution.&lt;/p&gt;
 &lt;h1 id=&#34;getting-kernelheaders&#34;&gt;Getting Kernel Headers&lt;/h1&gt;
@@ -3302,9 +3378,9 @@ I had this installed previously, but since I deleted the files, I need to remove
     </item>
     <item>
       <title>How to Create and Deploy Your Own Cloud Server with NextCloud</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2023-04-09_how-to-create-and-deploy-your-own-cloud-server-with-nextcloud-345e185d602a/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-04-09_how-to-create-and-deploy-your-own-cloud-server-with-nextcloud-345e185d602a/</link>
       <pubDate>Sun, 09 Apr 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2023-04-09_how-to-create-and-deploy-your-own-cloud-server-with-nextcloud-345e185d602a/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-04-09_how-to-create-and-deploy-your-own-cloud-server-with-nextcloud-345e185d602a/</guid>
       <description>&lt;h1 id=&#34;why-create-a-cloudserver&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*-WVjY5h4EpphjjX7&#34; alt=&#34;&#34;  /&gt;
 
 Why Create a Cloud Server?&lt;/h1&gt;
@@ -3472,9 +3548,9 @@ Conclusion</h1>
     </item>
     <item>
       <title>Practical Demonstration: DNS Spoofing &#43; Home Lab</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2023-03-28_practical-demonstration--dns-spoofing---home-lab-f7294443fb23/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-03-28_practical-demonstration--dns-spoofing---home-lab-f7294443fb23/</link>
       <pubDate>Tue, 28 Mar 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2023-03-28_practical-demonstration--dns-spoofing---home-lab-f7294443fb23/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-03-28_practical-demonstration--dns-spoofing---home-lab-f7294443fb23/</guid>
       <description>&lt;h2 id=&#34;dns-cache-poisoning-on-home-lab-walkthrough&#34;&gt;DNS Cache Poisoning on Home Lab Walkthrough&lt;/h2&gt;
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*P3ZahJWqz8AFbk9s.png&#34; alt=&#34;Basic DNS cache poisoning attack&#34;  /&gt;
 
@@ -3744,9 +3820,9 @@ Remediation</h1>
     </item>
     <item>
       <title>How I got my OSCP at 16 years old</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2023-03-19_how-i-got-my-oscp-at-16-years-old-50ed402d6fd1/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-03-19_how-i-got-my-oscp-at-16-years-old-50ed402d6fd1/</link>
       <pubDate>Sun, 19 Mar 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2023-03-19_how-i-got-my-oscp-at-16-years-old-50ed402d6fd1/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-03-19_how-i-got-my-oscp-at-16-years-old-50ed402d6fd1/</guid>
       <description>&lt;p&gt;Wait, you can do that? The answer is a resounding “yes”. And I’m not the only one who got my OSCP at the age of 16. Meet &lt;a href=&#34;https://www.offsec.com/offsec/meet-mihai-16-year-old-oscp-holder/&#34;&gt;Mihai&lt;/a&gt;, &lt;a href=&#34;https://vanshal.medium.com/my-oscp-journey-9a4041bab24a&#34;&gt;Vanshal&lt;/a&gt;, &lt;a href=&#34;https://grants235.github.io/cybersecurity/oscp/&#34;&gt;Grant&lt;/a&gt;, and &lt;a href=&#34;https://www.reddit.com/r/oscp/comments/swmqs1/aced_it_at_16yrs/?utm_source=share&amp;utm_medium=web2x&amp;context=3&#34;&gt;this person&lt;/a&gt; from Reddit. Admittedly, the number of us is few and far between when compared to the typical demographic of OSCP test-takers. To add to this, I’m a woman and I haven’t seen any other women my age do this. Still, people have done it and it  possible.&lt;/p&gt;
 &lt;p&gt;I present to you, the beautiful:&lt;/p&gt;
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*BQs51p5uCqZyIuYNCVrqGQ.png&#34; alt=&#34;Picture of my OSCP certification&#34;  /&gt;
@@ -4072,9 +4148,9 @@ I’m still deciding on the best ways to allocate my time, but I’m considering
     </item>
     <item>
       <title>Windows Remoting: Difference between psexec, wmiexec, atexec, *exec</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2022-12-09_windows-remoting--difference-between-psexec--wmiexec--atexec---exec-bf7d1edb5986/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2022-12-09_windows-remoting--difference-between-psexec--wmiexec--atexec---exec-bf7d1edb5986/</link>
       <pubDate>Fri, 09 Dec 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2022-12-09_windows-remoting--difference-between-psexec--wmiexec--atexec---exec-bf7d1edb5986/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2022-12-09_windows-remoting--difference-between-psexec--wmiexec--atexec---exec-bf7d1edb5986/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*2pekupqLLWtBkgpl&#34; alt=&#34;&#34;  /&gt;
 
 &lt;em&gt;&lt;a href=&#34;https://images.pexels.com/photos/3760778/pexels-photo-3760778.jpeg?auto=compress&amp;amp;cs=tinysrgb&amp;amp;w=1260&amp;amp;h=750&amp;amp;dpr=1&#34;&gt;https://images.pexels.com/photos/3760778/pexels-photo-3760778.jpeg?auto=compress&amp;amp;cs=tinysrgb&amp;amp;w=1260&amp;amp;h=750&amp;amp;dpr=1&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
@@ -4238,9 +4314,9 @@ I’m still deciding on the best ways to allocate my time, but I’m considering
     </item>
     <item>
       <title>VPN Troubleshooting: How to fix “Inactivity Timeout ( — ping-restart)”</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2022-11-12_vpn-troubleshooting--inactivity-timeout-----ping-restart--a52791c24a50/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2022-11-12_vpn-troubleshooting--inactivity-timeout-----ping-restart--a52791c24a50/</link>
       <pubDate>Sat, 12 Nov 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2022-11-12_vpn-troubleshooting--inactivity-timeout-----ping-restart--a52791c24a50/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2022-11-12_vpn-troubleshooting--inactivity-timeout-----ping-restart--a52791c24a50/</guid>
       <description>&lt;p&gt;If your VPN log looks something like this:&lt;/p&gt;
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*1SN24_SvT2cN2X0GeX-DUA.png&#34; alt=&#34;&#34;  /&gt;
 
@@ -4332,9 +4408,9 @@ Note: <code>1.1.1.1</code> is the public DNS resolver from Cloudflare and <code>
     </item>
     <item>
       <title>What the Pen-200 Has Taught Me About Pentesting Methodology</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2022-11-02_what-the-pen-200-has-taught-me-about-pentesting-methodology-1fd67760be5c/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2022-11-02_what-the-pen-200-has-taught-me-about-pentesting-methodology-1fd67760be5c/</link>
       <pubDate>Wed, 02 Nov 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2022-11-02_what-the-pen-200-has-taught-me-about-pentesting-methodology-1fd67760be5c/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2022-11-02_what-the-pen-200-has-taught-me-about-pentesting-methodology-1fd67760be5c/</guid>
       <description>&lt;p&gt;The Pen-200 is the prerequisite course for the OSCP exam. As such, the writeups for the labs are incredibly difficult to find. As someone who has relied heavily on the accessibility of HTB walkthroughs, I’ve never been in an environment where I wasn’t one Google search away from figuring out the next step in solving a box. Needless to say, 0xdf couldn’t help me much with the Pen-200 labs.&lt;/p&gt;
 &lt;p&gt;The Pen-200 labs were a struggle not because I was incompetent, but because I didn’t have enough practice reaching dead ends. I didn’t spend enough time in rabbit holes, therefore I wouldn’t realize when I was in one. I didn’t know how to search for details that I might have missed on my first look. When trying to solve a box, I learned that sometimes the vulnerability could be found just by Googling a word that I was not entirely familiar with on the&lt;code&gt;nmap&lt;/code&gt; scan.&lt;/p&gt;
 &lt;p&gt;My journey began with referencing writeups on HTB, but when I no longer could, I learned how to use cheatsheets on the internet. Some of my most notable mentions are &lt;a href=&#34;https://book.hacktricks.xyz/welcome/readme&#34;&gt;HackTricks&lt;/a&gt; and &lt;a href=&#34;https://kashz.gitbook.io/kashz-jewels/&#34;&gt;Kashz Jewels&lt;/a&gt;. When I found an open port, I would ensure that I went through every enumeration step that I found on these cheat sheets. It was still a slight crutch, but it did allow me to develop methodologies that I wasn’t getting by relying solely on writeups.&lt;/p&gt;
@@ -4360,9 +4436,9 @@ Key Takeaways</h2>
     </item>
     <item>
       <title>How Did an 18-Year-Old Hack Uber?</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2022-09-24_how-did-an-18-year-old-hack-uber--788f092b9dc3/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2022-09-24_how-did-an-18-year-old-hack-uber--788f092b9dc3/</link>
       <pubDate>Sat, 24 Sep 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2022-09-24_how-did-an-18-year-old-hack-uber--788f092b9dc3/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2022-09-24_how-did-an-18-year-old-hack-uber--788f092b9dc3/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*p8HCs81YRFvhgaR3.jpg&#34; alt=&#34;&#34;  /&gt;
 
 An 18-year-old hacker gained admin access to Uber on September 15, 2022. These are the steps that the hacker took:&lt;/p&gt;
@@ -4432,9 +4508,9 @@ They also created a “Security Updates” page on their <a href="https://www.ub
     </item>
     <item>
       <title>How Companies Respond to Cyber Attacks | The 6 Steps of an Incident Response Plan</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2022-07-09_how-companies-respond-to-cyber-attacks---the-6-steps-of-an-incident-response-plan-9c6f4267253e/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2022-07-09_how-companies-respond-to-cyber-attacks---the-6-steps-of-an-incident-response-plan-9c6f4267253e/</link>
       <pubDate>Sat, 09 Jul 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2022-07-09_how-companies-respond-to-cyber-attacks---the-6-steps-of-an-incident-response-plan-9c6f4267253e/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2022-07-09_how-companies-respond-to-cyber-attacks---the-6-steps-of-an-incident-response-plan-9c6f4267253e/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*NYCBo5F_MGeRvxzrEm1hsg.png&#34; alt=&#34;&#34;  /&gt;
 &lt;/p&gt;
 &lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
@@ -4670,9 +4746,9 @@ They also created a “Security Updates” page on their <a href="https://www.ub
     </item>
     <item>
       <title>Pentester’s Guide to Performing File Transfers</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2022-06-08_pentester-s-guide-to-performing-file-transfers-3c1a6a38dfc8/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2022-06-08_pentester-s-guide-to-performing-file-transfers-3c1a6a38dfc8/</link>
       <pubDate>Wed, 08 Jun 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2022-06-08_pentester-s-guide-to-performing-file-transfers-3c1a6a38dfc8/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2022-06-08_pentester-s-guide-to-performing-file-transfers-3c1a6a38dfc8/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*HNC0lT4gPMDU8uH0fyjRyw.png&#34; alt=&#34;&#34;  /&gt;
 &lt;/p&gt;
 &lt;h1 id=&#34;foreword&#34;&gt;Foreword&lt;/h1&gt;
@@ -4802,9 +4878,9 @@ File Transfer With an HTTP Server</h1>
     </item>
     <item>
       <title>Antivirus Evasion: What it is and How to do it</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/</link>
       <pubDate>Mon, 30 May 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*W1qjqIKKNMK9_QYWXGQzRw.png&#34; alt=&#34;picture of a bug&#34;  /&gt;
 &lt;/p&gt;
 &lt;h1 id=&#34;how-does-antivirus-software-actuallywork&#34;&gt;How Does Antivirus Software Actually Work?&lt;/h1&gt;
@@ -4926,9 +5002,9 @@ Command-Line Tools</h2>
     </item>
     <item>
       <title>Kerberos Authentication Explained</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2022-05-25_kerberos-authentication-explained-3d45f336bb2c/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2022-05-25_kerberos-authentication-explained-3d45f336bb2c/</link>
       <pubDate>Wed, 25 May 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2022-05-25_kerberos-authentication-explained-3d45f336bb2c/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2022-05-25_kerberos-authentication-explained-3d45f336bb2c/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*lPQ16gDtSYYccrc2-iExiA.jpeg&#34; alt=&#34;Kerberos- a three-headed dog&#34;  /&gt;
 
 When first learning Kerberos, it can feel like you’re being chased by the three-headed dog. Not to fear, however, because today I’ll be explaining a high-level overview of Kerberos authentication. Kerberos was designed to provide secure authentication to services over a potentially insecure network. It is used by many organizations to implement single sign-on (SSO).&lt;/p&gt;
@@ -5018,9 +5094,9 @@ When first learning Kerberos, it can feel like you’re being chased by the thre
     </item>
     <item>
       <title>Mustacchio Walkthrough | Try Hack Me | Ally Petitt</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2022-02-18_mustacchio-walkthrough---try-hack-me---ally-petitt-6295dfbbfb1b/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2022-02-18_mustacchio-walkthrough---try-hack-me---ally-petitt-6295dfbbfb1b/</link>
       <pubDate>Fri, 18 Feb 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2022-02-18_mustacchio-walkthrough---try-hack-me---ally-petitt-6295dfbbfb1b/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2022-02-18_mustacchio-walkthrough---try-hack-me---ally-petitt-6295dfbbfb1b/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*F19asfqgh7o-jFDVwsTizA.png&#34; alt=&#34;&#34;  /&gt;
 &lt;/p&gt;
 &lt;h1 id=&#34;introduction&#34;&gt;&lt;strong&gt;Introduction&lt;/strong&gt;&lt;/h1&gt;
@@ -5261,6 +5337,32 @@ $ /home/joe/live_log</p>
 <p>And it works! Since “live_log” was an SUID binary, we were able to run it as root. We were able to redirect the path from <code>/usr/bin/tail</code> to <code>/tmp/tail</code> which allowed us to run <code>/bin/bash</code> as root, giving us a root shell.</p>
 <p>That’s all! I hope you enjoyed my explanations. Please send me any constructive feedback <a href="https://www.linkedin.com/in/ally-petitt-5a02aa208/">via LinkedIn</a>. Thank you and take care!</p>
 ]]></content:encoded>
+    </item>
+    <item>
+      <title></title>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/drafts/fixing-rss-link/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/drafts/fixing-rss-link/</guid>
+      <description>&lt;h3 id=&#34;the-problem&#34;&gt;The problem&lt;/h3&gt;
+&lt;p&gt;The links in the rss feed were pointing to localhost.&lt;/p&gt;
+&lt;h3 id=&#34;the-fix&#34;&gt;the fix&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;rm -rf public/*
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hugo --gc --minify --config config.yml,hugo.toml --baseURL https://ally-petitt.github.io:443
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;and commit directly after. running it again will overwrite your github address with localhost.&lt;/p&gt;
+&lt;p&gt;OR&lt;/p&gt;
+&lt;p&gt;You can try doing a recursive find and replace like this&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sed -i  -e &amp;#39;s/http:\/\/localhost:1313\/ally-petitt\//https:\/\/ally-petitt.github.io\/ally-petitt\/en\//g&amp;#39; $(find . -type f)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+      <content:encoded><![CDATA[<h3 id="the-problem">The problem</h3>
+<p>The links in the rss feed were pointing to localhost.</p>
+<h3 id="the-fix">the fix</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>rm -rf public/*
+</span></span><span style="display:flex;"><span>hugo --gc --minify --config config.yml,hugo.toml --baseURL https://ally-petitt.github.io:443
+</span></span></code></pre></div><p>and commit directly after. running it again will overwrite your github address with localhost.</p>
+<p>OR</p>
+<p>You can try doing a recursive find and replace like this</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>sed -i  -e &#39;s/http:\/\/localhost:1313\/ally-petitt\//https:\/\/ally-petitt.github.io\/ally-petitt\/en\//g&#39; $(find . -type f)
+</span></span></code></pre></div>]]></content:encoded>
     </item>
   </channel>
 </rss>

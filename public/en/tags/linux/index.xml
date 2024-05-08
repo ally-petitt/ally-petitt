@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Linux on Ally Petitt</title>
-    <link>https://ally-petitt.github.io:443/en/tags/linux/</link>
+    <link>https://ally-petitt.github.io/ally-petitt/en/en/tags/linux/</link>
     <description>Recent content in Linux on Ally Petitt</description>
     <generator>Hugo -- 0.125.4</generator>
     <language>en</language>
     <lastBuildDate>Sat, 02 Dec 2023 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://ally-petitt.github.io:443/en/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ally-petitt.github.io/ally-petitt/en/en/tags/linux/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Stealthy Exploit Opens Door for Pre-Compilation Code Execution</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2023-12-02_stealthy-exploit-opens-door-for-pre-compilation-code-execution-17a57b9585cb/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-12-02_stealthy-exploit-opens-door-for-pre-compilation-code-execution-17a57b9585cb/</link>
       <pubDate>Sat, 02 Dec 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2023-12-02_stealthy-exploit-opens-door-for-pre-compilation-code-execution-17a57b9585cb/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-12-02_stealthy-exploit-opens-door-for-pre-compilation-code-execution-17a57b9585cb/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*XwuUEqGz-1xT_v_j.jpg&#34; alt=&#34;&#34;  /&gt;
 
 &lt;em&gt;&lt;a href=&#34;https://img.rasset.ie/001babea-1600.jpg&#34;&gt;https://img.rasset.ie/001babea-1600.jpg&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
@@ -108,9 +108,9 @@ For example, hackers can embed a malicious payload within the <code>configure.ac
     </item>
     <item>
       <title>5 Ways I Found Your Deleted Files</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</link>
       <pubDate>Sat, 13 May 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</guid>
       <description>&lt;h2 id=&#34;computer-forensics-for-filerecovery&#34;&gt;Computer Forensics for File Recovery&lt;/h2&gt;
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*MnBiAcwiwaFGOOAe.jpg&#34; alt=&#34;&#34;  /&gt;
 
@@ -542,9 +542,9 @@ Conclusion</h1>
     </item>
     <item>
       <title>How to Encrypt a Drive in Linux</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/</link>
       <pubDate>Fri, 05 May 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/</guid>
       <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;Hey everyone, this is a pretty quick article on LUKS drive encryption on Linux with the &lt;code&gt;cryptsetup&lt;/code&gt; library. By following the steps outlined here, you will be able to encrypt a drive, decrypt it, and mount it. This was done in a Kali Linux VM and commands may vary for other distributions.&lt;/p&gt;
 &lt;p&gt;Disclaimer: This is not an area that I have much experience in so if details are inaccurate, I apologize in advance.&lt;/p&gt;
@@ -700,9 +700,9 @@ Next Steps</h1>
     </item>
     <item>
       <title>Digging into the Linux Secure Boot Process</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2023-04-29_digging-into-the-linux-secure-boot-process-9631a70b158b/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-04-29_digging-into-the-linux-secure-boot-process-9631a70b158b/</link>
       <pubDate>Sat, 29 Apr 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2023-04-29_digging-into-the-linux-secure-boot-process-9631a70b158b/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-04-29_digging-into-the-linux-secure-boot-process-9631a70b158b/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*6T29Pwj4dMhQiPRW.png&#34; alt=&#34;&#34;  /&gt;
 
 &lt;em&gt;Linux Penguin&lt;/em&gt;&lt;/p&gt;

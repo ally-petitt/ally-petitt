@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>WAF on Ally Petitt</title>
-    <link>https://ally-petitt.github.io:443/en/tags/waf/</link>
+    <link>https://ally-petitt.github.io/ally-petitt/en/en/tags/waf/</link>
     <description>Recent content in WAF on Ally Petitt</description>
     <generator>Hugo -- 0.125.4</generator>
     <language>en</language>
     <lastBuildDate>Thu, 01 Jun 2023 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://ally-petitt.github.io:443/en/tags/waf/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ally-petitt.github.io/ally-petitt/en/en/tags/waf/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>5 Ways I Bypassed Your Web Application Firewall (WAF)</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2023-06-01_5-ways-i-bypassed-your-web-application-firewall--waf--43852a43a1c2/</link>
+      <link>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-06-01_5-ways-i-bypassed-your-web-application-firewall--waf--43852a43a1c2/</link>
       <pubDate>Thu, 01 Jun 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2023-06-01_5-ways-i-bypassed-your-web-application-firewall--waf--43852a43a1c2/</guid>
+      <guid>https://ally-petitt.github.io/ally-petitt/en/en/posts/2023-06-01_5-ways-i-bypassed-your-web-application-firewall--waf--43852a43a1c2/</guid>
       <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;This article will explain the tools and techniques used by web application penetration testers and security researchers to successfully bypass web application firewall (WAF) protections.&lt;/p&gt;
 &lt;p&gt;WAFs are a cybersecurity solution to filter and block malicious web traffic. Common vendors include CloudFlare, AWS, Citrix, Akamai, Radware, Microsoft Azure, and Barracuda.&lt;/p&gt;
