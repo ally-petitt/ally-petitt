@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Personal on Ally Petitt</title>
-    <link>https://ally-petitt.github.io/ally-petitt/tags/personal/</link>
+    <link>https://ally-petitt.com/tags/personal/</link>
     <description>Recent content in Personal on Ally Petitt</description>
     <generator>Hugo -- 0.125.4</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 07 May 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://ally-petitt.github.io/ally-petitt/tags/personal/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ally-petitt.com/tags/personal/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>How I became a hacker before I finished high school</title>
-      <link>https://ally-petitt.github.io/ally-petitt/posts/2024-05-07_how-i-became-a-hacker-before-i-finished-high-school/</link>
+      <link>https://ally-petitt.com/posts/2024-05-07_how-i-became-a-hacker-before-i-finished-high-school/</link>
       <pubDate>Tue, 07 May 2024 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/posts/2024-05-07_how-i-became-a-hacker-before-i-finished-high-school/</guid>
+      <guid>https://ally-petitt.com/posts/2024-05-07_how-i-became-a-hacker-before-i-finished-high-school/</guid>
       <description>&lt;p&gt;&lt;em&gt;Author&amp;rsquo;s note: This article was initially published on &lt;a href=&#34;https://readme.synack.com/how-i-became-a-hacker-before-i-finished-high-school&#34;&gt;Synack&amp;rsquo;s README&lt;/a&gt;. They have great content and I recommend that you check it out.&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://22524429.fs1.hubspotusercontent-na1.net/hubfs/22524429/victor-_qXjdWm8YEo-unsplash.jpg&#34; alt=&#34;Picture of a maze from above from Unsplash&#34;  /&gt;
 &lt;/p&gt;
@@ -51,10 +51,10 @@ As a current senior in high school, balancing school life with my professional a
     </item>
     <item>
       <title>Goodbye World - Migrating Away From Medium | Graduation &amp; Next Steps</title>
-      <link>https://ally-petitt.github.io/ally-petitt/posts/2024-04-31_leaving-medium/</link>
+      <link>https://ally-petitt.com/posts/2024-04-31_leaving-medium/</link>
       <pubDate>Fri, 03 May 2024 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/posts/2024-04-31_leaving-medium/</guid>
-      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://ally-petitt.github.io/ally-petitt/ally-petitt/images/Medium-crossed.png&#34; alt=&#34;Medium logo crossed out&#34;  /&gt;
+      <guid>https://ally-petitt.com/posts/2024-04-31_leaving-medium/</guid>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://ally-petitt.com/ally-petitt/images/Medium-crossed.png&#34; alt=&#34;Medium logo crossed out&#34;  /&gt;
 &lt;/p&gt;
 &lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;Hello everyone and welcome to the first exclusive post on my new personal website! I am very excited to be here and I hope that you are as well. The picture above is a bit dramatic, but communicates the message that I have decided to move forward. Those who have been following me will know that I first began my technical blog on Medium, which was an approachable outlet for sharing my knowledge as I first entered the field.&lt;/p&gt;
@@ -67,7 +67,7 @@ As a current senior in high school, balancing school life with my professional a
 &lt;p&gt;Not only am I ascending into adulthood, I am maturing into a professional career doing work that I am extremely passionate about. I wanted that increased seriousness to be reflected in the articles that I write, which is more aptly served by a personal website than Medium (even more so with a custom domain, but that is a work in progress).&lt;/p&gt;
 &lt;p&gt;Additionally, this website offers a more authentic experience. I have purposefully omitted analytics for the benefit of my readers&amp;rsquo; privacy. As a result, these posts are more like a conversation with interested readers than a numbers game.&lt;/p&gt;
 &lt;p&gt;Finally, creating my own website affords me autonomy. My readers are no longer berated by banners and pop-ups to subscribe to get a Medium membership so that they can view other content on the site with the vast majority of it being pay-walled. I can provide my readers with a site that is free to access without distractions- something that I have come to appreciate in my own internet browsing.&lt;/p&gt;
-&lt;p&gt;I also understand that I have readers that prefer stay updated with their authors through RSS feed aggregators. For you, I added an &lt;a href=&#34;https://ally-petitt.github.io/ally-petitt/index.xml&#34;&gt;RSS feed&lt;/a&gt; to the site :).&lt;/p&gt;
+&lt;p&gt;I also understand that I have readers that prefer stay updated with their authors through RSS feed aggregators. For you, I added an &lt;a href=&#34;https://ally-petitt.com/index.xml&#34;&gt;RSS feed&lt;/a&gt; to the site :).&lt;/p&gt;
 &lt;h2 id=&#34;next-steps&#34;&gt;Next Steps&lt;/h2&gt;
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn.vanderbilt.edu/vu-wpfsx/wp-content/uploads/sites/7/2024/04/09234832/commencement-topper-Image-2024-scaled.jpeg&#34; alt=&#34;Picture of a graduation&#34;  /&gt;
 &lt;/p&gt;

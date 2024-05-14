@@ -2,297 +2,297 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Tags on Ally Petitt</title>
-    <link>https://ally-petitt.github.io/ally-petitt/tags/</link>
+    <link>https://ally-petitt.com/tags/</link>
     <description>Recent content in Tags on Ally Petitt</description>
     <generator>Hugo -- 0.125.4</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 07 May 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://ally-petitt.github.io/ally-petitt/tags/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ally-petitt.com/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>OSCP</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/oscp/</link>
+      <link>https://ally-petitt.com/tags/oscp/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/oscp/</guid>
+      <guid>https://ally-petitt.com/tags/oscp/</guid>
       <description></description>
     </item>
     <item>
       <title>Personal</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/personal/</link>
+      <link>https://ally-petitt.com/tags/personal/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/personal/</guid>
+      <guid>https://ally-petitt.com/tags/personal/</guid>
       <description></description>
     </item>
     <item>
       <title>Self-Hosting</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/self-hosting/</link>
+      <link>https://ally-petitt.com/tags/self-hosting/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/self-hosting/</guid>
+      <guid>https://ally-petitt.com/tags/self-hosting/</guid>
       <description></description>
     </item>
     <item>
       <title>Tutorial</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/tutorial/</link>
+      <link>https://ally-petitt.com/tags/tutorial/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/tutorial/</guid>
+      <guid>https://ally-petitt.com/tags/tutorial/</guid>
       <description></description>
     </item>
     <item>
       <title>CVE</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/cve/</link>
+      <link>https://ally-petitt.com/tags/cve/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/cve/</guid>
+      <guid>https://ally-petitt.com/tags/cve/</guid>
       <description></description>
     </item>
     <item>
       <title>GNU</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/gnu/</link>
+      <link>https://ally-petitt.com/tags/gnu/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/gnu/</guid>
+      <guid>https://ally-petitt.com/tags/gnu/</guid>
       <description></description>
     </item>
     <item>
       <title>Security Research</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/security-research/</link>
+      <link>https://ally-petitt.com/tags/security-research/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/security-research/</guid>
+      <guid>https://ally-petitt.com/tags/security-research/</guid>
       <description></description>
     </item>
     <item>
       <title>Writeup</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/writeup/</link>
+      <link>https://ally-petitt.com/tags/writeup/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/writeup/</guid>
+      <guid>https://ally-petitt.com/tags/writeup/</guid>
       <description></description>
     </item>
     <item>
       <title>Static Analysis</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/static-analysis/</link>
+      <link>https://ally-petitt.com/tags/static-analysis/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/static-analysis/</guid>
+      <guid>https://ally-petitt.com/tags/static-analysis/</guid>
       <description></description>
     </item>
     <item>
       <title>Autoconf</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/autoconf/</link>
+      <link>https://ally-petitt.com/tags/autoconf/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/autoconf/</guid>
+      <guid>https://ally-petitt.com/tags/autoconf/</guid>
       <description></description>
     </item>
     <item>
       <title>Informative</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/informative/</link>
+      <link>https://ally-petitt.com/tags/informative/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/informative/</guid>
+      <guid>https://ally-petitt.com/tags/informative/</guid>
       <description></description>
     </item>
     <item>
       <title>Linux</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/linux/</link>
+      <link>https://ally-petitt.com/tags/linux/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/linux/</guid>
+      <guid>https://ally-petitt.com/tags/linux/</guid>
       <description></description>
     </item>
     <item>
       <title>Tooling</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/tooling/</link>
+      <link>https://ally-petitt.com/tags/tooling/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/tooling/</guid>
+      <guid>https://ally-petitt.com/tags/tooling/</guid>
       <description></description>
     </item>
     <item>
       <title>Firmware</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/firmware/</link>
+      <link>https://ally-petitt.com/tags/firmware/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/firmware/</guid>
+      <guid>https://ally-petitt.com/tags/firmware/</guid>
       <description></description>
     </item>
     <item>
       <title>Supply Chain</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/supply-chain/</link>
+      <link>https://ally-petitt.com/tags/supply-chain/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/supply-chain/</guid>
+      <guid>https://ally-petitt.com/tags/supply-chain/</guid>
       <description></description>
     </item>
     <item>
       <title>Forensics</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/forensics/</link>
+      <link>https://ally-petitt.com/tags/forensics/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/forensics/</guid>
+      <guid>https://ally-petitt.com/tags/forensics/</guid>
       <description></description>
     </item>
     <item>
       <title>Reverse Engineering</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/reverse-engineering/</link>
+      <link>https://ally-petitt.com/tags/reverse-engineering/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/reverse-engineering/</guid>
+      <guid>https://ally-petitt.com/tags/reverse-engineering/</guid>
       <description></description>
     </item>
     <item>
       <title>Defense Evasion</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/defense-evasion/</link>
+      <link>https://ally-petitt.com/tags/defense-evasion/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/defense-evasion/</guid>
+      <guid>https://ally-petitt.com/tags/defense-evasion/</guid>
       <description></description>
     </item>
     <item>
       <title>WAF</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/waf/</link>
+      <link>https://ally-petitt.com/tags/waf/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/waf/</guid>
+      <guid>https://ally-petitt.com/tags/waf/</guid>
       <description></description>
     </item>
     <item>
       <title>CTF</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/ctf/</link>
+      <link>https://ally-petitt.com/tags/ctf/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/ctf/</guid>
+      <guid>https://ally-petitt.com/tags/ctf/</guid>
       <description></description>
     </item>
     <item>
       <title>Drive Encryption</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/drive-encryption/</link>
+      <link>https://ally-petitt.com/tags/drive-encryption/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/drive-encryption/</guid>
+      <guid>https://ally-petitt.com/tags/drive-encryption/</guid>
       <description></description>
     </item>
     <item>
       <title>Snort</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/snort/</link>
+      <link>https://ally-petitt.com/tags/snort/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/snort/</guid>
+      <guid>https://ally-petitt.com/tags/snort/</guid>
       <description></description>
     </item>
     <item>
       <title>Secure Boot</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/secure-boot/</link>
+      <link>https://ally-petitt.com/tags/secure-boot/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/secure-boot/</guid>
+      <guid>https://ally-petitt.com/tags/secure-boot/</guid>
       <description></description>
     </item>
     <item>
       <title>Blue Team</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/blue-team/</link>
+      <link>https://ally-petitt.com/tags/blue-team/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/blue-team/</guid>
+      <guid>https://ally-petitt.com/tags/blue-team/</guid>
       <description></description>
     </item>
     <item>
       <title>Data Loss Protection (DLP)</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/data-loss-protection-dlp/</link>
+      <link>https://ally-petitt.com/tags/data-loss-protection-dlp/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/data-loss-protection-dlp/</guid>
+      <guid>https://ally-petitt.com/tags/data-loss-protection-dlp/</guid>
       <description></description>
     </item>
     <item>
       <title>Troubleshooting</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/troubleshooting/</link>
+      <link>https://ally-petitt.com/tags/troubleshooting/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/troubleshooting/</guid>
+      <guid>https://ally-petitt.com/tags/troubleshooting/</guid>
       <description></description>
     </item>
     <item>
       <title>NextCloud</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/nextcloud/</link>
+      <link>https://ally-petitt.com/tags/nextcloud/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/nextcloud/</guid>
+      <guid>https://ally-petitt.com/tags/nextcloud/</guid>
       <description></description>
     </item>
     <item>
       <title>DNS Cache Poisoning</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/dns-cache-poisoning/</link>
+      <link>https://ally-petitt.com/tags/dns-cache-poisoning/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/dns-cache-poisoning/</guid>
+      <guid>https://ally-petitt.com/tags/dns-cache-poisoning/</guid>
       <description></description>
     </item>
     <item>
       <title>Lab</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/lab/</link>
+      <link>https://ally-petitt.com/tags/lab/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/lab/</guid>
+      <guid>https://ally-petitt.com/tags/lab/</guid>
       <description></description>
     </item>
     <item>
       <title>Pentesting</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/pentesting/</link>
+      <link>https://ally-petitt.com/tags/pentesting/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/pentesting/</guid>
+      <guid>https://ally-petitt.com/tags/pentesting/</guid>
       <description></description>
     </item>
     <item>
       <title>VPN</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/vpn/</link>
+      <link>https://ally-petitt.com/tags/vpn/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/vpn/</guid>
+      <guid>https://ally-petitt.com/tags/vpn/</guid>
       <description></description>
     </item>
     <item>
       <title>PEN-200</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/pen-200/</link>
+      <link>https://ally-petitt.com/tags/pen-200/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/pen-200/</guid>
+      <guid>https://ally-petitt.com/tags/pen-200/</guid>
       <description></description>
     </item>
     <item>
       <title>News</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/news/</link>
+      <link>https://ally-petitt.com/tags/news/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/news/</guid>
+      <guid>https://ally-petitt.com/tags/news/</guid>
       <description></description>
     </item>
     <item>
       <title>Incident Response</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/incident-response/</link>
+      <link>https://ally-petitt.com/tags/incident-response/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/incident-response/</guid>
+      <guid>https://ally-petitt.com/tags/incident-response/</guid>
       <description></description>
     </item>
     <item>
       <title>Cheatsheet</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/cheatsheet/</link>
+      <link>https://ally-petitt.com/tags/cheatsheet/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/cheatsheet/</guid>
+      <guid>https://ally-petitt.com/tags/cheatsheet/</guid>
       <description></description>
     </item>
     <item>
       <title>File Transfers</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/file-transfers/</link>
+      <link>https://ally-petitt.com/tags/file-transfers/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/file-transfers/</guid>
+      <guid>https://ally-petitt.com/tags/file-transfers/</guid>
       <description></description>
     </item>
     <item>
       <title>Active Directory</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/active-directory/</link>
+      <link>https://ally-petitt.com/tags/active-directory/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/active-directory/</guid>
+      <guid>https://ally-petitt.com/tags/active-directory/</guid>
       <description></description>
     </item>
     <item>
       <title>Kerberos</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/kerberos/</link>
+      <link>https://ally-petitt.com/tags/kerberos/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/kerberos/</guid>
+      <guid>https://ally-petitt.com/tags/kerberos/</guid>
       <description></description>
     </item>
     <item>
       <title>Networking</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/networking/</link>
+      <link>https://ally-petitt.com/tags/networking/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/networking/</guid>
+      <guid>https://ally-petitt.com/tags/networking/</guid>
       <description></description>
     </item>
     <item>
       <title>TryHackMe</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/tryhackme/</link>
+      <link>https://ally-petitt.com/tags/tryhackme/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/tryhackme/</guid>
+      <guid>https://ally-petitt.com/tags/tryhackme/</guid>
       <description></description>
     </item>
     <item>
       <title>XXE</title>
-      <link>https://ally-petitt.github.io/ally-petitt/tags/xxe/</link>
+      <link>https://ally-petitt.com/tags/xxe/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/tags/xxe/</guid>
+      <guid>https://ally-petitt.com/tags/xxe/</guid>
       <description></description>
     </item>
   </channel>

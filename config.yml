@@ -1,4 +1,4 @@
-baseURL: "https://ally-petitt.github.io/ally-petitt/"
+baseURL: "https://ally-petitt.com"
 title: Ally Petitt
 paginate: 5
 theme: hugo-PaperMod
@@ -84,7 +84,7 @@ params:
       url: "https://www.linkedin.com/in/ally-petitt/"
     - name: rss
       title: View RSS Feed
-      url: "https://ally-petitt.github.io/ally-petitt/en/index.xml"
+      url: "https://ally-petitt.com/en/index.xml"
 
   profileMode:
     enabled: false

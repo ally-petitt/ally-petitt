@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Tutorial on Ally Petitt</title>
-    <link>https://ally-petitt.github.io/ally-petitt/tags/tutorial/</link>
+    <link>https://ally-petitt.com/tags/tutorial/</link>
     <description>Recent content in Tutorial on Ally Petitt</description>
     <generator>Hugo -- 0.125.4</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 03 May 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://ally-petitt.github.io/ally-petitt/tags/tutorial/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ally-petitt.com/tags/tutorial/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Goodbye World - Migrating Away From Medium | Graduation &amp; Next Steps</title>
-      <link>https://ally-petitt.github.io/ally-petitt/posts/2024-04-31_leaving-medium/</link>
+      <link>https://ally-petitt.com/posts/2024-04-31_leaving-medium/</link>
       <pubDate>Fri, 03 May 2024 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/posts/2024-04-31_leaving-medium/</guid>
-      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://ally-petitt.github.io/ally-petitt/ally-petitt/images/Medium-crossed.png&#34; alt=&#34;Medium logo crossed out&#34;  /&gt;
+      <guid>https://ally-petitt.com/posts/2024-04-31_leaving-medium/</guid>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://ally-petitt.com/ally-petitt/images/Medium-crossed.png&#34; alt=&#34;Medium logo crossed out&#34;  /&gt;
 &lt;/p&gt;
 &lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;Hello everyone and welcome to the first exclusive post on my new personal website! I am very excited to be here and I hope that you are as well. The picture above is a bit dramatic, but communicates the message that I have decided to move forward. Those who have been following me will know that I first began my technical blog on Medium, which was an approachable outlet for sharing my knowledge as I first entered the field.&lt;/p&gt;
@@ -26,7 +26,7 @@
 &lt;p&gt;Not only am I ascending into adulthood, I am maturing into a professional career doing work that I am extremely passionate about. I wanted that increased seriousness to be reflected in the articles that I write, which is more aptly served by a personal website than Medium (even more so with a custom domain, but that is a work in progress).&lt;/p&gt;
 &lt;p&gt;Additionally, this website offers a more authentic experience. I have purposefully omitted analytics for the benefit of my readers&amp;rsquo; privacy. As a result, these posts are more like a conversation with interested readers than a numbers game.&lt;/p&gt;
 &lt;p&gt;Finally, creating my own website affords me autonomy. My readers are no longer berated by banners and pop-ups to subscribe to get a Medium membership so that they can view other content on the site with the vast majority of it being pay-walled. I can provide my readers with a site that is free to access without distractions- something that I have come to appreciate in my own internet browsing.&lt;/p&gt;
-&lt;p&gt;I also understand that I have readers that prefer stay updated with their authors through RSS feed aggregators. For you, I added an &lt;a href=&#34;https://ally-petitt.github.io/ally-petitt/index.xml&#34;&gt;RSS feed&lt;/a&gt; to the site :).&lt;/p&gt;
+&lt;p&gt;I also understand that I have readers that prefer stay updated with their authors through RSS feed aggregators. For you, I added an &lt;a href=&#34;https://ally-petitt.com/index.xml&#34;&gt;RSS feed&lt;/a&gt; to the site :).&lt;/p&gt;
 &lt;h2 id=&#34;next-steps&#34;&gt;Next Steps&lt;/h2&gt;
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn.vanderbilt.edu/vu-wpfsx/wp-content/uploads/sites/7/2024/04/09234832/commencement-topper-Image-2024-scaled.jpeg&#34; alt=&#34;Picture of a graduation&#34;  /&gt;
 &lt;/p&gt;
@@ -48,9 +48,9 @@
     </item>
     <item>
       <title>How to Find more Vulnerabilities — Source Code Auditing Explained</title>
-      <link>https://ally-petitt.github.io/ally-petitt/posts/2024-01-01_how-to-find-more-vulnerabilities---source-code-auditing-explained-2c8a10896374/</link>
+      <link>https://ally-petitt.com/posts/2024-01-01_how-to-find-more-vulnerabilities---source-code-auditing-explained-2c8a10896374/</link>
       <pubDate>Mon, 01 Jan 2024 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/posts/2024-01-01_how-to-find-more-vulnerabilities---source-code-auditing-explained-2c8a10896374/</guid>
+      <guid>https://ally-petitt.com/posts/2024-01-01_how-to-find-more-vulnerabilities---source-code-auditing-explained-2c8a10896374/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*jDmBerRWYf3eZh2J&#34; alt=&#34;&#34;  /&gt;
 
 &lt;em&gt;&lt;a href=&#34;https://images.pexels.com/photos/374559/pexels-photo-374559.jpeg?auto=compress&amp;amp;amp;cs=tinysrgb&amp;amp;amp;w=1260&amp;amp;amp;h=750&amp;amp;amp;dpr=1&#34;&gt;https://images.pexels.com/photos/374559/pexels-photo-374559.jpeg?auto=compress&amp;amp;amp;cs=tinysrgb&amp;amp;amp;w=1260&amp;amp;amp;h=750&amp;amp;amp;dpr=1&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
@@ -103,9 +103,9 @@ Tooling&lt;/h1&gt;
     </item>
     <item>
       <title>How to safely convert to LVM without losing your data</title>
-      <link>https://ally-petitt.github.io/ally-petitt/posts/2023-08-19_how-to-safely-convert-to-lvm-without-losing-your-data-258ce044448/</link>
+      <link>https://ally-petitt.com/posts/2023-08-19_how-to-safely-convert-to-lvm-without-losing-your-data-258ce044448/</link>
       <pubDate>Sat, 19 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/posts/2023-08-19_how-to-safely-convert-to-lvm-without-losing-your-data-258ce044448/</guid>
+      <guid>https://ally-petitt.com/posts/2023-08-19_how-to-safely-convert-to-lvm-without-losing-your-data-258ce044448/</guid>
       <description>&lt;h1 id=&#34;introduction&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*es1LJrnEBsSNgXZM.png&#34; alt=&#34;&#34;  /&gt;
 
 Introduction&lt;/h1&gt;
@@ -188,9 +188,9 @@ UUID=&amp;lt;your-root-uuid&amp;gt; / ext4 rw,relatime 0 1
     </item>
     <item>
       <title>5 Ways I Found Your Deleted Files</title>
-      <link>https://ally-petitt.github.io/ally-petitt/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</link>
+      <link>https://ally-petitt.com/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</link>
       <pubDate>Sat, 13 May 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</guid>
+      <guid>https://ally-petitt.com/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</guid>
       <description>&lt;h2 id=&#34;computer-forensics-for-filerecovery&#34;&gt;Computer Forensics for File Recovery&lt;/h2&gt;
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*MnBiAcwiwaFGOOAe.jpg&#34; alt=&#34;&#34;  /&gt;
 
@@ -408,9 +408,9 @@ Conclusion&lt;/h1&gt;
     </item>
     <item>
       <title>How to Encrypt a Drive in Linux</title>
-      <link>https://ally-petitt.github.io/ally-petitt/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/</link>
+      <link>https://ally-petitt.com/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/</link>
       <pubDate>Fri, 05 May 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/</guid>
+      <guid>https://ally-petitt.com/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/</guid>
       <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;Hey everyone, this is a pretty quick article on LUKS drive encryption on Linux with the &lt;code&gt;cryptsetup&lt;/code&gt; library. By following the steps outlined here, you will be able to encrypt a drive, decrypt it, and mount it. This was done in a Kali Linux VM and commands may vary for other distributions.&lt;/p&gt;
 &lt;p&gt;Disclaimer: This is not an area that I have much experience in so if details are inaccurate, I apologize in advance.&lt;/p&gt;
@@ -490,9 +490,9 @@ Next Steps&lt;/h1&gt;
     </item>
     <item>
       <title>Snort IPS Quickstart</title>
-      <link>https://ally-petitt.github.io/ally-petitt/posts/2023-05-02_snort-ips-quickstart-27559ae01fae/</link>
+      <link>https://ally-petitt.com/posts/2023-05-02_snort-ips-quickstart-27559ae01fae/</link>
       <pubDate>Tue, 02 May 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/posts/2023-05-02_snort-ips-quickstart-27559ae01fae/</guid>
+      <guid>https://ally-petitt.com/posts/2023-05-02_snort-ips-quickstart-27559ae01fae/</guid>
       <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;Snort is an open source Intrusion Prevention System (IPS) that detects malicious network traffic by comparing the network packets to a set of rules, often created by Snort and the community. Snort can be used as a packet sniffer, packet logger, and intrusion prevention system.&lt;/p&gt;
 &lt;p&gt;In this article, I’ll go over some of the first steps of installing, configuring, and running Snort so that new users have a place to branch off of.&lt;/p&gt;
@@ -583,9 +583,9 @@ root 196973 0.0 0.3 450316 118644 ? Ssl 10:25 0:00 snort -D -i wlan0 -c /etc/sno
     </item>
     <item>
       <title>Restoring Files in /usr/include</title>
-      <link>https://ally-petitt.github.io/ally-petitt/posts/2023-04-13_restoring-files-in--usr-include-88622911c3ae/</link>
+      <link>https://ally-petitt.com/posts/2023-04-13_restoring-files-in--usr-include-88622911c3ae/</link>
       <pubDate>Thu, 13 Apr 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/posts/2023-04-13_restoring-files-in--usr-include-88622911c3ae/</guid>
+      <guid>https://ally-petitt.com/posts/2023-04-13_restoring-files-in--usr-include-88622911c3ae/</guid>
       <description>&lt;p&gt;Hi guys, I made a mistake. In my frustration trying to debug my C program, I inadvertently deleted all the files within my &lt;code&gt;/usr/include&lt;/code&gt; folder. I didn’t realize at the time that this was a very important folder! As explained &lt;a href=&#34;https://www.kernel.org/doc/Documentation/kbuild/headers_install.txt&#34;&gt;here&lt;/a&gt;, it stores the Linux kernel’s libc header files! Rookie mistake, but luckily for us, there’s ways to fix it.&lt;/p&gt;
 &lt;p&gt;If your &lt;code&gt;/usr/include&lt;/code&gt; folder is also looking more empty than the shelves during COVID, I come bearing the solution.&lt;/p&gt;
 &lt;h1 id=&#34;getting-kernelheaders&#34;&gt;Getting Kernel Headers&lt;/h1&gt;
@@ -612,9 +612,9 @@ sudo apt install linux-libc-dev
     </item>
     <item>
       <title>How to Create and Deploy Your Own Cloud Server with NextCloud</title>
-      <link>https://ally-petitt.github.io/ally-petitt/posts/2023-04-09_how-to-create-and-deploy-your-own-cloud-server-with-nextcloud-345e185d602a/</link>
+      <link>https://ally-petitt.com/posts/2023-04-09_how-to-create-and-deploy-your-own-cloud-server-with-nextcloud-345e185d602a/</link>
       <pubDate>Sun, 09 Apr 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/posts/2023-04-09_how-to-create-and-deploy-your-own-cloud-server-with-nextcloud-345e185d602a/</guid>
+      <guid>https://ally-petitt.com/posts/2023-04-09_how-to-create-and-deploy-your-own-cloud-server-with-nextcloud-345e185d602a/</guid>
       <description>&lt;h1 id=&#34;why-create-a-cloudserver&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*-WVjY5h4EpphjjX7&#34; alt=&#34;&#34;  /&gt;
 
 Why Create a Cloud Server?&lt;/h1&gt;
@@ -700,9 +700,9 @@ Conclusion&lt;/h1&gt;
     </item>
     <item>
       <title>Practical Demonstration: DNS Spoofing &#43; Home Lab</title>
-      <link>https://ally-petitt.github.io/ally-petitt/posts/2023-03-28_practical-demonstration--dns-spoofing---home-lab-f7294443fb23/</link>
+      <link>https://ally-petitt.com/posts/2023-03-28_practical-demonstration--dns-spoofing---home-lab-f7294443fb23/</link>
       <pubDate>Tue, 28 Mar 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/posts/2023-03-28_practical-demonstration--dns-spoofing---home-lab-f7294443fb23/</guid>
+      <guid>https://ally-petitt.com/posts/2023-03-28_practical-demonstration--dns-spoofing---home-lab-f7294443fb23/</guid>
       <description>&lt;h2 id=&#34;dns-cache-poisoning-on-home-lab-walkthrough&#34;&gt;DNS Cache Poisoning on Home Lab Walkthrough&lt;/h2&gt;
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*P3ZahJWqz8AFbk9s.png&#34; alt=&#34;Basic DNS cache poisoning attack&#34;  /&gt;
 
@@ -839,9 +839,9 @@ Remediation&lt;/h1&gt;
     </item>
     <item>
       <title>Pentester’s Guide to Performing File Transfers</title>
-      <link>https://ally-petitt.github.io/ally-petitt/posts/2022-06-08_pentester-s-guide-to-performing-file-transfers-3c1a6a38dfc8/</link>
+      <link>https://ally-petitt.com/posts/2022-06-08_pentester-s-guide-to-performing-file-transfers-3c1a6a38dfc8/</link>
       <pubDate>Wed, 08 Jun 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/posts/2022-06-08_pentester-s-guide-to-performing-file-transfers-3c1a6a38dfc8/</guid>
+      <guid>https://ally-petitt.com/posts/2022-06-08_pentester-s-guide-to-performing-file-transfers-3c1a6a38dfc8/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*HNC0lT4gPMDU8uH0fyjRyw.png&#34; alt=&#34;&#34;  /&gt;
 &lt;/p&gt;
 &lt;h1 id=&#34;foreword&#34;&gt;Foreword&lt;/h1&gt;
@@ -908,9 +908,9 @@ File Transfer With an HTTP Server&lt;/h1&gt;
     </item>
     <item>
       <title>Antivirus Evasion: What it is and How to do it</title>
-      <link>https://ally-petitt.github.io/ally-petitt/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/</link>
+      <link>https://ally-petitt.com/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/</link>
       <pubDate>Mon, 30 May 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/</guid>
+      <guid>https://ally-petitt.com/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*W1qjqIKKNMK9_QYWXGQzRw.png&#34; alt=&#34;picture of a bug&#34;  /&gt;
 &lt;/p&gt;
 &lt;h1 id=&#34;how-does-antivirus-software-actuallywork&#34;&gt;How Does Antivirus Software Actually Work?&lt;/h1&gt;
@@ -973,9 +973,9 @@ Command-Line Tools&lt;/h2&gt;
     </item>
     <item>
       <title>Mustacchio Walkthrough | Try Hack Me | Ally Petitt</title>
-      <link>https://ally-petitt.github.io/ally-petitt/posts/2022-02-18_mustacchio-walkthrough---try-hack-me---ally-petitt-6295dfbbfb1b/</link>
+      <link>https://ally-petitt.com/posts/2022-02-18_mustacchio-walkthrough---try-hack-me---ally-petitt-6295dfbbfb1b/</link>
       <pubDate>Fri, 18 Feb 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/posts/2022-02-18_mustacchio-walkthrough---try-hack-me---ally-petitt-6295dfbbfb1b/</guid>
+      <guid>https://ally-petitt.com/posts/2022-02-18_mustacchio-walkthrough---try-hack-me---ally-petitt-6295dfbbfb1b/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*F19asfqgh7o-jFDVwsTizA.png&#34; alt=&#34;&#34;  /&gt;
 &lt;/p&gt;
 &lt;h1 id=&#34;introduction&#34;&gt;&lt;strong&gt;Introduction&lt;/strong&gt;&lt;/h1&gt;

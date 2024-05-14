@@ -29,7 +29,7 @@ Additionally, this website offers a more authentic experience. I have purposeful
 
 Finally, creating my own website affords me autonomy. My readers are no longer berated by banners and pop-ups to subscribe to get a Medium membership so that they can view other content on the site with the vast majority of it being pay-walled. I can provide my readers with a site that is free to access without distractions- something that I have come to appreciate in my own internet browsing. 
 
-I also understand that I have readers that prefer stay updated with their authors through RSS feed aggregators. For you, I added an [RSS feed](https://ally-petitt.github.io/ally-petitt/index.xml) to the site :).
+I also understand that I have readers that prefer stay updated with their authors through RSS feed aggregators. For you, I added an [RSS feed](https://ally-petitt.com/index.xml) to the site :).
 
 ## Next Steps
 ![Picture of a graduation](https://cdn.vanderbilt.edu/vu-wpfsx/wp-content/uploads/sites/7/2024/04/09234832/commencement-topper-Image-2024-scaled.jpeg)

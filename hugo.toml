@@ -1,4 +1,4 @@
-baseURL = 'https://ally-petitt.github.io/ally-petitt/'
+baseURL = 'https://ally-petitt.com/'
 languageCode = 'en-us'
 title = 'Ally Petitt'
 theme = 'hugo-PaperMod'

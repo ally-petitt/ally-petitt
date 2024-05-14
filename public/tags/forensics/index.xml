@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Forensics on Ally Petitt</title>
-    <link>https://ally-petitt.github.io/ally-petitt/tags/forensics/</link>
+    <link>https://ally-petitt.com/tags/forensics/</link>
     <description>Recent content in Forensics on Ally Petitt</description>
     <generator>Hugo -- 0.125.4</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 13 Jul 2023 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://ally-petitt.github.io/ally-petitt/tags/forensics/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ally-petitt.com/tags/forensics/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Reverse Engineering — Analyzing Headers</title>
-      <link>https://ally-petitt.github.io/ally-petitt/posts/2023-07-13_reverse-engineering---analyzing-headers-23dc84075cd/</link>
+      <link>https://ally-petitt.com/posts/2023-07-13_reverse-engineering---analyzing-headers-23dc84075cd/</link>
       <pubDate>Thu, 13 Jul 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/posts/2023-07-13_reverse-engineering---analyzing-headers-23dc84075cd/</guid>
+      <guid>https://ally-petitt.com/posts/2023-07-13_reverse-engineering---analyzing-headers-23dc84075cd/</guid>
       <description>&lt;p&gt;&lt;code&gt;objdump&lt;/code&gt; is a command line tool that can be used to gain insight into an executable binary. In this article, the tool will be used to dump all of the headers of the ELF binary &lt;code&gt;heapedit&lt;/code&gt; with the command below. Then, we will analyze and explain each section of output from the top to the bottom.&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;objdump -x ./heapedit
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Executable and Linkable Format (ELF) files are a common file format for object files, executable binaries, core dumps, and shared libraries. It provides a standardized format for storing executable and object code, symbol information, and other metadata necessary for proper software execution. It may be helpful to first get an overview of an ELF file structure which can be seen in this image:&lt;/p&gt;
@@ -287,9 +287,9 @@ typedef struct {
     </item>
     <item>
       <title>5 Ways I Found Your Deleted Files</title>
-      <link>https://ally-petitt.github.io/ally-petitt/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</link>
+      <link>https://ally-petitt.com/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</link>
       <pubDate>Sat, 13 May 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io/ally-petitt/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</guid>
+      <guid>https://ally-petitt.com/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</guid>
       <description>&lt;h2 id=&#34;computer-forensics-for-filerecovery&#34;&gt;Computer Forensics for File Recovery&lt;/h2&gt;
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*MnBiAcwiwaFGOOAe.jpg&#34; alt=&#34;&#34;  /&gt;
 

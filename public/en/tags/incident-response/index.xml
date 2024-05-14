@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Incident Response on Ally Petitt</title>
-    <link>https://ally-petitt.github.io:443/en/tags/incident-response/</link>
+    <link>https://ally-petitt.com/en/tags/incident-response/</link>
     <description>Recent content in Incident Response on Ally Petitt</description>
     <generator>Hugo -- 0.125.4</generator>
     <language>en</language>
     <lastBuildDate>Sat, 09 Jul 2022 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://ally-petitt.github.io:443/en/tags/incident-response/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ally-petitt.com/en/tags/incident-response/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>How Companies Respond to Cyber Attacks | The 6 Steps of an Incident Response Plan</title>
-      <link>https://ally-petitt.github.io:443/en/posts/2022-07-09_how-companies-respond-to-cyber-attacks---the-6-steps-of-an-incident-response-plan-9c6f4267253e/</link>
+      <link>https://ally-petitt.com/en/posts/2022-07-09_how-companies-respond-to-cyber-attacks---the-6-steps-of-an-incident-response-plan-9c6f4267253e/</link>
       <pubDate>Sat, 09 Jul 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.github.io:443/en/posts/2022-07-09_how-companies-respond-to-cyber-attacks---the-6-steps-of-an-incident-response-plan-9c6f4267253e/</guid>
+      <guid>https://ally-petitt.com/en/posts/2022-07-09_how-companies-respond-to-cyber-attacks---the-6-steps-of-an-incident-response-plan-9c6f4267253e/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*NYCBo5F_MGeRvxzrEm1hsg.png&#34; alt=&#34;&#34;  /&gt;
 &lt;/p&gt;
 &lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
