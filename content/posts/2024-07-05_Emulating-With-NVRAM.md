@@ -23,7 +23,7 @@ In this article, I’ll walk through one method that I used to hook into the fun
 
 *Note: By "target application" or "target binary", I am referring to the binary that is being emulated in QEMU and relies on the NVRAM. In my specific case, this is `httpd` in my extracted firmware.*
 
-This article aims to walk you through my thought process in approaching this rather than solely offering a copy-paste solution. I have found reading other researcher's though processes to be helpful in the past and was hoping to pay it forward. As such, my troubleshooting steps and some of my (failed) ideas are included.
+This article aims to walk you through my thought process in approaching this rather than solely offering a copy-paste solution. I have found reading other researcher's thought processes to be helpful in the past and was hoping to pay it forward. As such, my troubleshooting steps and some of my (failed) ideas are included.
 
 **TLDR;** I built an instance of [crosstool-ng](https://github.com/crosstool-ng/crosstool-ng) to create a `armeb-unknown-eabi` toolchain. This was necessary for me to cross-compile [nvram-faker](https://github.com/zcutlip/nvram-faker) in the target architecture: big endian, 32-bit ARM. Nvram-faker allowed us to hijack function calls originally intended for libnvram.so, which is a library used to interface with `/dev/nvram`, through the `LD_PRELOAD` variable. I ended up patching `nvram-faker` in my [own fork](https://github.com/ally-petitt/nvram-faker) to solve dynamic linking issues and solve a bug that caused a segfault.
 
