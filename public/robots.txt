@@ -1,3 +1,2 @@
 User-agent: *
-Disallow:
 Sitemap: https://ally-petitt.com:443/sitemap.xml

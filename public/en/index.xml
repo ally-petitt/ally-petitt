@@ -6085,9 +6085,17 @@ $ /home/joe/live_log</p>
       <link>https://ally-petitt.com:443/en/about-me/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://ally-petitt.com:443/en/about-me/</guid>
-      <description>&lt;p&gt;High school student by day, hacker by night.&lt;/p&gt;
+      <description>&lt;p&gt;When I was 14 years old, I began teaching myself to code in the midst of a global pandemic. I was curious about how the ubiquitious technology of my childhood actually worked. Fast-forward 3 software engineering internships, I learned the concept of cybersecurity. Particularly, I was fascinated by the idea of being able to use a set of rules in a way that caused the very behavior they were enacted to prevent. This mirrored the strategy games that I pored over as a child.&lt;/p&gt;
+&lt;p&gt;I made a discovery that few adolescents make so early on: I knew what I wanted to do with my future. And that was cybersecurity, specifically specializations that are investigative in nature. The rest is history.&lt;/p&gt;
+&lt;p&gt;At the age of 16- I became one of the youngest people globally to earn the OSCP and negotiated my way into an 8-week, red team internship doing offensive security operations in the municipal enterprise environment of the City of Bakersfield.&lt;/p&gt;
+&lt;p&gt;At the age of 17- I discovered 8 CVEs, became the youngest Synack Red Team Security Researcher, and performed Chevron-sponsored academic research on parallel processing in GPUs, developing my own CUDA kernel.&lt;/p&gt;
+&lt;p&gt;At the age of 18&amp;hellip; I aim to continue on the trajectory I&amp;rsquo;ve been fortunate enough to experience, honing my technical skills, and continuing to ask questions that lead to new discoveries.&lt;/p&gt;
 </description>
-      <content:encoded><![CDATA[<p>High school student by day, hacker by night.</p>
+      <content:encoded><![CDATA[<p>When I was 14 years old, I began teaching myself to code in the midst of a global pandemic. I was curious about how the ubiquitious technology of my childhood actually worked. Fast-forward 3 software engineering internships, I learned the concept of cybersecurity. Particularly, I was fascinated by the idea of being able to use a set of rules in a way that caused the very behavior they were enacted to prevent. This mirrored the strategy games that I pored over as a child.</p>
+<p>I made a discovery that few adolescents make so early on: I knew what I wanted to do with my future. And that was cybersecurity, specifically specializations that are investigative in nature. The rest is history.</p>
+<p>At the age of 16- I became one of the youngest people globally to earn the OSCP and negotiated my way into an 8-week, red team internship doing offensive security operations in the municipal enterprise environment of the City of Bakersfield.</p>
+<p>At the age of 17- I discovered 8 CVEs, became the youngest Synack Red Team Security Researcher, and performed Chevron-sponsored academic research on parallel processing in GPUs, developing my own CUDA kernel.</p>
+<p>At the age of 18&hellip; I aim to continue on the trajectory I&rsquo;ve been fortunate enough to experience, honing my technical skills, and continuing to ask questions that lead to new discoveries.</p>
 ]]></content:encoded>
     </item>
   </channel>
