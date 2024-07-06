@@ -85,6 +85,7 @@
 &lt;p&gt;The &lt;code&gt;httpd&lt;/code&gt; program imports functions like &lt;code&gt;nvram_get()&lt;/code&gt; and &lt;code&gt;nvram_set()&lt;/code&gt; from &lt;code&gt;libnvram.so&lt;/code&gt; that manage interactions with &lt;code&gt;/dev/nvram&lt;/code&gt;. If we were able to set our own definitions for what &lt;code&gt;nvam_get()&lt;/code&gt; and &lt;code&gt;nvram_set()&lt;/code&gt; do, we can effectively control the values that &lt;code&gt;httpd&lt;/code&gt; recieves when attempting to interact with the NVRAM through these functions.&lt;/p&gt;
 &lt;p&gt;That is what &lt;code&gt;nvram-faker&lt;/code&gt; does. We can recreate the NVRAM-related procedures called by &lt;code&gt;httpd&lt;/code&gt; in &lt;code&gt;nvram-faker.c&lt;/code&gt; and compile them into our own library, &lt;code&gt;libnvram-faker.so&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;Furthermore, &lt;code&gt;httpd&lt;/code&gt; dynamically links the &lt;code&gt;libnvram.so&lt;/code&gt; library with the dynamic linker &lt;a href=&#34;https://man7.org/linux/man-pages/man8/ld.so.8.html&#34;&gt;ld&lt;/a&gt;. By setting the environment variable &lt;code&gt;LD_PRELOAD&lt;/code&gt; to &lt;code&gt;libnvram-faker.so&lt;/code&gt;, &lt;code&gt;ld&lt;/code&gt; is instructed to load our crafted shared object file before the real &lt;code&gt;libnvram.so&lt;/code&gt; library is loaded in. Consequently, the NVRAM-related procedures that we defined in &lt;code&gt;nvram-faker.c&lt;/code&gt; (and by extension &lt;code&gt;libnvram-faker.so&lt;/code&gt;) will be called instead of the intended symbols in &lt;code&gt;libnvram.so&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Nvram-faker&lt;/code&gt; is programmed to parse through key-value pairs stored in a &lt;code&gt;/nvram.ini&lt;/code&gt; file in the firmware squashfs root. When the target binary calls &lt;code&gt;nvram_get()&lt;/code&gt;, the value defined in &lt;code&gt;/nvram.ini&lt;/code&gt; for the requested key is returned.&lt;/p&gt;
 &lt;h1 id=&#34;building-nvram-faker&#34;&gt;Building Nvram-Faker&lt;/h1&gt;
 &lt;p&gt;As previously mentioned, the firmware that I am emulating is big-endian, 32-bit ARM. Since &lt;code&gt;libnvram-faker.so&lt;/code&gt; will be preloaded into a binary in that firmware, it must match that ARM architecture. This means that I will need to cross-compile our &lt;code&gt;nvram-faker&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;Cross-compiling requires a cross-compilation toolchain. ARM offsers plenty of &lt;a href=&#34;https://developer.arm.com/Tools%20and%20Software/GNU%20Toolchain&#34;&gt;toolchains&lt;/a&gt;, however, none of them matched what I was looking for, so I decided to use &lt;a href=&#34;https://github.com/crosstool-ng/crosstool-ng&#34;&gt;crosstool-ng&lt;/a&gt; to compile my own toolchain. You can read their &lt;a href=&#34;https://crosstool-ng.github.io/docs/&#34;&gt;documentation&lt;/a&gt; for more information on how this works.&lt;/p&gt;
@@ -361,7 +362,21 @@
 &lt;li&gt;Add a preliminary &lt;code&gt;nvram_set()&lt;/code&gt; function that logs debug output to prevent function calls to &lt;code&gt;libnvram.so&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;Add a &lt;code&gt;build_and_run.sh&lt;/code&gt; script to streamline development and testing&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
+&lt;h2 id=&#34;next-steps&#34;&gt;Next Steps&lt;/h2&gt;
+&lt;p&gt;From here, you can simply create and populate an &lt;code&gt;nvram.ini&lt;/code&gt; file at the root of your extracted firmware filesystem and add the keys-value pairs that your target application expects! There are many ways to figure out these expected values. For instance, you can run the target application and view the NVRAM values it requests in the debugging output. You can also reverse engineer the target application to see the values it expects.&lt;/p&gt;
+&lt;p&gt;Here is an excerpt from the &lt;code&gt;nvram-faker&lt;/code&gt; example &lt;a href=&#34;https://github.com/zcutlip/nvram-faker/blob/master/nvram.ini&#34;&gt;nvram.ini&lt;/a&gt; file for reference:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[config]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;os_name=linux
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;os_version=1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;upnp_port=9999
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;upnp_ad_time=30
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;upnp_sub_timeout=60
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;upnp_conn_retries=10
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;log_level=10
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;lan_hwaddr=52:54:00:12:34:58
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;lan_ifname=eth0
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;lan1_ifname=wlan0
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
 &lt;p&gt;This article was quite lengthy and technical compared to what I normally put out. It really started as me wanting to test out a chroot sandbox on a router and escalated into emulating a webserver and needing a way to interface with NVRAM. This was a great exercise that taught me more about cross-compilation, NVRAM, and general troubleshooting. Past me would have been overwhelmed by the amount of errors that I had to work through to get this to work (this article didn&amp;rsquo;t even detail half of them for brevity), so working through this helped to strengthen my perserverance as a researcher.&lt;/p&gt;
 &lt;p&gt;Overall, this was an interesting rabbit hole to go down. I hope it made as much sense in text as it did in my head. If any details in here were inaccurate, please feel free to contact me and I will be happy to correct the information in this article.&lt;/p&gt;
 &lt;p&gt;Thanks for reading!&lt;/p&gt;
@@ -438,6 +453,7 @@
 <p>The <code>httpd</code> program imports functions like <code>nvram_get()</code> and <code>nvram_set()</code> from <code>libnvram.so</code> that manage interactions with <code>/dev/nvram</code>. If we were able to set our own definitions for what <code>nvam_get()</code> and <code>nvram_set()</code> do, we can effectively control the values that <code>httpd</code> recieves when attempting to interact with the NVRAM through these functions.</p>
 <p>That is what <code>nvram-faker</code> does. We can recreate the NVRAM-related procedures called by <code>httpd</code> in <code>nvram-faker.c</code> and compile them into our own library, <code>libnvram-faker.so</code>.</p>
 <p>Furthermore, <code>httpd</code> dynamically links the <code>libnvram.so</code> library with the dynamic linker <a href="https://man7.org/linux/man-pages/man8/ld.so.8.html">ld</a>. By setting the environment variable <code>LD_PRELOAD</code> to <code>libnvram-faker.so</code>, <code>ld</code> is instructed to load our crafted shared object file before the real <code>libnvram.so</code> library is loaded in. Consequently, the NVRAM-related procedures that we defined in <code>nvram-faker.c</code> (and by extension <code>libnvram-faker.so</code>) will be called instead of the intended symbols in <code>libnvram.so</code>.</p>
+<p><code>Nvram-faker</code> is programmed to parse through key-value pairs stored in a <code>/nvram.ini</code> file in the firmware squashfs root. When the target binary calls <code>nvram_get()</code>, the value defined in <code>/nvram.ini</code> for the requested key is returned.</p>
 <h1 id="building-nvram-faker">Building Nvram-Faker</h1>
 <p>As previously mentioned, the firmware that I am emulating is big-endian, 32-bit ARM. Since <code>libnvram-faker.so</code> will be preloaded into a binary in that firmware, it must match that ARM architecture. This means that I will need to cross-compile our <code>nvram-faker</code>.</p>
 <p>Cross-compiling requires a cross-compilation toolchain. ARM offsers plenty of <a href="https://developer.arm.com/Tools%20and%20Software/GNU%20Toolchain">toolchains</a>, however, none of them matched what I was looking for, so I decided to use <a href="https://github.com/crosstool-ng/crosstool-ng">crosstool-ng</a> to compile my own toolchain. You can read their <a href="https://crosstool-ng.github.io/docs/">documentation</a> for more information on how this works.</p>
@@ -714,7 +730,21 @@
 <li>Add a preliminary <code>nvram_set()</code> function that logs debug output to prevent function calls to <code>libnvram.so</code></li>
 <li>Add a <code>build_and_run.sh</code> script to streamline development and testing</li>
 </ul>
-<h1 id="conclusion">Conclusion</h1>
+<h2 id="next-steps">Next Steps</h2>
+<p>From here, you can simply create and populate an <code>nvram.ini</code> file at the root of your extracted firmware filesystem and add the keys-value pairs that your target application expects! There are many ways to figure out these expected values. For instance, you can run the target application and view the NVRAM values it requests in the debugging output. You can also reverse engineer the target application to see the values it expects.</p>
+<p>Here is an excerpt from the <code>nvram-faker</code> example <a href="https://github.com/zcutlip/nvram-faker/blob/master/nvram.ini">nvram.ini</a> file for reference:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>[config]
+</span></span><span style="display:flex;"><span>os_name=linux
+</span></span><span style="display:flex;"><span>os_version=1
+</span></span><span style="display:flex;"><span>upnp_port=9999
+</span></span><span style="display:flex;"><span>upnp_ad_time=30
+</span></span><span style="display:flex;"><span>upnp_sub_timeout=60
+</span></span><span style="display:flex;"><span>upnp_conn_retries=10
+</span></span><span style="display:flex;"><span>log_level=10
+</span></span><span style="display:flex;"><span>lan_hwaddr=52:54:00:12:34:58
+</span></span><span style="display:flex;"><span>lan_ifname=eth0
+</span></span><span style="display:flex;"><span>lan1_ifname=wlan0
+</span></span></code></pre></div><h1 id="conclusion">Conclusion</h1>
 <p>This article was quite lengthy and technical compared to what I normally put out. It really started as me wanting to test out a chroot sandbox on a router and escalated into emulating a webserver and needing a way to interface with NVRAM. This was a great exercise that taught me more about cross-compilation, NVRAM, and general troubleshooting. Past me would have been overwhelmed by the amount of errors that I had to work through to get this to work (this article didn&rsquo;t even detail half of them for brevity), so working through this helped to strengthen my perserverance as a researcher.</p>
 <p>Overall, this was an interesting rabbit hole to go down. I hope it made as much sense in text as it did in my head. If any details in here were inaccurate, please feel free to contact me and I will be happy to correct the information in this article.</p>
 <p>Thanks for reading!</p>

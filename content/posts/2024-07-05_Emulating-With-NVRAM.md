@@ -83,6 +83,7 @@ That is what `nvram-faker` does. We can recreate the NVRAM-related procedures ca
 
 Furthermore, `httpd` dynamically links the `libnvram.so` library with the dynamic linker [ld](https://man7.org/linux/man-pages/man8/ld.so.8.html). By setting the environment variable `LD_PRELOAD` to `libnvram-faker.so`, `ld` is instructed to load our crafted shared object file before the real `libnvram.so` library is loaded in. Consequently, the NVRAM-related procedures that we defined in `nvram-faker.c` (and by extension `libnvram-faker.so`) will be called instead of the intended symbols in `libnvram.so`.
 
+`Nvram-faker` is programmed to parse through key-value pairs stored in a `/nvram.ini` file in the firmware squashfs root. When the target binary calls `nvram_get()`, the value defined in `/nvram.ini` for the requested key is returned.
 
 # Building Nvram-Faker
 As previously mentioned, the firmware that I am emulating is big-endian, 32-bit ARM. Since `libnvram-faker.so` will be preloaded into a binary in that firmware, it must match that ARM architecture. This means that I will need to cross-compile our `nvram-faker`.
@@ -499,6 +500,25 @@ It was originally my intention to add `nvram_set()` support to `nvram-faker.c` i
 - Added additional symbols to `nvram-faker.c` such as `initialise_monitor_handles` and `__libc_fini_array` to avoid linking errors
 - Add a preliminary `nvram_set()` function that logs debug output to prevent function calls to `libnvram.so`
 - Add a `build_and_run.sh` script to streamline development and testing
+
+## Next Steps
+From here, you can simply create and populate an `nvram.ini` file at the root of your extracted firmware filesystem and add the keys-value pairs that your target application expects! There are many ways to figure out these expected values. For instance, you can run the target application and view the NVRAM values it requests in the debugging output. You can also reverse engineer the target application to see the values it expects.
+
+Here is an excerpt from the `nvram-faker` example [nvram.ini](https://github.com/zcutlip/nvram-faker/blob/master/nvram.ini) file for reference:
+
+```
+[config]
+os_name=linux
+os_version=1
+upnp_port=9999
+upnp_ad_time=30
+upnp_sub_timeout=60
+upnp_conn_retries=10
+log_level=10
+lan_hwaddr=52:54:00:12:34:58
+lan_ifname=eth0
+lan1_ifname=wlan0
+```
 
 
 # Conclusion
