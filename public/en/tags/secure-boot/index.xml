@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Secure Boot on Ally Petitt</title>
-    <link>https://ally-petitt.com/en/tags/secure-boot/</link>
+    <link>https://ally-petitt.com:443/en/tags/secure-boot/</link>
     <description>Recent content in Secure Boot on Ally Petitt</description>
-    <generator>Hugo -- 0.125.4</generator>
+    <generator>Hugo -- 0.128.0</generator>
     <language>en</language>
     <lastBuildDate>Sat, 29 Apr 2023 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://ally-petitt.com/en/tags/secure-boot/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ally-petitt.com:443/en/tags/secure-boot/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Digging into the Linux Secure Boot Process</title>
-      <link>https://ally-petitt.com/en/posts/2023-04-29_digging-into-the-linux-secure-boot-process-9631a70b158b/</link>
+      <link>https://ally-petitt.com:443/en/posts/2023-04-29_digging-into-the-linux-secure-boot-process-9631a70b158b/</link>
       <pubDate>Sat, 29 Apr 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2023-04-29_digging-into-the-linux-secure-boot-process-9631a70b158b/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2023-04-29_digging-into-the-linux-secure-boot-process-9631a70b158b/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*6T29Pwj4dMhQiPRW.png&#34; alt=&#34;&#34;  /&gt;
 
 &lt;em&gt;Linux Penguin&lt;/em&gt;&lt;/p&gt;

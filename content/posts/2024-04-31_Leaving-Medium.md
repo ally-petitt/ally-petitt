@@ -7,7 +7,7 @@ tags= ["Self-hosting", "Tutorial", "Personal"]
 +++
 
 
-![Medium logo crossed out](/ally-petitt/images/Medium-crossed.png)
+![Medium logo crossed out](/images/Medium-crossed.png)
 ## Introduction
 Hello everyone and welcome to the first exclusive post on my new personal website! I am very excited to be here and I hope that you are as well. The picture above is a bit dramatic, but communicates the message that I have decided to move forward. Those who have been following me will know that I first began my technical blog on Medium, which was an approachable outlet for sharing my knowledge as I first entered the field.
 

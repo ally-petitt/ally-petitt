@@ -2,17 +2,729 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Ally Petitt</title>
-    <link>https://ally-petitt.com/en/</link>
+    <link>https://ally-petitt.com:443/en/</link>
     <description>Recent content on Ally Petitt</description>
-    <generator>Hugo -- 0.125.4</generator>
+    <generator>Hugo -- 0.128.0</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 07 May 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://ally-petitt.com/en/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 05 Jul 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://ally-petitt.com:443/en/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to Use NVRAM When Emulating an Embedded Device</title>
+      <link>https://ally-petitt.com:443/en/posts/2024-07-05_emulating-with-nvram/</link>
+      <pubDate>Fri, 05 Jul 2024 00:00:00 +0000</pubDate>
+      <guid>https://ally-petitt.com:443/en/posts/2024-07-05_emulating-with-nvram/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;Last week, I came across a piece of firmware that I was particularly curious about. As with typical analysis on such an image, I extracted the squashfs root using binwalk and found the web service, &lt;code&gt;httpd&lt;/code&gt;, that I was targeting. A smile spread across my face as I typed a command into the terminal to run &lt;code&gt;httpd&lt;/code&gt; in QEMU user mode, but after pressing the “Enter” key, I saw it:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ sudo chroot . ./qemu-armeb-static /usr/sbin/httpd -n
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cannot open /dev/nvram
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Cannot open &lt;code&gt;/dev/nvram&lt;/code&gt;. This error highlights a somewhat common obstacle when emulating embedded devices. Interacting with NVRAM can be an important step in the expected execution of an application, which can be made even more complicated when emulating a device.&lt;/p&gt;
+&lt;h3 id=&#34;the-solution&#34;&gt;The Solution&lt;/h3&gt;
+&lt;p&gt;In this article, I’ll walk through one method that I used to hook into the functions that request and set data from &lt;code&gt;/dev/nvram&lt;/code&gt;, enabling me to intercept and modify interactions with the NVRAM while my target application runs. This allows us to have more granular control of the values returned by calls to the NVRAM so that we can return our desired values. As a result, the application runs smoothly as though an NVRAM device actually existed on the system. Think of it like a man-in-the-middle attack on NVRAM that our target application is oblivious to.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Note: By &amp;ldquo;target application&amp;rdquo; or &amp;ldquo;target binary&amp;rdquo;, I am referring to the binary that is being emulated in QEMU and relies on the NVRAM. In my specific case, this is &lt;code&gt;httpd&lt;/code&gt; in my extracted firmware.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;This article aims to walk you through my thought process in approaching this rather than solely offering a copy-paste solution. I have found reading other researcher&amp;rsquo;s though processes to be helpful in the past and was hoping to pay it forward. As such, my troubleshooting steps and some of my (failed) ideas are included.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;TLDR;&lt;/strong&gt; I built an instance of &lt;a href=&#34;https://github.com/crosstool-ng/crosstool-ng&#34;&gt;crosstool-ng&lt;/a&gt; to create a &lt;code&gt;armeb-unknown-eabi&lt;/code&gt; toolchain. This was necessary for me to cross-compile &lt;a href=&#34;https://github.com/zcutlip/nvram-faker&#34;&gt;nvram-faker&lt;/a&gt; in the target architecture: big endian, 32-bit ARM. Nvram-faker allowed us to hijack function calls originally intended for libnvram.so, which is a library used to interface with &lt;code&gt;/dev/nvram&lt;/code&gt;, through the &lt;code&gt;LD_PRELOAD&lt;/code&gt; variable. I ended up patching &lt;code&gt;nvram-faker&lt;/code&gt; in my &lt;a href=&#34;https://github.com/ally-petitt/nvram-faker&#34;&gt;own fork&lt;/a&gt; to solve dynamic linking issues and solve a bug that caused a segfault.&lt;/p&gt;
+&lt;h3 id=&#34;disclaimer&#34;&gt;Disclaimer&lt;/h3&gt;
+&lt;p&gt;I am just a hobbyist. There are likely more efficient and/or robust ways to add support for NVRAM when emulating firmware with QEMU. This is just one of the solutions that I came across on my own. All the information in the article is accurate to the best of my knowledge and has the chance to be incorrect. I have done my best to fact-check the information presented.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://www.mouser.com/images/cypresssemiconductor/hd/tssop44.jpg&#34; alt=&#34;Picture of NVRAM&#34;  /&gt;
+&lt;/p&gt;
+&lt;h2 id=&#34;what-is-nvram&#34;&gt;What is NVRAM?&lt;/h2&gt;
+&lt;p&gt;NVRAM, or non-volatile RAM, is a type of computer memory that maintains the values stored within it after the computer has been turned off and on again. Often, the NVRAM contains configuration information that can help direct applications during the boot process or runtime. It is almost like a Solid-State Drive (SSD), but with far less storage capacity, increased speed, and it is generally soldered onto the motherboard.&lt;/p&gt;
+&lt;h2 id=&#34;setup&#34;&gt;Setup&lt;/h2&gt;
+&lt;p&gt;The following table shows a high-level overview of the firmware I am dealing with.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Architecture&lt;/th&gt;
+&lt;th&gt;ARMv5 (armeb)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Chipset&lt;/td&gt;
+&lt;td&gt;IXP425&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ABI&lt;/td&gt;
+&lt;td&gt;EABI5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Operating System&lt;/td&gt;
+&lt;td&gt;OpenWRT&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Endianess&lt;/td&gt;
+&lt;td&gt;Big Endian&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;Goal:&lt;/strong&gt; Run the binary &lt;code&gt;/usr/sbin/httpd&lt;/code&gt; in our firmware image.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Problem:&lt;/strong&gt; &lt;code&gt;httpd&lt;/code&gt; relies on NVRAM for configuration data. Since we are emulating in QEMU, we do not have the physical NVRAM to provide this data, so &lt;code&gt;httpd&lt;/code&gt; is unable to initialize.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Potential Solutions:&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Create a custom kernel module to respond with the expected values at &lt;code&gt;/dev/nvram&lt;/code&gt;.
+&lt;ul&gt;
+&lt;li&gt;This can be more complex and would require reverse engineering of &lt;code&gt;libnvram.so&lt;/code&gt; to understand how &lt;code&gt;/dev/nvram&lt;/code&gt; expects to be interacted with in order to recreate the appropriate interface.&lt;/li&gt;
+&lt;li&gt;Building a specific implementation for this firmware may be less portable to other firmware images compared to our 2nd possible solution.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Hook function calls to libnvram.so and override their return value.
+&lt;ul&gt;
+&lt;li&gt;Potentially faster to implement.&lt;/li&gt;
+&lt;li&gt;There is already an open-source project called &lt;a href=&#34;https://github.com/zcutlip/nvram-faker&#34;&gt;nvram-faker&lt;/a&gt; that can be used as a starting point.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Needless to say, I’ll be exploring solution 2 in this article. Although, I am open to creating the kernel module if it is requested since I can see if having educational value.&lt;/p&gt;
+&lt;h2 id=&#34;nvram-faker&#34;&gt;Nvram faker&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/zcutlip/nvram-faker&#34;&gt;Nvram-faker&lt;/a&gt; is a GitHub project created by Zachary Cutlip in 2013 to &amp;ldquo;intercept calls to libnvram when running embedded linux applications in emulated environments.&amp;rdquo; Despite its old age, &lt;code&gt;Nvram-faker&lt;/code&gt; is still very usable for today&amp;rsquo;s use cases.&lt;/p&gt;
+&lt;h3 id=&#34;how-it-works&#34;&gt;How it Works&lt;/h3&gt;
+&lt;p&gt;Our &lt;code&gt;httpd&lt;/code&gt; binary does not attempt to access &lt;code&gt;/dev/nvram&lt;/code&gt;, the NVRAM device file in the firmware, directly. Instead, it uses a shared object file called &lt;code&gt;libnvram.so&lt;/code&gt; in order to abstract interaction with NVRAM. This dependency on &lt;code&gt;libnvram.so&lt;/code&gt; is evident in the &amp;ldquo;About&amp;rdquo; window on &lt;code&gt;httpd&lt;/code&gt; in Ghidra.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://ally-petitt.com:443/images/nvram-1.png&#34; alt=&#34;Picture of linked libraries on the httpd binary&#34;  /&gt;
+
+&lt;em&gt;Yes, my Ghidra is in dark mode.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;httpd&lt;/code&gt; program imports functions like &lt;code&gt;nvram_get()&lt;/code&gt; and &lt;code&gt;nvram_set()&lt;/code&gt; from &lt;code&gt;libnvram.so&lt;/code&gt; that manage interactions with &lt;code&gt;/dev/nvram&lt;/code&gt;. If we were able to set our own definitions for what &lt;code&gt;nvam_get()&lt;/code&gt; and &lt;code&gt;nvram_set()&lt;/code&gt; do, we can effectively control the values that &lt;code&gt;httpd&lt;/code&gt; recieves when attempting to interact with the NVRAM through these functions.&lt;/p&gt;
+&lt;p&gt;That is what &lt;code&gt;nvram-faker&lt;/code&gt; does. We can recreate the NVRAM-related procedures called by &lt;code&gt;httpd&lt;/code&gt; in &lt;code&gt;nvram-faker.c&lt;/code&gt; and compile them into our own library, &lt;code&gt;libnvram-faker.so&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Furthermore, &lt;code&gt;httpd&lt;/code&gt; dynamically links the &lt;code&gt;libnvram.so&lt;/code&gt; library with the dynamic linker &lt;a href=&#34;https://man7.org/linux/man-pages/man8/ld.so.8.html&#34;&gt;ld&lt;/a&gt;. By setting the environment variable &lt;code&gt;LD_PRELOAD&lt;/code&gt; to &lt;code&gt;libnvram-faker.so&lt;/code&gt;, &lt;code&gt;ld&lt;/code&gt; is instructed to load our crafted shared object file before the real &lt;code&gt;libnvram.so&lt;/code&gt; library is loaded in. Consequently, the NVRAM-related procedures that we defined in &lt;code&gt;nvram-faker.c&lt;/code&gt; (and by extension &lt;code&gt;libnvram-faker.so&lt;/code&gt;) will be called instead of the intended symbols in &lt;code&gt;libnvram.so&lt;/code&gt;.&lt;/p&gt;
+&lt;h1 id=&#34;building-nvram-faker&#34;&gt;Building Nvram-Faker&lt;/h1&gt;
+&lt;p&gt;As previously mentioned, the firmware that I am emulating is big-endian, 32-bit ARM. Since &lt;code&gt;libnvram-faker.so&lt;/code&gt; will be preloaded into a binary in that firmware, it must match that ARM architecture. This means that I will need to cross-compile our &lt;code&gt;nvram-faker&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Cross-compiling requires a cross-compilation toolchain. ARM offsers plenty of &lt;a href=&#34;https://developer.arm.com/Tools%20and%20Software/GNU%20Toolchain&#34;&gt;toolchains&lt;/a&gt;, however, none of them matched what I was looking for, so I decided to use &lt;a href=&#34;https://github.com/crosstool-ng/crosstool-ng&#34;&gt;crosstool-ng&lt;/a&gt; to compile my own toolchain. You can read their &lt;a href=&#34;https://crosstool-ng.github.io/docs/&#34;&gt;documentation&lt;/a&gt; for more information on how this works.&lt;/p&gt;
+&lt;h2 id=&#34;making-a-cross-compilation-toolchain-with-crosstool-ng&#34;&gt;Making a Cross-Compilation Toolchain with Crosstool-ng&lt;/h2&gt;
+&lt;p&gt;I used the following commands to begin building &lt;code&gt;crosstool-ng&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt install help2man libtool-bin &lt;span style=&#34;color:#75715e&#34;&gt;#dependencies&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git clone https://github.com/crosstool-ng/crosstool-ng
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cd crosstool-ng
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git checkout tags/crosstool-ng-1.26.0
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./bootstrap
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./configure --prefix&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;$PWD&lt;span style=&#34;color:#e6db74&#34;&gt;/build&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;make &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; make install
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;With the created &lt;code&gt;ct-ng&lt;/code&gt; binary, I began to configure my toolchain. Luckily, there was already a sample configuration from &lt;code&gt;armeb-unknown-eabi&lt;/code&gt;, which is a match for my target architecture (I was able to tell based on the &lt;a href=&#34;https://stackoverflow.com/questions/5731495/can-anyone-explain-the-gcc-cross-compiler-naming-convention/5731708#5731708&#34;&gt;toolchain naming conventions&lt;/a&gt;):&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./build/bin/ct-ng show-samples
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./build/bin/ct-ng show-armeb-unknown-eabi
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./build/bin/ct-ng armeb-unknown-eabi &lt;span style=&#34;color:#75715e&#34;&gt;# load it into config&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./build/bin/ct-ng menuconfig
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;I verified in the menu configuration that the settings for our target toolchain matched what I was expecting for this compilation in the “Target Options” menu.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://ally-petitt.com:443/images/nvram-2.png&#34; alt=&#34;Picture of the &amp;amp;ldquo;Target Options&amp;amp;rdquo; menu in the ct-ng menuconfig&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;I later encountered difficulties with downloading the tarballs needed by &lt;code&gt;crosstool-ng&lt;/code&gt;. To resolve this, I configured a mirror: &lt;a href=&#34;https://ftp.gnu.org/gnu/&#34;&gt;https://ftp.gnu.org/gnu/&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://ally-petitt.com:443/images/nvram-5.png&#34; alt=&#34;Mirror added to menuconfig&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;Future me experienced more errors relating to missing necessary C library header files. To address this, I enabled newlib.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://ally-petitt.com:443/images/nvram-6.png&#34; alt=&#34;Enabling the newlib C library in the ct-ng menuconfig&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;We can now begin to build our target toolchain!&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./build/bin/ct-ng build
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The build process took about 40 minutes and eventually resulted in an error when attempting to compile &lt;code&gt;gdbserver&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;ERROR&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;    configure: error: C compiler cannot create executables
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;CFG  &lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;    See &lt;span style=&#34;color:#e6db74&#34;&gt;`&lt;/span&gt;config.log&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; more details
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;I was worried that this error may have stopped the target toolchain from being created. I searched within the &lt;code&gt;.build&lt;/code&gt; directory of &lt;code&gt;crosstool-ng&lt;/code&gt; to check that the target binaries I was looking for were created.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ find . -name &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;*armeb-unknown-eabi*&amp;#39;&lt;/span&gt; -type f
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/armeb-unknown-eabi/buildtools/share/man/man1/armeb-unknown-eabi-gcc.1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/armeb-unknown-eabi/buildtools/share/man/man1/armeb-unknown-eabi-gcov-tool.1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/armeb-unknown-eabi/buildtools/share/man/man1/armeb-unknown-eabi-gcov.1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/armeb-unknown-eabi/buildtools/share/man/man1/armeb-unknown-eabi-cpp.1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/armeb-unknown-eabi/buildtools/share/man/man1/armeb-unknown-eabi-gcov-dump.1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcov-tool
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcov
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc-ranlib
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-cpp
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc-ar
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc-nm
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcov-dump
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc-13.2.0
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Perfect, the tools we need have been built. We can use the gdbserver built into QEMU for debugging.  Let’s begin to compile nvram-faker.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git clone https://github.com/zcutlip/nvram-faker.git
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cd nvram-faker
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;CC&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;$HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc make
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Unfortunately, attempting to build nvram-faker with &lt;code&gt;make&lt;/code&gt; resulted in two distinct errors. First, the file &lt;code&gt;$HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/lib/gcc/armeb-unknown-eabi/13.2.0/../../../../armeb-unknown-eabi/lib/crt0.o&lt;/code&gt; was not found.&lt;/p&gt;
+&lt;p&gt;Let’s investigate.&lt;/p&gt;
+&lt;h2 id=&#34;troubleshooting-nvram-faker-compilation&#34;&gt;Troubleshooting Nvram-Faker Compilation&lt;/h2&gt;
+&lt;p&gt;Since &lt;code&gt;make&lt;/code&gt; appeared to expect &lt;code&gt;crt0.o&lt;/code&gt; in a specific location, I figured that changing the search path to include the location that it was actually at would resolve the issue. I began by locating a copy of &lt;code&gt;crt0.o&lt;/code&gt; that exists&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ find . -name &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;crt0.o&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/armeb-unknown-eabi/build/build-libc/armeb-unknown-eabi/newlib/crt0.o
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then, I used &lt;code&gt;$CFLAGS&lt;/code&gt; such as &lt;code&gt;-I&lt;/code&gt; and &lt;code&gt;-L&lt;/code&gt; to include the path &lt;code&gt;./.build/armeb-unknown-eabi/build/build-libc/armeb-unknown-eabi/newlib/&lt;/code&gt;. I also tried including the &lt;code&gt;crt0.o&lt;/code&gt; file directly by manually using the &lt;code&gt;armeb-unkown-eabi-gcc&lt;/code&gt; compiler with &lt;code&gt;crt0.o&lt;/code&gt; as an input file, but neither of these worked.&lt;/p&gt;
+&lt;p&gt;I ultimately decided to copy &lt;code&gt;crt0.o&lt;/code&gt; to the location that the cross-compiler was searching for it at.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mkdir -p $HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/lib/gcc/armeb-unknown-eabi/13.2.0/../../../../armeb-unknown-eabi/lib
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# the symlink didn&amp;#39;t work&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#ln -s ./.build/armeb-unknown-eabi/build/build-libc/armeb-unknown-eabi/newlib/crt0.o $HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/lib/gcc/armeb-unknown-eabi/13.2.0/../../../../armeb-unknown-eabi/lib/crt0.o&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cp ./.build/armeb-unknown-eabi/build/build-libc/armeb-unknown-eabi/newlib/crt0.o $HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/lib/gcc/armeb-unknown-eabi/13.2.0/crt0.o
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now that we&amp;rsquo;ve solved the first error, let&amp;rsquo;s move on to the next!&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kali@kali:~/Documents/firmware/nvram-faker$ CC&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;$HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc make
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc -Wall -I./contrib/inih -ggdb -DINI_MAX_LINE&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2000&lt;/span&gt; -DINI_USE_STACK&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; -fPIC -c -o nvram-faker.o nvram-faker.c
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nvram-faker.c:1:10: fatal error: stdlib.h: No such file or directory
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; | &lt;span style=&#34;color:#75715e&#34;&gt;#include &amp;lt;stdlib.h&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      |          ^~~~~~~~~~
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;compilation terminated.
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;make: *** &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Makefile:35: nvram-faker.o&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; Error &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;It seems that &lt;code&gt;make&lt;/code&gt; was having difficulty with finding our C library. I ended up searching for the &lt;code&gt;stdlib.h&lt;/code&gt; header file in the &lt;code&gt;crosstool-ng&lt;/code&gt; directory.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;~/Documents/firmware/crosstool-ng$ find . -name stdlib.h
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/armeb-unknown-eabi/build/build-gdb-cross/gnulib/import/stdlib.h
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/src/gcc-13.2.0/fixincludes/tests/base/stdlib.h
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/src/gcc-13.2.0/fixincludes/tests/base/ansi/stdlib.h
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/src/gcc-13.2.0/libstdc++-v3/include/tr1/stdlib.h
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/src/gcc-13.2.0/libstdc++-v3/include/c_compatibility/stdlib.h
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/src/newlib-4.3.0.20230120/newlib/libc/include/ssp/stdlib.h
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/src/newlib-4.3.0.20230120/newlib/libc/include/machine/stdlib.h
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/src/newlib-4.3.0.20230120/newlib/libc/include/stdlib.h
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./.build/src/newlib-4.3.0.20230120/newlib/libc/machine/powerpc/machine/stdlib.h
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;I first tried using the stdlib from &lt;code&gt;./.build/armeb-unknown-eabi/build/build-gdb-cross/gnulib/import/&lt;/code&gt;, however, this resulted additional errors. My speculation is that the header files in there were intended for my host architecture, x64, and not the target architecture of 32-bit, big-endian ARM.&lt;/p&gt;
+&lt;p&gt;This was the point that I realized that rebuilding with newlib would solve this problem. This enabled me to include &lt;code&gt;./.build/src/newlib-4.3.0.20230120/newlib/libc/include/&lt;/code&gt; as a search directory in our make command via the CFLAGS &lt;code&gt;-I&lt;/code&gt; option:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; make CC&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;$HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc CFLAGS&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;-I&lt;/span&gt;$HOME&lt;span style=&#34;color:#e6db74&#34;&gt;/Documents/firmware/crosstool-ng/.build/src/newlib-4.3.0.20230120/newlib&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;With that, our problems are solved.&lt;/p&gt;
+&lt;h3 id=&#34;compiling-nvram-faker&#34;&gt;Compiling nvram-faker.&lt;/h3&gt;
+&lt;p&gt;Now that we are properly set up for building &lt;code&gt;nvram-faker&lt;/code&gt;, let’s run &lt;code&gt;make&lt;/code&gt; to create &lt;code&gt;libnvram-faker.so&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ make CC&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;$HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc CFLAGS&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;-I&lt;/span&gt;$HOME&lt;span style=&#34;color:#e6db74&#34;&gt;/Documents/firmware/crosstool-ng/.build/src/newlib-4.3.0.20230120/newlib&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;make: Nothing to be &lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;all&amp;#39;&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ file ./libnvram-faker.so 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./libnvram-faker.so: ELF 32-bit MSB shared object, ARM, EABI5 version &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;SYSV&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;, dynamically linked, with debug_info, not stripped
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The &lt;code&gt;file&lt;/code&gt; output is exactly what we want as it matches the other binaries executed on the firmware like busybox:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kali@kali:~/Documents/firmware/_extracted_firmware/squashfs-root$ file ./bin/busybox 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./bin/busybox: ELF 32-bit MSB executable, ARM, EABI5 version &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;SYSV&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;, dynamically linked, interpreter /lib/ld-musl-armeb.so.1, no section header
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;using-nvram-faker&#34;&gt;Using nvram-faker&lt;/h3&gt;
+&lt;p&gt;Now, I’ll copy the libnvram-faker.so file and re-enter the chroot environment at the base of our firmware image’s squashfs file system.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cp ../../nvram-faker/libnvram-faker.so .
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;touch nvram.ini
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let&amp;rsquo;s test it!&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ sudo chroot . ./qemu-armeb-static /bin/sh -c &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;LD_PRELOAD=/libnvram-faker.so /usr/sbin/httpd&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Error relocating /libnvram-faker.so: initialise_monitor_handles: symbol not found
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Error relocating /libnvram-faker.so: __libc_init_array: symbol not found
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Error relocating /libnvram-faker.so: main: symbol not found
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Error relocating /libnvram-faker.so: __libc_fini_array: symbol not found
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Error relocating /libnvram-faker.so: __heap_limit: symbol not found
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Error relocating /libnvram-faker.so: _impure_ptr: symbol not found
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Error relocating /libnvram-faker.so: _ctype_: symbol not found
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Hm, it looks like we have some more errors to resolve. Let’s understand why these are happening and address them. Based on the error message, I am going to assume that the linker was expecting the symbols above to be in our library (perhaps as some ABI standard?) and since they were not found, it has difficulty with determining where to place our library in memory. This is just a guess, so feel free to correct me if I’m wrong.&lt;/p&gt;
+&lt;h3 id=&#34;troubleshooting-libnvram-fakerso&#34;&gt;Troubleshooting libnvram-faker.so&lt;/h3&gt;
+&lt;p&gt;I had two ideas that I thought may resolve this by including the expected symbols:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Recompiling &lt;code&gt;libnvram-faker.so&lt;/code&gt; with our cross-compiled  &lt;code&gt;ld&lt;/code&gt;, &lt;code&gt;ar&lt;/code&gt;, &lt;code&gt;as&lt;/code&gt;, &lt;code&gt;strip&lt;/code&gt;, and &lt;code&gt;nm&lt;/code&gt; binaries since I did not include these before.
+&lt;ul&gt;
+&lt;li&gt;This operates on the assumption that including these binaries would automatically create the expected symbols.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Manually patching &lt;code&gt;nvram-faker.c&lt;/code&gt; to include the symbols that the linker is expecting.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;I started out testing the first idea.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ make clean
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;rm *.o
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;rm *.so
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;rm nvram_faker_exe
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;rm: cannot remove &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;nvram_faker_exe&amp;#39;&lt;/span&gt;: No such file or directory
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;make: &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Makefile:46: clean&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; Error &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;ignored&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;make -C ./contrib/inih clean
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;make&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;1&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;: Entering directory &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;$HOME/Documents/firmware/nvram-faker/contrib/inih&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;rm *.o
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;make&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;1&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;: Leaving directory &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;$HOME/Documents/firmware/nvram-faker/contrib/inih&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ make CC&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;$HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc CFLAGS&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;-I&lt;/span&gt;$HOME&lt;span style=&#34;color:#e6db74&#34;&gt;/Documents/firmware/crosstool-ng/.build/src/newlib-4.3.0.20230120/newlib/libc/include&amp;#34;&lt;/span&gt; LD&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;$HOME/x-tools/armeb-unknown-eabi/bin/armeb-unknown-eabi-ld AR&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;$HOME/x-tools/armeb-unknown-eabi/bin/armeb-unknown-eabi-ar STRIP&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;$HOME/x-tools/armeb-unknown-eabi/bin/armeb-unknown-eabi-strip NM&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;$HOME/x-tools/armeb-unknown-eabi/bin/armeb-unknown-eabi-nm 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc -Wall -I./contrib/inih -I$HOME/Documents/firmware/crosstool-ng/.build/src/newlib-4.3.0.20230120/newlib/libc/include -fPIC -c -o nvram-faker.o nvram-faker.c
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;make -C ./contrib/inih ini.o
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;make&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;1&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;: Entering directory &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;$HOME/Documents/firmware/nvram-faker/contrib/inih&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc -I$HOME/Documents/firmware/crosstool-ng/.build/src/newlib-4.3.0.20230120/newlib/libc/include -fPIC -c -o ini.o ini.c
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;make&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;1&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;: Leaving directory &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;$HOME/Documents/firmware/nvram-faker/contrib/inih&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cp ./contrib/inih/ini.o .
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc -shared -o libnvram-faker.so nvram-faker.o ini.o -Wl,-nostdlib
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After copying it back to our squashfs root and trying again, it seems the same issue persists. This rules out incompatible &lt;code&gt;ld&lt;/code&gt;, &lt;code&gt;ar&lt;/code&gt;, &lt;code&gt;as&lt;/code&gt;, &lt;code&gt;strip&lt;/code&gt;, or &lt;code&gt;nm&lt;/code&gt; binaries as the root cause. I wasn&amp;rsquo;t confident that this would be the solution, but it was worth a shot. Now I know more.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ cp ./libnvram-faker.so ../_extracted_firmware/squashfs-root/
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ sudo chroot . ./qemu-armeb-static /bin/sh -c &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;LD_PRELOAD=/libnvram-faker.so /usr/sbin/httpd&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Error relocating /libnvram-faker.so: initialise_monitor_handles: symbol not found
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Error relocating /libnvram-faker.so: __libc_init_array: symbol not found
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Error relocating /libnvram-faker.so: main: symbol not found
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Error relocating /libnvram-faker.so: __libc_fini_array: symbol not found
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Error relocating /libnvram-faker.so: __heap_limit: symbol not found
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Error relocating /libnvram-faker.so: _impure_ptr: symbol not found
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Error relocating /libnvram-faker.so: _ctype_: symbol not found
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Instead, let’s attempt the second idea. I created &lt;a href=&#34;https://github.com/ally-petitt/nvram-faker&#34;&gt;my own fork&lt;/a&gt; of nvram-faker and got to work.&lt;/p&gt;
+&lt;p&gt;As I was creating the patch to manually add the expected symbols into &lt;code&gt;nvram-faker.c&lt;/code&gt;, I made the observation that many of these symbols were defined in common C libraries like &lt;code&gt;ctypes.h&lt;/code&gt; and &lt;code&gt;stdlib.h&lt;/code&gt;. This made me suspect that the issue might reside in the flags relating to the C library.&lt;/p&gt;
+&lt;p&gt;I quickly tried recompiling without the &lt;code&gt;-nostdlib&lt;/code&gt; flag by modifying the &lt;code&gt;nvram-faker&lt;/code&gt; &lt;code&gt;Makefile&lt;/code&gt; and recompiling with the &lt;code&gt;-static&lt;/code&gt; flag. Neither of these worked, so I continued with the original plan, which involved appending the following to &lt;code&gt;nvram-faker.c&lt;/code&gt; and recompiling:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;void main&lt;span style=&#34;color:#f92672&#34;&gt;(){&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	write&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;1, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;libnvram-faker.so has loaded\n&amp;#34;&lt;/span&gt;, 29&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;void* initialise_monitor_handles;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;void* __heap_limit;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;void &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;*__libc_fini_array&lt;span style=&#34;color:#f92672&#34;&gt;[])&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;void&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;void &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;*__libc_init_array&lt;span style=&#34;color:#f92672&#34;&gt;[])&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;void&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;struct _reent * _impure_ptr;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;char _ctype_;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;I discovered the data types that work through a combination of compiler warnings and grepping for definitions such as:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kali@kali:~/Documents/firmware/crosstool-ng/.build/src/newlib-4.3.0.20230120/newlib/libc/include$ grep -r &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;_ctype_&amp;#34;&lt;/span&gt; .
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./ctype.h:extern	__IMPORT const char	_ctype_&lt;span style=&#34;color:#f92672&#34;&gt;[]&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let’s try to run this again!&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kali@kali:~/Documents/firmware/_extracted_firmware/squashfs-root$ sudo chroot . ./qemu-armeb-static /bin/sh -c &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;LD_PRELOAD=/libnvram-faker.so /usr/sbin/httpd&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cannot open /dev/nvram
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;httpd : httpd cannot start. ssl and/or http must be selected
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Well, our library loaded successfully this time, but it’s not quite what we were hoping for. From my prior reverse engineering of interesting libraries in this firmware, I knew that the error message we received comes from &lt;code&gt;libnvram.so&lt;/code&gt;, which we can verify with grep.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ grep -r &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;cannot open /dev/nvram&amp;#34;&lt;/span&gt; .
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Binary file ./lib/libnvram.so matches
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;debugging-libnvram-fakerso&#34;&gt;Debugging Libnvram-faker.so&lt;/h3&gt;
+&lt;p&gt;I wanted to get to the root of why this error message was still appearing despite using &lt;code&gt;libnvram-faker.so&lt;/code&gt; to hook NVRAM-related functionality.&lt;/p&gt;
+&lt;h4 id=&#34;attempt-1-gdb&#34;&gt;Attempt 1: GDB&lt;/h4&gt;
+&lt;p&gt;I first attempted to debug using GDB. In QEMU, I used the built-in GDB server to listen on port 1234.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo chroot . ./qemu-armeb-static -g &lt;span style=&#34;color:#ae81ff&#34;&gt;1234&lt;/span&gt; -E LD_PRELOAD&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;/libnvram-faker.so /usr/sbin/httpd
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;in another terminal window I modified my &lt;code&gt;.gdbinit&lt;/code&gt; file to expidite up the process of connecting and debugging to our target application.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ cat ~/.gdbinit
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;set disassembly-flavor intel
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;set print asm-demangle on
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;source $HOME/Downloads/pwndbg/gdbinit.py
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;set arch arm
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;set follow-fork-mode child
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;target extended-remote :1234
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then, I connected to the remote process.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gdb-multiarch ./usr/sbin/httpd
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://ally-petitt.com:443/images/nvram-7.png&#34; alt=&#34;Pwndbg context output after connecting to the httpd debugging process&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;To make debugging easier, I calculated the offset of the memory addresses in our debugging process to memory addresses in the &lt;code&gt;httpd&lt;/code&gt; binary itself. When I ran the &lt;code&gt;load&lt;/code&gt; command in GDB with this offset as the second parameter, it made the addresses in the debugger consistent with those in my Ghidra CodeBrowser.&lt;/p&gt;
+&lt;p&gt;To make this calculation, I subtracted PC (the ARM &lt;a href=&#34;https://developer.arm.com/documentation/107656/0101/Registers/Registers-in-the-register-bank/R15--Program-Counter--PC-&#34;&gt;program counter register&lt;/a&gt;) with the address of the first entry instruction in &lt;code&gt;httpd&lt;/code&gt; to adjust our addresses to match that of the binary.&lt;/p&gt;
+&lt;blockquote&gt;
+
+
+&lt;p&gt;&lt;details &gt;
+  &lt;summary markdown=&#34;span&#34;&gt;&lt;strong&gt;Note on verifying offset&lt;/strong&gt;&lt;/summary&gt;
+  I had verified that we were at the first entry instruction by matching the byte sequence that our PC was at (&lt;code&gt;x/3wx $PC&lt;/code&gt;) to the hex dump of the &lt;code&gt;httpd&lt;/code&gt; entrypoint (made easier through the use of a Ghidra search functionality).
+&lt;/details&gt;&lt;/p&gt;
+
+&lt;/blockquote&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pwndbg&amp;gt; load ./usr/sbin/httpd &lt;span style=&#34;color:#ae81ff&#34;&gt;4286266732&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This is where the problems with GDB began. There appeared to be an issue with the timing of the program between when I connected to the debugging process and it began execution. If the delay was more than a few milliseconds, the &lt;code&gt;libc_start_main&lt;/code&gt; function would have a segmentation fault. I tried automating loading the program and setting breakpoints in &lt;code&gt;.gdbinit&lt;/code&gt;, but even this was not fast enough to prevent a segfault.&lt;/p&gt;
+&lt;p&gt;I don’t know if there was a race condition or something else preventing normal execution. If anyone knows why this may have happened, please do let me know since I am quite puzzled by it.&lt;/p&gt;
+&lt;p&gt;I asked myself the question, “is there another way to do this?”. I realized what I was really looking for was a call stack for when that error message was printed. I got an idea of how I could recreate this through static analysis.&lt;/p&gt;
+&lt;h4 id=&#34;attempt-2-ghidra&#34;&gt;Attempt 2: Ghidra&lt;/h4&gt;
+&lt;p&gt;I started by pinpointing where our error message appears and checking its implementation in our fake NVRAM library.&lt;/p&gt;
+&lt;p&gt;In Ghidra, I opened a project with &lt;code&gt;libnvram.so&lt;/code&gt; loaded in the CodeBrowser. Using the built-in tool &lt;code&gt;Window &amp;gt; Defined Strings&lt;/code&gt;, I was able to search for our error message, “&lt;code&gt;cannot open /dev/nvram&lt;/code&gt;.&amp;quot;&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://ally-petitt.com:443/images/nvram-8.png&#34; alt=&#34;Ghidra defined strings window showing our error message&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;I followed the location of this string in the binary to reveal that it is referenced in a procedure that Ghidra called &lt;code&gt;FUN_00012420&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://ally-petitt.com:443/images/nvram-9.png&#34; alt=&#34;The error message in the disassembly of the binary&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;This function is called by some of the major functions in &lt;code&gt;libnvram.so&lt;/code&gt; such as &lt;code&gt;nvram_get&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://ally-petitt.com:443/images/nvram-10.png&#34; alt=&#34;The call tree of FUN_00012420&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;When quickly listing the NVRAM functions imported in &lt;code&gt;httpd&lt;/code&gt;(which there are defined strings for), it does not appear that &lt;code&gt;httpd&lt;/code&gt; is calling a libnvram function that would trigger our error. However, that doesn’t mean that a call to this endpoint isn’t abstracted some other way.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://ally-petitt.com:443/images/nvram-11.png&#34; alt=&#34;Defined strings with &amp;amp;ldquo;nvram&amp;amp;rdquo; in them in &amp;lt;code&amp;gt;httpd&amp;lt;/code&amp;gt;&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;I decided to analyze a complete call graph of &lt;code&gt;FUN_00012420&lt;/code&gt; (as opposed to the first layer of the call tree), which confirmed my suspicions: &lt;code&gt;nvram_set&lt;/code&gt; called a function that called &lt;code&gt;FUN_00012420&lt;/code&gt;. This means that &lt;code&gt;nvram_set&lt;/code&gt;, a function called by &lt;code&gt;httpd&lt;/code&gt;, was very likely the entrypoint to our “&lt;code&gt;cannot find /dev/nvram&lt;/code&gt;” error message.&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://ally-petitt.com:443/images/nvram-12.png&#34; alt=&#34;Call graph of FUN_00012420&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;As stated in the &lt;code&gt;nvram-faker&lt;/code&gt; &lt;a href=&#34;https://github.com/zcutlip/nvram-faker?tab=readme-ov-file#using&#34;&gt;README&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The library currently does not support calls to &lt;code&gt;nvram_set()&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;My hypothesis was that since &lt;code&gt;nvram_set()&lt;/code&gt; was not defined in the &lt;code&gt;libnvram-faker.so&lt;/code&gt; library that we created, it was being imported from &lt;code&gt;libnvram.so&lt;/code&gt;. In turn, &lt;code&gt;FUN_00012420&lt;/code&gt; is called which attempts to open &lt;code&gt;/dev/nvram&lt;/code&gt; and fails (since the kernel module for &lt;code&gt;/dev/nvram&lt;/code&gt; does not exist), printing our error message.&lt;/p&gt;
+&lt;p&gt;To verify that this is the case, I once again patched &lt;code&gt;nvram-faker.c&lt;/code&gt;, but this time I implemented a preliminary definition for &lt;code&gt;nvram_set&lt;/code&gt; and observe whether the error from before is still present.&lt;/p&gt;
+&lt;p&gt;The following is what I added to &lt;code&gt;nvram-faker.c&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;char * nvram_set&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;char * key, char * value&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	write&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;1, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;nvram_set called\n&amp;#34;&lt;/span&gt;, 17&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After I compiled and ran &lt;code&gt;httpd&lt;/code&gt;, this was my output:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ sudo chroot . ./qemu-armeb-static -E LD_PRELOAD&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;/libnvram-faker.so /usr/sbin/httpd
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nvram_set called
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;httpd : httpd cannot start. ssl and/or http must be selected
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Perfect! The previous error that &lt;code&gt;/dev/nvram&lt;/code&gt; was not found is no longer appearing and in its place is the output that we injected for the &lt;code&gt;nvram_set()&lt;/code&gt; function I defined. This verifies that &lt;code&gt;nvram_set&lt;/code&gt; was the source of the error messages. Now, we can create our own implementation of &lt;code&gt;nvram_set&lt;/code&gt; to enable full functionality of &lt;code&gt;httpd.&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;To streamline the development process, I made my own script to clean, build, and test the library:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;set -e &lt;span style=&#34;color:#75715e&#34;&gt;# exit on failure&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt; $# -ne &lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Usage: &lt;/span&gt;$0&lt;span style=&#34;color:#e6db74&#34;&gt; &amp;lt;compilation_toolchain_binaries_path&amp;gt; &amp;lt;squashfs_root_path&amp;gt; &amp;lt;newlib_path&amp;gt; &amp;lt;target_binary_path&amp;gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  echo &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Example: &lt;/span&gt;$0&lt;span style=&#34;color:#e6db74&#34;&gt; &lt;/span&gt;$HOME&lt;span style=&#34;color:#e6db74&#34;&gt;/x-tools/armeb-unknown-eabi/bin &lt;/span&gt;$HOME&lt;span style=&#34;color:#e6db74&#34;&gt;/_extracted_firmware/squashfs-root &lt;/span&gt;$HOME&lt;span style=&#34;color:#e6db74&#34;&gt;/Documents/firmware/crosstool-ng/.build/src/newlib-4.3.0.20230120/newlib/libc/include /usr/sbin/httpd&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  exit &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;TOOLCHAIN_PATH&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;$1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;SQUASHFS_PATH&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;$2
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;NEWLIB_PATH&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;$3
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;TARGET_BINARY&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;$4
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;make clean
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;make CC&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;TOOLCHAIN_PATH&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;/armeb-unknown-eabi-gcc&amp;#34;&lt;/span&gt; CFLAGS&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;-DDEBUG=1 -I&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;NEWLIB_PATH&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; LD&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;TOOLCHAIN_PATH&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;/armeb-unknown-eabi-ld AR=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;TOOLCHAIN_PATH&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;/armeb-unknown-eabi-ar STRIP=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;TOOLCHAIN_PATH&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;/armeb-unknown-eabi-strip NM=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;TOOLCHAIN_PATH&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;/armeb-unknown-eabi-nm&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cp ./libnvram-faker.so &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;SQUASHFS_PATH&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo chroot &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;SQUASHFS_PATH&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; ./qemu-armeb-static -E LD_PRELOAD&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;/libnvram-faker.so &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;TARGET_BINARY&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;I encountered a segmentation fault when debug was enabled due to how &lt;code&gt;fprintf&lt;/code&gt; was being used to log debug output through the &lt;code&gt;DEBUG_PRINTF&lt;/code&gt; macro. I ended up redefining &lt;code&gt;DEBUG_PRINTF&lt;/code&gt; and &lt;code&gt;LOG_PRINTF&lt;/code&gt; to be based on &lt;code&gt;printf&lt;/code&gt; instead of &lt;code&gt;fprintf&lt;/code&gt; to prevent the segfault.&lt;/p&gt;
+&lt;blockquote&gt;
+
+
+&lt;p&gt;&lt;details &gt;
+  &lt;summary markdown=&#34;span&#34;&gt;&lt;strong&gt;Expand to learn why fprintf was originally used instead of printf&lt;/strong&gt;&lt;/summary&gt;
+  After a bit of digging, I would discover that &lt;code&gt;fprintf()&lt;/code&gt; was used for debug and log output in the original &lt;code&gt;nvram-faker&lt;/code&gt; repository as a workaround to how &lt;code&gt;stdout&lt;/code&gt; was being redirected after &lt;code&gt;system()&lt;/code&gt; was called in the webserver it was used to emulate. As explained in the &lt;a href=&#34;https://shadowfile.inode.link/blog/2015/01/patching-emulating-and-debugging-a-netgear-embedded-web-server/&#34;&gt;author’s blogpost&lt;/a&gt;, &lt;code&gt;fprintf()&lt;/code&gt; allowed him to print to &lt;code&gt;stderr&lt;/code&gt;, which was visible in the console, unlike the output of &lt;code&gt;printf()&lt;/code&gt; that goes to &lt;code&gt;stdout&lt;/code&gt; and was not visible after &lt;code&gt;system()&lt;/code&gt; was called.
+&lt;/details&gt;&lt;/p&gt;
+
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;adding-support-for-nvram_set&#34;&gt;Adding Support for nvram_set&lt;/h3&gt;
+&lt;p&gt;It was originally my intention to add &lt;code&gt;nvram_set()&lt;/code&gt; support to &lt;code&gt;nvram-faker.c&lt;/code&gt; in order to fully mimic a real NVRAM interaction, however, an event came up in my personal life that delayed this. I may endeavor to do so in the future when the timing is better, however, for now I have opted to simply create my &lt;a href=&#34;https://github.com/ally-petitt/nvram-faker&#34;&gt;own fork&lt;/a&gt; with the following improvements on the old one:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;More informative debug output&lt;/li&gt;
+&lt;li&gt;Resolve segmentation fault in debugging output&lt;/li&gt;
+&lt;li&gt;Added additional symbols to &lt;code&gt;nvram-faker.c&lt;/code&gt; such as &lt;code&gt;initialise_monitor_handles&lt;/code&gt; and &lt;code&gt;__libc_fini_array&lt;/code&gt; to avoid linking errors&lt;/li&gt;
+&lt;li&gt;Add a preliminary &lt;code&gt;nvram_set()&lt;/code&gt; function that logs debug output to prevent function calls to &lt;code&gt;libnvram.so&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Add a &lt;code&gt;build_and_run.sh&lt;/code&gt; script to streamline development and testing&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;This article was quite lengthy and technical compared to what I normally put out. It really started as me wanting to test out a chroot sandbox on a router and escalated into emulating a webserver and needing a way to interface with NVRAM. This was a great exercise that taught me more about cross-compilation, NVRAM, and general troubleshooting. Past me would have been overwhelmed by the amount of errors that I had to work through to get this to work (this article didn&amp;rsquo;t even detail half of them for brevity), so working through this helped to strengthen my perserverance as a researcher.&lt;/p&gt;
+&lt;p&gt;Overall, this was an interesting rabbit hole to go down. I hope it made as much sense in text as it did in my head. If any details in here were inaccurate, please feel free to contact me and I will be happy to correct the information in this article.&lt;/p&gt;
+&lt;p&gt;Thanks for reading!&lt;/p&gt;
+</description>
+      <content:encoded><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>Last week, I came across a piece of firmware that I was particularly curious about. As with typical analysis on such an image, I extracted the squashfs root using binwalk and found the web service, <code>httpd</code>, that I was targeting. A smile spread across my face as I typed a command into the terminal to run <code>httpd</code> in QEMU user mode, but after pressing the “Enter” key, I saw it:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ sudo chroot . ./qemu-armeb-static /usr/sbin/httpd -n
+</span></span><span style="display:flex;"><span>cannot open /dev/nvram
+</span></span></code></pre></div><p>Cannot open <code>/dev/nvram</code>. This error highlights a somewhat common obstacle when emulating embedded devices. Interacting with NVRAM can be an important step in the expected execution of an application, which can be made even more complicated when emulating a device.</p>
+<h3 id="the-solution">The Solution</h3>
+<p>In this article, I’ll walk through one method that I used to hook into the functions that request and set data from <code>/dev/nvram</code>, enabling me to intercept and modify interactions with the NVRAM while my target application runs. This allows us to have more granular control of the values returned by calls to the NVRAM so that we can return our desired values. As a result, the application runs smoothly as though an NVRAM device actually existed on the system. Think of it like a man-in-the-middle attack on NVRAM that our target application is oblivious to.</p>
+<p><em>Note: By &ldquo;target application&rdquo; or &ldquo;target binary&rdquo;, I am referring to the binary that is being emulated in QEMU and relies on the NVRAM. In my specific case, this is <code>httpd</code> in my extracted firmware.</em></p>
+<p>This article aims to walk you through my thought process in approaching this rather than solely offering a copy-paste solution. I have found reading other researcher&rsquo;s though processes to be helpful in the past and was hoping to pay it forward. As such, my troubleshooting steps and some of my (failed) ideas are included.</p>
+<p><strong>TLDR;</strong> I built an instance of <a href="https://github.com/crosstool-ng/crosstool-ng">crosstool-ng</a> to create a <code>armeb-unknown-eabi</code> toolchain. This was necessary for me to cross-compile <a href="https://github.com/zcutlip/nvram-faker">nvram-faker</a> in the target architecture: big endian, 32-bit ARM. Nvram-faker allowed us to hijack function calls originally intended for libnvram.so, which is a library used to interface with <code>/dev/nvram</code>, through the <code>LD_PRELOAD</code> variable. I ended up patching <code>nvram-faker</code> in my <a href="https://github.com/ally-petitt/nvram-faker">own fork</a> to solve dynamic linking issues and solve a bug that caused a segfault.</p>
+<h3 id="disclaimer">Disclaimer</h3>
+<p>I am just a hobbyist. There are likely more efficient and/or robust ways to add support for NVRAM when emulating firmware with QEMU. This is just one of the solutions that I came across on my own. All the information in the article is accurate to the best of my knowledge and has the chance to be incorrect. I have done my best to fact-check the information presented.</p>
+<p><img loading="lazy" src="https://www.mouser.com/images/cypresssemiconductor/hd/tssop44.jpg" alt="Picture of NVRAM"  />
+</p>
+<h2 id="what-is-nvram">What is NVRAM?</h2>
+<p>NVRAM, or non-volatile RAM, is a type of computer memory that maintains the values stored within it after the computer has been turned off and on again. Often, the NVRAM contains configuration information that can help direct applications during the boot process or runtime. It is almost like a Solid-State Drive (SSD), but with far less storage capacity, increased speed, and it is generally soldered onto the motherboard.</p>
+<h2 id="setup">Setup</h2>
+<p>The following table shows a high-level overview of the firmware I am dealing with.</p>
+<table>
+<thead>
+<tr>
+<th>Architecture</th>
+<th>ARMv5 (armeb)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chipset</td>
+<td>IXP425</td>
+</tr>
+<tr>
+<td>ABI</td>
+<td>EABI5</td>
+</tr>
+<tr>
+<td>Operating System</td>
+<td>OpenWRT</td>
+</tr>
+<tr>
+<td>Endianess</td>
+<td>Big Endian</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Goal:</strong> Run the binary <code>/usr/sbin/httpd</code> in our firmware image.</p>
+<p><strong>Problem:</strong> <code>httpd</code> relies on NVRAM for configuration data. Since we are emulating in QEMU, we do not have the physical NVRAM to provide this data, so <code>httpd</code> is unable to initialize.</p>
+<p><strong>Potential Solutions:</strong></p>
+<ol>
+<li>Create a custom kernel module to respond with the expected values at <code>/dev/nvram</code>.
+<ul>
+<li>This can be more complex and would require reverse engineering of <code>libnvram.so</code> to understand how <code>/dev/nvram</code> expects to be interacted with in order to recreate the appropriate interface.</li>
+<li>Building a specific implementation for this firmware may be less portable to other firmware images compared to our 2nd possible solution.</li>
+</ul>
+</li>
+<li>Hook function calls to libnvram.so and override their return value.
+<ul>
+<li>Potentially faster to implement.</li>
+<li>There is already an open-source project called <a href="https://github.com/zcutlip/nvram-faker">nvram-faker</a> that can be used as a starting point.</li>
+</ul>
+</li>
+</ol>
+<p>Needless to say, I’ll be exploring solution 2 in this article. Although, I am open to creating the kernel module if it is requested since I can see if having educational value.</p>
+<h2 id="nvram-faker">Nvram faker</h2>
+<p><a href="https://github.com/zcutlip/nvram-faker">Nvram-faker</a> is a GitHub project created by Zachary Cutlip in 2013 to &ldquo;intercept calls to libnvram when running embedded linux applications in emulated environments.&rdquo; Despite its old age, <code>Nvram-faker</code> is still very usable for today&rsquo;s use cases.</p>
+<h3 id="how-it-works">How it Works</h3>
+<p>Our <code>httpd</code> binary does not attempt to access <code>/dev/nvram</code>, the NVRAM device file in the firmware, directly. Instead, it uses a shared object file called <code>libnvram.so</code> in order to abstract interaction with NVRAM. This dependency on <code>libnvram.so</code> is evident in the &ldquo;About&rdquo; window on <code>httpd</code> in Ghidra.</p>
+<p><img loading="lazy" src="/images/nvram-1.png" alt="Picture of linked libraries on the httpd binary"  />
+
+<em>Yes, my Ghidra is in dark mode.</em></p>
+<p>The <code>httpd</code> program imports functions like <code>nvram_get()</code> and <code>nvram_set()</code> from <code>libnvram.so</code> that manage interactions with <code>/dev/nvram</code>. If we were able to set our own definitions for what <code>nvam_get()</code> and <code>nvram_set()</code> do, we can effectively control the values that <code>httpd</code> recieves when attempting to interact with the NVRAM through these functions.</p>
+<p>That is what <code>nvram-faker</code> does. We can recreate the NVRAM-related procedures called by <code>httpd</code> in <code>nvram-faker.c</code> and compile them into our own library, <code>libnvram-faker.so</code>.</p>
+<p>Furthermore, <code>httpd</code> dynamically links the <code>libnvram.so</code> library with the dynamic linker <a href="https://man7.org/linux/man-pages/man8/ld.so.8.html">ld</a>. By setting the environment variable <code>LD_PRELOAD</code> to <code>libnvram-faker.so</code>, <code>ld</code> is instructed to load our crafted shared object file before the real <code>libnvram.so</code> library is loaded in. Consequently, the NVRAM-related procedures that we defined in <code>nvram-faker.c</code> (and by extension <code>libnvram-faker.so</code>) will be called instead of the intended symbols in <code>libnvram.so</code>.</p>
+<h1 id="building-nvram-faker">Building Nvram-Faker</h1>
+<p>As previously mentioned, the firmware that I am emulating is big-endian, 32-bit ARM. Since <code>libnvram-faker.so</code> will be preloaded into a binary in that firmware, it must match that ARM architecture. This means that I will need to cross-compile our <code>nvram-faker</code>.</p>
+<p>Cross-compiling requires a cross-compilation toolchain. ARM offsers plenty of <a href="https://developer.arm.com/Tools%20and%20Software/GNU%20Toolchain">toolchains</a>, however, none of them matched what I was looking for, so I decided to use <a href="https://github.com/crosstool-ng/crosstool-ng">crosstool-ng</a> to compile my own toolchain. You can read their <a href="https://crosstool-ng.github.io/docs/">documentation</a> for more information on how this works.</p>
+<h2 id="making-a-cross-compilation-toolchain-with-crosstool-ng">Making a Cross-Compilation Toolchain with Crosstool-ng</h2>
+<p>I used the following commands to begin building <code>crosstool-ng</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt install help2man libtool-bin <span style="color:#75715e">#dependencies</span>
+</span></span><span style="display:flex;"><span>git clone https://github.com/crosstool-ng/crosstool-ng
+</span></span><span style="display:flex;"><span>cd crosstool-ng
+</span></span><span style="display:flex;"><span>git checkout tags/crosstool-ng-1.26.0
+</span></span><span style="display:flex;"><span>./bootstrap
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$PWD<span style="color:#e6db74">/build&#34;</span>
+</span></span><span style="display:flex;"><span>make <span style="color:#f92672">&amp;&amp;</span> make install
+</span></span></code></pre></div><p>With the created <code>ct-ng</code> binary, I began to configure my toolchain. Luckily, there was already a sample configuration from <code>armeb-unknown-eabi</code>, which is a match for my target architecture (I was able to tell based on the <a href="https://stackoverflow.com/questions/5731495/can-anyone-explain-the-gcc-cross-compiler-naming-convention/5731708#5731708">toolchain naming conventions</a>):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>./build/bin/ct-ng show-samples
+</span></span><span style="display:flex;"><span>./build/bin/ct-ng show-armeb-unknown-eabi
+</span></span><span style="display:flex;"><span>./build/bin/ct-ng armeb-unknown-eabi <span style="color:#75715e"># load it into config</span>
+</span></span><span style="display:flex;"><span>./build/bin/ct-ng menuconfig
+</span></span></code></pre></div><p>I verified in the menu configuration that the settings for our target toolchain matched what I was expecting for this compilation in the “Target Options” menu.</p>
+<p><img loading="lazy" src="/images/nvram-2.png" alt="Picture of the &amp;ldquo;Target Options&amp;rdquo; menu in the ct-ng menuconfig"  />
+</p>
+<p>I later encountered difficulties with downloading the tarballs needed by <code>crosstool-ng</code>. To resolve this, I configured a mirror: <a href="https://ftp.gnu.org/gnu/">https://ftp.gnu.org/gnu/</a>.</p>
+<p><img loading="lazy" src="/images/nvram-5.png" alt="Mirror added to menuconfig"  />
+</p>
+<p>Future me experienced more errors relating to missing necessary C library header files. To address this, I enabled newlib.</p>
+<p><img loading="lazy" src="/images/nvram-6.png" alt="Enabling the newlib C library in the ct-ng menuconfig"  />
+</p>
+<p>We can now begin to build our target toolchain!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>./build/bin/ct-ng build
+</span></span></code></pre></div><p>The build process took about 40 minutes and eventually resulted in an error when attempting to compile <code>gdbserver</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">[</span>ERROR<span style="color:#f92672">]</span>    configure: error: C compiler cannot create executables
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>CFG  <span style="color:#f92672">]</span>    See <span style="color:#e6db74">`</span>config.log<span style="color:#960050;background-color:#1e0010">&#39;</span> <span style="color:#66d9ef">for</span> more details
+</span></span></code></pre></div><p>I was worried that this error may have stopped the target toolchain from being created. I searched within the <code>.build</code> directory of <code>crosstool-ng</code> to check that the target binaries I was looking for were created.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ find . -name <span style="color:#e6db74">&#39;*armeb-unknown-eabi*&#39;</span> -type f
+</span></span><span style="display:flex;"><span>./.build/armeb-unknown-eabi/buildtools/share/man/man1/armeb-unknown-eabi-gcc.1
+</span></span><span style="display:flex;"><span>./.build/armeb-unknown-eabi/buildtools/share/man/man1/armeb-unknown-eabi-gcov-tool.1
+</span></span><span style="display:flex;"><span>./.build/armeb-unknown-eabi/buildtools/share/man/man1/armeb-unknown-eabi-gcov.1
+</span></span><span style="display:flex;"><span>./.build/armeb-unknown-eabi/buildtools/share/man/man1/armeb-unknown-eabi-cpp.1
+</span></span><span style="display:flex;"><span>./.build/armeb-unknown-eabi/buildtools/share/man/man1/armeb-unknown-eabi-gcov-dump.1
+</span></span><span style="display:flex;"><span>./.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcov-tool
+</span></span><span style="display:flex;"><span>./.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcov
+</span></span><span style="display:flex;"><span>./.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc-ranlib
+</span></span><span style="display:flex;"><span>./.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-cpp
+</span></span><span style="display:flex;"><span>./.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc
+</span></span><span style="display:flex;"><span>./.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc-ar
+</span></span><span style="display:flex;"><span>./.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc-nm
+</span></span><span style="display:flex;"><span>./.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcov-dump
+</span></span><span style="display:flex;"><span>./.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc-13.2.0
+</span></span></code></pre></div><p>Perfect, the tools we need have been built. We can use the gdbserver built into QEMU for debugging.  Let’s begin to compile nvram-faker.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone https://github.com/zcutlip/nvram-faker.git
+</span></span><span style="display:flex;"><span>cd nvram-faker
+</span></span><span style="display:flex;"><span>CC<span style="color:#f92672">=</span>$HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc make
+</span></span></code></pre></div><p>Unfortunately, attempting to build nvram-faker with <code>make</code> resulted in two distinct errors. First, the file <code>$HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/lib/gcc/armeb-unknown-eabi/13.2.0/../../../../armeb-unknown-eabi/lib/crt0.o</code> was not found.</p>
+<p>Let’s investigate.</p>
+<h2 id="troubleshooting-nvram-faker-compilation">Troubleshooting Nvram-Faker Compilation</h2>
+<p>Since <code>make</code> appeared to expect <code>crt0.o</code> in a specific location, I figured that changing the search path to include the location that it was actually at would resolve the issue. I began by locating a copy of <code>crt0.o</code> that exists</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ find . -name <span style="color:#e6db74">&#39;crt0.o&#39;</span>
+</span></span><span style="display:flex;"><span>./.build/armeb-unknown-eabi/build/build-libc/armeb-unknown-eabi/newlib/crt0.o
+</span></span></code></pre></div><p>Then, I used <code>$CFLAGS</code> such as <code>-I</code> and <code>-L</code> to include the path <code>./.build/armeb-unknown-eabi/build/build-libc/armeb-unknown-eabi/newlib/</code>. I also tried including the <code>crt0.o</code> file directly by manually using the <code>armeb-unkown-eabi-gcc</code> compiler with <code>crt0.o</code> as an input file, but neither of these worked.</p>
+<p>I ultimately decided to copy <code>crt0.o</code> to the location that the cross-compiler was searching for it at.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir -p $HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/lib/gcc/armeb-unknown-eabi/13.2.0/../../../../armeb-unknown-eabi/lib
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># the symlink didn&#39;t work</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#ln -s ./.build/armeb-unknown-eabi/build/build-libc/armeb-unknown-eabi/newlib/crt0.o $HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/lib/gcc/armeb-unknown-eabi/13.2.0/../../../../armeb-unknown-eabi/lib/crt0.o</span>
+</span></span><span style="display:flex;"><span>cp ./.build/armeb-unknown-eabi/build/build-libc/armeb-unknown-eabi/newlib/crt0.o $HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/lib/gcc/armeb-unknown-eabi/13.2.0/crt0.o
+</span></span></code></pre></div><p>Now that we&rsquo;ve solved the first error, let&rsquo;s move on to the next!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kali@kali:~/Documents/firmware/nvram-faker$ CC<span style="color:#f92672">=</span>$HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc make
+</span></span><span style="display:flex;"><span>$HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc -Wall -I./contrib/inih -ggdb -DINI_MAX_LINE<span style="color:#f92672">=</span><span style="color:#ae81ff">2000</span> -DINI_USE_STACK<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> -fPIC -c -o nvram-faker.o nvram-faker.c
+</span></span><span style="display:flex;"><span>nvram-faker.c:1:10: fatal error: stdlib.h: No such file or directory
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">1</span> | <span style="color:#75715e">#include &lt;stdlib.h&gt;</span>
+</span></span><span style="display:flex;"><span>      |          ^~~~~~~~~~
+</span></span><span style="display:flex;"><span>compilation terminated.
+</span></span><span style="display:flex;"><span>make: *** <span style="color:#f92672">[</span>Makefile:35: nvram-faker.o<span style="color:#f92672">]</span> Error <span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><p>It seems that <code>make</code> was having difficulty with finding our C library. I ended up searching for the <code>stdlib.h</code> header file in the <code>crosstool-ng</code> directory.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>~/Documents/firmware/crosstool-ng$ find . -name stdlib.h
+</span></span><span style="display:flex;"><span>./.build/armeb-unknown-eabi/build/build-gdb-cross/gnulib/import/stdlib.h
+</span></span><span style="display:flex;"><span>./.build/src/gcc-13.2.0/fixincludes/tests/base/stdlib.h
+</span></span><span style="display:flex;"><span>./.build/src/gcc-13.2.0/fixincludes/tests/base/ansi/stdlib.h
+</span></span><span style="display:flex;"><span>./.build/src/gcc-13.2.0/libstdc++-v3/include/tr1/stdlib.h
+</span></span><span style="display:flex;"><span>./.build/src/gcc-13.2.0/libstdc++-v3/include/c_compatibility/stdlib.h
+</span></span><span style="display:flex;"><span>./.build/src/newlib-4.3.0.20230120/newlib/libc/include/ssp/stdlib.h
+</span></span><span style="display:flex;"><span>./.build/src/newlib-4.3.0.20230120/newlib/libc/include/machine/stdlib.h
+</span></span><span style="display:flex;"><span>./.build/src/newlib-4.3.0.20230120/newlib/libc/include/stdlib.h
+</span></span><span style="display:flex;"><span>./.build/src/newlib-4.3.0.20230120/newlib/libc/machine/powerpc/machine/stdlib.h
+</span></span></code></pre></div><p>I first tried using the stdlib from <code>./.build/armeb-unknown-eabi/build/build-gdb-cross/gnulib/import/</code>, however, this resulted additional errors. My speculation is that the header files in there were intended for my host architecture, x64, and not the target architecture of 32-bit, big-endian ARM.</p>
+<p>This was the point that I realized that rebuilding with newlib would solve this problem. This enabled me to include <code>./.build/src/newlib-4.3.0.20230120/newlib/libc/include/</code> as a search directory in our make command via the CFLAGS <code>-I</code> option:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> make CC<span style="color:#f92672">=</span>$HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc CFLAGS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;-I</span>$HOME<span style="color:#e6db74">/Documents/firmware/crosstool-ng/.build/src/newlib-4.3.0.20230120/newlib&#34;</span>
+</span></span></code></pre></div><p>With that, our problems are solved.</p>
+<h3 id="compiling-nvram-faker">Compiling nvram-faker.</h3>
+<p>Now that we are properly set up for building <code>nvram-faker</code>, let’s run <code>make</code> to create <code>libnvram-faker.so</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ make CC<span style="color:#f92672">=</span>$HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc CFLAGS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;-I</span>$HOME<span style="color:#e6db74">/Documents/firmware/crosstool-ng/.build/src/newlib-4.3.0.20230120/newlib&#34;</span>
+</span></span><span style="display:flex;"><span>make: Nothing to be <span style="color:#66d9ef">done</span> <span style="color:#66d9ef">for</span> <span style="color:#e6db74">&#39;all&#39;</span>.
+</span></span><span style="display:flex;"><span>$ file ./libnvram-faker.so 
+</span></span><span style="display:flex;"><span>./libnvram-faker.so: ELF 32-bit MSB shared object, ARM, EABI5 version <span style="color:#ae81ff">1</span> <span style="color:#f92672">(</span>SYSV<span style="color:#f92672">)</span>, dynamically linked, with debug_info, not stripped
+</span></span></code></pre></div><p>The <code>file</code> output is exactly what we want as it matches the other binaries executed on the firmware like busybox:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kali@kali:~/Documents/firmware/_extracted_firmware/squashfs-root$ file ./bin/busybox 
+</span></span><span style="display:flex;"><span>./bin/busybox: ELF 32-bit MSB executable, ARM, EABI5 version <span style="color:#ae81ff">1</span> <span style="color:#f92672">(</span>SYSV<span style="color:#f92672">)</span>, dynamically linked, interpreter /lib/ld-musl-armeb.so.1, no section header
+</span></span></code></pre></div><h3 id="using-nvram-faker">Using nvram-faker</h3>
+<p>Now, I’ll copy the libnvram-faker.so file and re-enter the chroot environment at the base of our firmware image’s squashfs file system.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cp ../../nvram-faker/libnvram-faker.so .
+</span></span><span style="display:flex;"><span>touch nvram.ini
+</span></span></code></pre></div><p>Let&rsquo;s test it!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ sudo chroot . ./qemu-armeb-static /bin/sh -c <span style="color:#e6db74">&#34;LD_PRELOAD=/libnvram-faker.so /usr/sbin/httpd&#34;</span>
+</span></span><span style="display:flex;"><span>Error relocating /libnvram-faker.so: initialise_monitor_handles: symbol not found
+</span></span><span style="display:flex;"><span>Error relocating /libnvram-faker.so: __libc_init_array: symbol not found
+</span></span><span style="display:flex;"><span>Error relocating /libnvram-faker.so: main: symbol not found
+</span></span><span style="display:flex;"><span>Error relocating /libnvram-faker.so: __libc_fini_array: symbol not found
+</span></span><span style="display:flex;"><span>Error relocating /libnvram-faker.so: __heap_limit: symbol not found
+</span></span><span style="display:flex;"><span>Error relocating /libnvram-faker.so: _impure_ptr: symbol not found
+</span></span><span style="display:flex;"><span>Error relocating /libnvram-faker.so: _ctype_: symbol not found
+</span></span></code></pre></div><p>Hm, it looks like we have some more errors to resolve. Let’s understand why these are happening and address them. Based on the error message, I am going to assume that the linker was expecting the symbols above to be in our library (perhaps as some ABI standard?) and since they were not found, it has difficulty with determining where to place our library in memory. This is just a guess, so feel free to correct me if I’m wrong.</p>
+<h3 id="troubleshooting-libnvram-fakerso">Troubleshooting libnvram-faker.so</h3>
+<p>I had two ideas that I thought may resolve this by including the expected symbols:</p>
+<ol>
+<li>Recompiling <code>libnvram-faker.so</code> with our cross-compiled  <code>ld</code>, <code>ar</code>, <code>as</code>, <code>strip</code>, and <code>nm</code> binaries since I did not include these before.
+<ul>
+<li>This operates on the assumption that including these binaries would automatically create the expected symbols.</li>
+</ul>
+</li>
+<li>Manually patching <code>nvram-faker.c</code> to include the symbols that the linker is expecting.</li>
+</ol>
+<p>I started out testing the first idea.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ make clean
+</span></span><span style="display:flex;"><span>rm *.o
+</span></span><span style="display:flex;"><span>rm *.so
+</span></span><span style="display:flex;"><span>rm nvram_faker_exe
+</span></span><span style="display:flex;"><span>rm: cannot remove <span style="color:#e6db74">&#39;nvram_faker_exe&#39;</span>: No such file or directory
+</span></span><span style="display:flex;"><span>make: <span style="color:#f92672">[</span>Makefile:46: clean<span style="color:#f92672">]</span> Error <span style="color:#ae81ff">1</span> <span style="color:#f92672">(</span>ignored<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>make -C ./contrib/inih clean
+</span></span><span style="display:flex;"><span>make<span style="color:#f92672">[</span>1<span style="color:#f92672">]</span>: Entering directory <span style="color:#e6db74">&#39;$HOME/Documents/firmware/nvram-faker/contrib/inih&#39;</span>
+</span></span><span style="display:flex;"><span>rm *.o
+</span></span><span style="display:flex;"><span>make<span style="color:#f92672">[</span>1<span style="color:#f92672">]</span>: Leaving directory <span style="color:#e6db74">&#39;$HOME/Documents/firmware/nvram-faker/contrib/inih&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$ make CC<span style="color:#f92672">=</span>$HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc CFLAGS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;-I</span>$HOME<span style="color:#e6db74">/Documents/firmware/crosstool-ng/.build/src/newlib-4.3.0.20230120/newlib/libc/include&#34;</span> LD<span style="color:#f92672">=</span>$HOME/x-tools/armeb-unknown-eabi/bin/armeb-unknown-eabi-ld AR<span style="color:#f92672">=</span>$HOME/x-tools/armeb-unknown-eabi/bin/armeb-unknown-eabi-ar STRIP<span style="color:#f92672">=</span>$HOME/x-tools/armeb-unknown-eabi/bin/armeb-unknown-eabi-strip NM<span style="color:#f92672">=</span>$HOME/x-tools/armeb-unknown-eabi/bin/armeb-unknown-eabi-nm 
+</span></span><span style="display:flex;"><span>$HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc -Wall -I./contrib/inih -I$HOME/Documents/firmware/crosstool-ng/.build/src/newlib-4.3.0.20230120/newlib/libc/include -fPIC -c -o nvram-faker.o nvram-faker.c
+</span></span><span style="display:flex;"><span>make -C ./contrib/inih ini.o
+</span></span><span style="display:flex;"><span>make<span style="color:#f92672">[</span>1<span style="color:#f92672">]</span>: Entering directory <span style="color:#e6db74">&#39;$HOME/Documents/firmware/nvram-faker/contrib/inih&#39;</span>
+</span></span><span style="display:flex;"><span>$HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc -I$HOME/Documents/firmware/crosstool-ng/.build/src/newlib-4.3.0.20230120/newlib/libc/include -fPIC -c -o ini.o ini.c
+</span></span><span style="display:flex;"><span>make<span style="color:#f92672">[</span>1<span style="color:#f92672">]</span>: Leaving directory <span style="color:#e6db74">&#39;$HOME/Documents/firmware/nvram-faker/contrib/inih&#39;</span>
+</span></span><span style="display:flex;"><span>cp ./contrib/inih/ini.o .
+</span></span><span style="display:flex;"><span>$HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/bin/armeb-unknown-eabi-gcc -shared -o libnvram-faker.so nvram-faker.o ini.o -Wl,-nostdlib
+</span></span></code></pre></div><p>After copying it back to our squashfs root and trying again, it seems the same issue persists. This rules out incompatible <code>ld</code>, <code>ar</code>, <code>as</code>, <code>strip</code>, or <code>nm</code> binaries as the root cause. I wasn&rsquo;t confident that this would be the solution, but it was worth a shot. Now I know more.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ cp ./libnvram-faker.so ../_extracted_firmware/squashfs-root/
+</span></span><span style="display:flex;"><span>$ sudo chroot . ./qemu-armeb-static /bin/sh -c <span style="color:#e6db74">&#34;LD_PRELOAD=/libnvram-faker.so /usr/sbin/httpd&#34;</span>
+</span></span><span style="display:flex;"><span>Error relocating /libnvram-faker.so: initialise_monitor_handles: symbol not found
+</span></span><span style="display:flex;"><span>Error relocating /libnvram-faker.so: __libc_init_array: symbol not found
+</span></span><span style="display:flex;"><span>Error relocating /libnvram-faker.so: main: symbol not found
+</span></span><span style="display:flex;"><span>Error relocating /libnvram-faker.so: __libc_fini_array: symbol not found
+</span></span><span style="display:flex;"><span>Error relocating /libnvram-faker.so: __heap_limit: symbol not found
+</span></span><span style="display:flex;"><span>Error relocating /libnvram-faker.so: _impure_ptr: symbol not found
+</span></span><span style="display:flex;"><span>Error relocating /libnvram-faker.so: _ctype_: symbol not found
+</span></span></code></pre></div><p>Instead, let’s attempt the second idea. I created <a href="https://github.com/ally-petitt/nvram-faker">my own fork</a> of nvram-faker and got to work.</p>
+<p>As I was creating the patch to manually add the expected symbols into <code>nvram-faker.c</code>, I made the observation that many of these symbols were defined in common C libraries like <code>ctypes.h</code> and <code>stdlib.h</code>. This made me suspect that the issue might reside in the flags relating to the C library.</p>
+<p>I quickly tried recompiling without the <code>-nostdlib</code> flag by modifying the <code>nvram-faker</code> <code>Makefile</code> and recompiling with the <code>-static</code> flag. Neither of these worked, so I continued with the original plan, which involved appending the following to <code>nvram-faker.c</code> and recompiling:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>void main<span style="color:#f92672">(){</span>
+</span></span><span style="display:flex;"><span>	write<span style="color:#f92672">(</span>1, <span style="color:#e6db74">&#34;libnvram-faker.so has loaded\n&#34;</span>, 29<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>void* initialise_monitor_handles;
+</span></span><span style="display:flex;"><span>void* __heap_limit;
+</span></span><span style="display:flex;"><span>void <span style="color:#f92672">(</span>*__libc_fini_array<span style="color:#f92672">[])</span> <span style="color:#f92672">(</span>void<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>void <span style="color:#f92672">(</span>*__libc_init_array<span style="color:#f92672">[])</span> <span style="color:#f92672">(</span>void<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>struct _reent * _impure_ptr;
+</span></span><span style="display:flex;"><span>char _ctype_;
+</span></span></code></pre></div><p>I discovered the data types that work through a combination of compiler warnings and grepping for definitions such as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kali@kali:~/Documents/firmware/crosstool-ng/.build/src/newlib-4.3.0.20230120/newlib/libc/include$ grep -r <span style="color:#e6db74">&#34;_ctype_&#34;</span> .
+</span></span><span style="display:flex;"><span>./ctype.h:extern	__IMPORT const char	_ctype_<span style="color:#f92672">[]</span>;
+</span></span></code></pre></div><p>Let’s try to run this again!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kali@kali:~/Documents/firmware/_extracted_firmware/squashfs-root$ sudo chroot . ./qemu-armeb-static /bin/sh -c <span style="color:#e6db74">&#34;LD_PRELOAD=/libnvram-faker.so /usr/sbin/httpd&#34;</span>
+</span></span><span style="display:flex;"><span>cannot open /dev/nvram
+</span></span><span style="display:flex;"><span>httpd : httpd cannot start. ssl and/or http must be selected
+</span></span></code></pre></div><p>Well, our library loaded successfully this time, but it’s not quite what we were hoping for. From my prior reverse engineering of interesting libraries in this firmware, I knew that the error message we received comes from <code>libnvram.so</code>, which we can verify with grep.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ grep -r <span style="color:#e6db74">&#34;cannot open /dev/nvram&#34;</span> .
+</span></span><span style="display:flex;"><span>Binary file ./lib/libnvram.so matches
+</span></span></code></pre></div><h3 id="debugging-libnvram-fakerso">Debugging Libnvram-faker.so</h3>
+<p>I wanted to get to the root of why this error message was still appearing despite using <code>libnvram-faker.so</code> to hook NVRAM-related functionality.</p>
+<h4 id="attempt-1-gdb">Attempt 1: GDB</h4>
+<p>I first attempted to debug using GDB. In QEMU, I used the built-in GDB server to listen on port 1234.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo chroot . ./qemu-armeb-static -g <span style="color:#ae81ff">1234</span> -E LD_PRELOAD<span style="color:#f92672">=</span>/libnvram-faker.so /usr/sbin/httpd
+</span></span></code></pre></div><p>in another terminal window I modified my <code>.gdbinit</code> file to expidite up the process of connecting and debugging to our target application.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ cat ~/.gdbinit
+</span></span><span style="display:flex;"><span>set disassembly-flavor intel
+</span></span><span style="display:flex;"><span>set print asm-demangle on
+</span></span><span style="display:flex;"><span>source $HOME/Downloads/pwndbg/gdbinit.py
+</span></span><span style="display:flex;"><span>set arch arm
+</span></span><span style="display:flex;"><span>set follow-fork-mode child
+</span></span><span style="display:flex;"><span>target extended-remote :1234
+</span></span></code></pre></div><p>Then, I connected to the remote process.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gdb-multiarch ./usr/sbin/httpd
+</span></span></code></pre></div><p><img loading="lazy" src="/images/nvram-7.png" alt="Pwndbg context output after connecting to the httpd debugging process"  />
+</p>
+<p>To make debugging easier, I calculated the offset of the memory addresses in our debugging process to memory addresses in the <code>httpd</code> binary itself. When I ran the <code>load</code> command in GDB with this offset as the second parameter, it made the addresses in the debugger consistent with those in my Ghidra CodeBrowser.</p>
+<p>To make this calculation, I subtracted PC (the ARM <a href="https://developer.arm.com/documentation/107656/0101/Registers/Registers-in-the-register-bank/R15--Program-Counter--PC-">program counter register</a>) with the address of the first entry instruction in <code>httpd</code> to adjust our addresses to match that of the binary.</p>
+<blockquote>
+
+
+<p><details >
+  <summary markdown="span"><strong>Note on verifying offset</strong></summary>
+  I had verified that we were at the first entry instruction by matching the byte sequence that our PC was at (<code>x/3wx $PC</code>) to the hex dump of the <code>httpd</code> entrypoint (made easier through the use of a Ghidra search functionality).
+</details></p>
+
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pwndbg&gt; load ./usr/sbin/httpd <span style="color:#ae81ff">4286266732</span>
+</span></span></code></pre></div><p>This is where the problems with GDB began. There appeared to be an issue with the timing of the program between when I connected to the debugging process and it began execution. If the delay was more than a few milliseconds, the <code>libc_start_main</code> function would have a segmentation fault. I tried automating loading the program and setting breakpoints in <code>.gdbinit</code>, but even this was not fast enough to prevent a segfault.</p>
+<p>I don’t know if there was a race condition or something else preventing normal execution. If anyone knows why this may have happened, please do let me know since I am quite puzzled by it.</p>
+<p>I asked myself the question, “is there another way to do this?”. I realized what I was really looking for was a call stack for when that error message was printed. I got an idea of how I could recreate this through static analysis.</p>
+<h4 id="attempt-2-ghidra">Attempt 2: Ghidra</h4>
+<p>I started by pinpointing where our error message appears and checking its implementation in our fake NVRAM library.</p>
+<p>In Ghidra, I opened a project with <code>libnvram.so</code> loaded in the CodeBrowser. Using the built-in tool <code>Window &gt; Defined Strings</code>, I was able to search for our error message, “<code>cannot open /dev/nvram</code>.&quot;</p>
+<p><img loading="lazy" src="/images/nvram-8.png" alt="Ghidra defined strings window showing our error message"  />
+</p>
+<p>I followed the location of this string in the binary to reveal that it is referenced in a procedure that Ghidra called <code>FUN_00012420</code>.</p>
+<p><img loading="lazy" src="/images/nvram-9.png" alt="The error message in the disassembly of the binary"  />
+</p>
+<p>This function is called by some of the major functions in <code>libnvram.so</code> such as <code>nvram_get</code>.</p>
+<p><img loading="lazy" src="/images/nvram-10.png" alt="The call tree of FUN_00012420"  />
+</p>
+<p>When quickly listing the NVRAM functions imported in <code>httpd</code>(which there are defined strings for), it does not appear that <code>httpd</code> is calling a libnvram function that would trigger our error. However, that doesn’t mean that a call to this endpoint isn’t abstracted some other way.</p>
+<p><img loading="lazy" src="/images/nvram-11.png" alt="Defined strings with &amp;ldquo;nvram&amp;rdquo; in them in &lt;code&gt;httpd&lt;/code&gt;"  />
+</p>
+<p>I decided to analyze a complete call graph of <code>FUN_00012420</code> (as opposed to the first layer of the call tree), which confirmed my suspicions: <code>nvram_set</code> called a function that called <code>FUN_00012420</code>. This means that <code>nvram_set</code>, a function called by <code>httpd</code>, was very likely the entrypoint to our “<code>cannot find /dev/nvram</code>” error message.</p>
+<p><img loading="lazy" src="/images/nvram-12.png" alt="Call graph of FUN_00012420"  />
+</p>
+<p>As stated in the <code>nvram-faker</code> <a href="https://github.com/zcutlip/nvram-faker?tab=readme-ov-file#using">README</a>:</p>
+<blockquote>
+<p>The library currently does not support calls to <code>nvram_set()</code>.</p>
+</blockquote>
+<p>My hypothesis was that since <code>nvram_set()</code> was not defined in the <code>libnvram-faker.so</code> library that we created, it was being imported from <code>libnvram.so</code>. In turn, <code>FUN_00012420</code> is called which attempts to open <code>/dev/nvram</code> and fails (since the kernel module for <code>/dev/nvram</code> does not exist), printing our error message.</p>
+<p>To verify that this is the case, I once again patched <code>nvram-faker.c</code>, but this time I implemented a preliminary definition for <code>nvram_set</code> and observe whether the error from before is still present.</p>
+<p>The following is what I added to <code>nvram-faker.c</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>char * nvram_set<span style="color:#f92672">(</span>char * key, char * value<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>	write<span style="color:#f92672">(</span>1, <span style="color:#e6db74">&#34;nvram_set called\n&#34;</span>, 17<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>After I compiled and ran <code>httpd</code>, this was my output:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ sudo chroot . ./qemu-armeb-static -E LD_PRELOAD<span style="color:#f92672">=</span>/libnvram-faker.so /usr/sbin/httpd
+</span></span><span style="display:flex;"><span>nvram_set called
+</span></span><span style="display:flex;"><span>httpd : httpd cannot start. ssl and/or http must be selected
+</span></span></code></pre></div><p>Perfect! The previous error that <code>/dev/nvram</code> was not found is no longer appearing and in its place is the output that we injected for the <code>nvram_set()</code> function I defined. This verifies that <code>nvram_set</code> was the source of the error messages. Now, we can create our own implementation of <code>nvram_set</code> to enable full functionality of <code>httpd.</code></p>
+<p>To streamline the development process, I made my own script to clean, build, and test the library:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>set -e <span style="color:#75715e"># exit on failure</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> $# -ne <span style="color:#ae81ff">4</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>  echo <span style="color:#e6db74">&#34;Usage: </span>$0<span style="color:#e6db74"> &lt;compilation_toolchain_binaries_path&gt; &lt;squashfs_root_path&gt; &lt;newlib_path&gt; &lt;target_binary_path&gt;&#34;</span>
+</span></span><span style="display:flex;"><span>  echo <span style="color:#e6db74">&#34;Example: </span>$0<span style="color:#e6db74"> </span>$HOME<span style="color:#e6db74">/x-tools/armeb-unknown-eabi/bin </span>$HOME<span style="color:#e6db74">/_extracted_firmware/squashfs-root </span>$HOME<span style="color:#e6db74">/Documents/firmware/crosstool-ng/.build/src/newlib-4.3.0.20230120/newlib/libc/include /usr/sbin/httpd&#34;</span>
+</span></span><span style="display:flex;"><span>  exit <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>TOOLCHAIN_PATH<span style="color:#f92672">=</span>$1
+</span></span><span style="display:flex;"><span>SQUASHFS_PATH<span style="color:#f92672">=</span>$2
+</span></span><span style="display:flex;"><span>NEWLIB_PATH<span style="color:#f92672">=</span>$3
+</span></span><span style="display:flex;"><span>TARGET_BINARY<span style="color:#f92672">=</span>$4
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>make clean
+</span></span><span style="display:flex;"><span>make CC<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>TOOLCHAIN_PATH<span style="color:#e6db74">}</span><span style="color:#e6db74">/armeb-unknown-eabi-gcc&#34;</span> CFLAGS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;-DDEBUG=1 -I</span><span style="color:#e6db74">${</span>NEWLIB_PATH<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> LD<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>TOOLCHAIN_PATH<span style="color:#e6db74">}</span><span style="color:#e6db74">/armeb-unknown-eabi-ld AR=</span><span style="color:#e6db74">${</span>TOOLCHAIN_PATH<span style="color:#e6db74">}</span><span style="color:#e6db74">/armeb-unknown-eabi-ar STRIP=</span><span style="color:#e6db74">${</span>TOOLCHAIN_PATH<span style="color:#e6db74">}</span><span style="color:#e6db74">/armeb-unknown-eabi-strip NM=</span><span style="color:#e6db74">${</span>TOOLCHAIN_PATH<span style="color:#e6db74">}</span><span style="color:#e6db74">/armeb-unknown-eabi-nm&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cp ./libnvram-faker.so <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SQUASHFS_PATH<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>sudo chroot <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SQUASHFS_PATH<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> ./qemu-armeb-static -E LD_PRELOAD<span style="color:#f92672">=</span>/libnvram-faker.so <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>TARGET_BINARY<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span></code></pre></div><p>I encountered a segmentation fault when debug was enabled due to how <code>fprintf</code> was being used to log debug output through the <code>DEBUG_PRINTF</code> macro. I ended up redefining <code>DEBUG_PRINTF</code> and <code>LOG_PRINTF</code> to be based on <code>printf</code> instead of <code>fprintf</code> to prevent the segfault.</p>
+<blockquote>
+
+
+<p><details >
+  <summary markdown="span"><strong>Expand to learn why fprintf was originally used instead of printf</strong></summary>
+  After a bit of digging, I would discover that <code>fprintf()</code> was used for debug and log output in the original <code>nvram-faker</code> repository as a workaround to how <code>stdout</code> was being redirected after <code>system()</code> was called in the webserver it was used to emulate. As explained in the <a href="https://shadowfile.inode.link/blog/2015/01/patching-emulating-and-debugging-a-netgear-embedded-web-server/">author’s blogpost</a>, <code>fprintf()</code> allowed him to print to <code>stderr</code>, which was visible in the console, unlike the output of <code>printf()</code> that goes to <code>stdout</code> and was not visible after <code>system()</code> was called.
+</details></p>
+
+</blockquote>
+<h3 id="adding-support-for-nvram_set">Adding Support for nvram_set</h3>
+<p>It was originally my intention to add <code>nvram_set()</code> support to <code>nvram-faker.c</code> in order to fully mimic a real NVRAM interaction, however, an event came up in my personal life that delayed this. I may endeavor to do so in the future when the timing is better, however, for now I have opted to simply create my <a href="https://github.com/ally-petitt/nvram-faker">own fork</a> with the following improvements on the old one:</p>
+<ul>
+<li>More informative debug output</li>
+<li>Resolve segmentation fault in debugging output</li>
+<li>Added additional symbols to <code>nvram-faker.c</code> such as <code>initialise_monitor_handles</code> and <code>__libc_fini_array</code> to avoid linking errors</li>
+<li>Add a preliminary <code>nvram_set()</code> function that logs debug output to prevent function calls to <code>libnvram.so</code></li>
+<li>Add a <code>build_and_run.sh</code> script to streamline development and testing</li>
+</ul>
+<h1 id="conclusion">Conclusion</h1>
+<p>This article was quite lengthy and technical compared to what I normally put out. It really started as me wanting to test out a chroot sandbox on a router and escalated into emulating a webserver and needing a way to interface with NVRAM. This was a great exercise that taught me more about cross-compilation, NVRAM, and general troubleshooting. Past me would have been overwhelmed by the amount of errors that I had to work through to get this to work (this article didn&rsquo;t even detail half of them for brevity), so working through this helped to strengthen my perserverance as a researcher.</p>
+<p>Overall, this was an interesting rabbit hole to go down. I hope it made as much sense in text as it did in my head. If any details in here were inaccurate, please feel free to contact me and I will be happy to correct the information in this article.</p>
+<p>Thanks for reading!</p>
+]]></content:encoded>
+    </item>
     <item>
       <title>How I became a hacker before I finished high school [Repost]</title>
-      <link>https://ally-petitt.com/en/posts/2024-05-07_how-i-became-a-hacker-before-i-finished-high-school/</link>
+      <link>https://ally-petitt.com:443/en/posts/2024-05-07_how-i-became-a-hacker-before-i-finished-high-school/</link>
       <pubDate>Tue, 07 May 2024 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2024-05-07_how-i-became-a-hacker-before-i-finished-high-school/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2024-05-07_how-i-became-a-hacker-before-i-finished-high-school/</guid>
       <description>&lt;p&gt;&lt;em&gt;Author&amp;rsquo;s note: This article was initially published on &lt;a href=&#34;https://readme.synack.com/how-i-became-a-hacker-before-i-finished-high-school&#34;&gt;Synack&amp;rsquo;s README&lt;/a&gt;. They have great content and I recommend that you browse their articles if you are interested cybersecurity.&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://22524429.fs1.hubspotusercontent-na1.net/hubfs/22524429/victor-_qXjdWm8YEo-unsplash.jpg&#34; alt=&#34;Picture of a maze from above from Unsplash&#34;  /&gt;
 &lt;/p&gt;
@@ -86,10 +798,10 @@
     </item>
     <item>
       <title>Goodbye World - Migrating Away From Medium | Graduation &amp; Next Steps</title>
-      <link>https://ally-petitt.com/en/posts/2024-04-31_leaving-medium/</link>
+      <link>https://ally-petitt.com:443/en/posts/2024-04-31_leaving-medium/</link>
       <pubDate>Fri, 03 May 2024 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2024-04-31_leaving-medium/</guid>
-      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://ally-petitt.com/ally-petitt/images/Medium-crossed.png&#34; alt=&#34;Medium logo crossed out&#34;  /&gt;
+      <guid>https://ally-petitt.com:443/en/posts/2024-04-31_leaving-medium/</guid>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://ally-petitt.com:443/images/Medium-crossed.png&#34; alt=&#34;Medium logo crossed out&#34;  /&gt;
 &lt;/p&gt;
 &lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;Hello everyone and welcome to the first exclusive post on my new personal website! I am very excited to be here and I hope that you are as well. The picture above is a bit dramatic, but communicates the message that I have decided to move forward. Those who have been following me will know that I first began my technical blog on Medium, which was an approachable outlet for sharing my knowledge as I first entered the field.&lt;/p&gt;
@@ -121,7 +833,7 @@
 &lt;h3 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h3&gt;
 &lt;p&gt;Migrating to this website is a symbol of a new beginning. I could not be more enthusiastic about this transformative period of my life as I transition into a full-time career doing the work that I love. Thank you to everyone who has supported me throughout this journey, and I can&amp;rsquo;t wait to see what the future has in store!&lt;/p&gt;
 </description>
-      <content:encoded><![CDATA[<p><img loading="lazy" src="/ally-petitt/images/Medium-crossed.png" alt="Medium logo crossed out"  />
+      <content:encoded><![CDATA[<p><img loading="lazy" src="/images/Medium-crossed.png" alt="Medium logo crossed out"  />
 </p>
 <h2 id="introduction">Introduction</h2>
 <p>Hello everyone and welcome to the first exclusive post on my new personal website! I am very excited to be here and I hope that you are as well. The picture above is a bit dramatic, but communicates the message that I have decided to move forward. Those who have been following me will know that I first began my technical blog on Medium, which was an approachable outlet for sharing my knowledge as I first entered the field.</p>
@@ -156,9 +868,9 @@
     </item>
     <item>
       <title>How I Found 3 CVEs in 2 Days</title>
-      <link>https://ally-petitt.com/en/posts/2024-03-21_how-i-found-3-cves-in-2-days-8a135eb924d3/</link>
+      <link>https://ally-petitt.com:443/en/posts/2024-03-21_how-i-found-3-cves-in-2-days-8a135eb924d3/</link>
       <pubDate>Thu, 21 Mar 2024 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2024-03-21_how-i-found-3-cves-in-2-days-8a135eb924d3/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2024-03-21_how-i-found-3-cves-in-2-days-8a135eb924d3/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*wGuRqNuBuFV5u69n.png&#34; alt=&#34;&#34;  /&gt;
 
 Author: Ally Petitt&lt;/p&gt;
@@ -444,9 +1156,9 @@ Additionally, attempting to change the password required the previous user passw
     </item>
     <item>
       <title>How to Find more Vulnerabilities — Source Code Auditing Explained</title>
-      <link>https://ally-petitt.com/en/posts/2024-01-01_how-to-find-more-vulnerabilities---source-code-auditing-explained-2c8a10896374/</link>
+      <link>https://ally-petitt.com:443/en/posts/2024-01-01_how-to-find-more-vulnerabilities---source-code-auditing-explained-2c8a10896374/</link>
       <pubDate>Mon, 01 Jan 2024 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2024-01-01_how-to-find-more-vulnerabilities---source-code-auditing-explained-2c8a10896374/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2024-01-01_how-to-find-more-vulnerabilities---source-code-auditing-explained-2c8a10896374/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*jDmBerRWYf3eZh2J&#34; alt=&#34;&#34;  /&gt;
 
 &lt;em&gt;&lt;a href=&#34;https://images.pexels.com/photos/374559/pexels-photo-374559.jpeg?auto=compress&amp;amp;cs=tinysrgb&amp;amp;w=1260&amp;amp;h=750&amp;amp;dpr=1&#34;&gt;https://images.pexels.com/photos/374559/pexels-photo-374559.jpeg?auto=compress&amp;amp;cs=tinysrgb&amp;amp;w=1260&amp;amp;h=750&amp;amp;dpr=1&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
@@ -548,9 +1260,9 @@ Tooling</h1>
     </item>
     <item>
       <title>Stealthy Exploit Opens Door for Pre-Compilation Code Execution</title>
-      <link>https://ally-petitt.com/en/posts/2023-12-02_stealthy-exploit-opens-door-for-pre-compilation-code-execution-17a57b9585cb/</link>
+      <link>https://ally-petitt.com:443/en/posts/2023-12-02_stealthy-exploit-opens-door-for-pre-compilation-code-execution-17a57b9585cb/</link>
       <pubDate>Sat, 02 Dec 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2023-12-02_stealthy-exploit-opens-door-for-pre-compilation-code-execution-17a57b9585cb/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2023-12-02_stealthy-exploit-opens-door-for-pre-compilation-code-execution-17a57b9585cb/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*XwuUEqGz-1xT_v_j.jpg&#34; alt=&#34;&#34;  /&gt;
 
 &lt;em&gt;&lt;a href=&#34;https://img.rasset.ie/001babea-1600.jpg&#34;&gt;https://img.rasset.ie/001babea-1600.jpg&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
@@ -646,9 +1358,9 @@ For example, hackers can embed a malicious payload within the <code>configure.ac
     </item>
     <item>
       <title>How I Found an Authentication Bypass Vulnerability — CVE-2023–43154</title>
-      <link>https://ally-petitt.com/en/posts/2023-09-29_how-i-found-authentication-bypass-vulnerability---cve-2023-43154-b55dee7c876b/</link>
+      <link>https://ally-petitt.com:443/en/posts/2023-09-29_how-i-found-authentication-bypass-vulnerability---cve-2023-43154-b55dee7c876b/</link>
       <pubDate>Fri, 29 Sep 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2023-09-29_how-i-found-authentication-bypass-vulnerability---cve-2023-43154-b55dee7c876b/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2023-09-29_how-i-found-authentication-bypass-vulnerability---cve-2023-43154-b55dee7c876b/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*3hIZtNoj0lfZ86_b&#34; alt=&#34;&#34;  /&gt;
 
 &lt;em&gt;&lt;a href=&#34;https://images.pexels.com/photos/5483149/pexels-photo-5483149.jpeg?auto=compress&amp;amp;cs=tinysrgb&amp;amp;w=1260&amp;amp;h=750&amp;amp;dpr=1&#34;&gt;https://images.pexels.com/photos/5483149/pexels-photo-5483149.jpeg?auto=compress&amp;amp;cs=tinysrgb&amp;amp;w=1260&amp;amp;h=750&amp;amp;dpr=1&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
@@ -912,9 +1624,9 @@ Conclusion</h1>
     </item>
     <item>
       <title>How to safely convert to LVM without losing your data</title>
-      <link>https://ally-petitt.com/en/posts/2023-08-19_how-to-safely-convert-to-lvm-without-losing-your-data-258ce044448/</link>
+      <link>https://ally-petitt.com:443/en/posts/2023-08-19_how-to-safely-convert-to-lvm-without-losing-your-data-258ce044448/</link>
       <pubDate>Sat, 19 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2023-08-19_how-to-safely-convert-to-lvm-without-losing-your-data-258ce044448/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2023-08-19_how-to-safely-convert-to-lvm-without-losing-your-data-258ce044448/</guid>
       <description>&lt;h1 id=&#34;introduction&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*es1LJrnEBsSNgXZM.png&#34; alt=&#34;&#34;  /&gt;
 
 Introduction&lt;/h1&gt;
@@ -1076,9 +1788,9 @@ Introduction</h1>
     </item>
     <item>
       <title>Beyond the Screen: The Hidden World of Firmware Security</title>
-      <link>https://ally-petitt.com/en/posts/2023-08-05_beyond-the-screen--the-hidden-world-of-firmware-security-87b0ea6a20a4/</link>
+      <link>https://ally-petitt.com:443/en/posts/2023-08-05_beyond-the-screen--the-hidden-world-of-firmware-security-87b0ea6a20a4/</link>
       <pubDate>Sat, 05 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2023-08-05_beyond-the-screen--the-hidden-world-of-firmware-security-87b0ea6a20a4/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2023-08-05_beyond-the-screen--the-hidden-world-of-firmware-security-87b0ea6a20a4/</guid>
       <description>&lt;h1 id=&#34;introduction&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*UA4-sPgJH7Fhk9jbvvRafQ.jpeg&#34; alt=&#34;https://www.istockphoto.com/photo/man-using-laptop-with-update-software-computer-program-upgrade-business-technology-gm1449779856-486876929&#34;  /&gt;
 
 Introduction&lt;/h1&gt;
@@ -1326,9 +2038,9 @@ Baseboard Management Controllers (BMCs) are hardware components that are often s
     </item>
     <item>
       <title>Reverse Engineering — Analyzing Headers</title>
-      <link>https://ally-petitt.com/en/posts/2023-07-13_reverse-engineering---analyzing-headers-23dc84075cd/</link>
+      <link>https://ally-petitt.com:443/en/posts/2023-07-13_reverse-engineering---analyzing-headers-23dc84075cd/</link>
       <pubDate>Thu, 13 Jul 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2023-07-13_reverse-engineering---analyzing-headers-23dc84075cd/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2023-07-13_reverse-engineering---analyzing-headers-23dc84075cd/</guid>
       <description>&lt;p&gt;&lt;code&gt;objdump&lt;/code&gt; is a command line tool that can be used to gain insight into an executable binary. In this article, the tool will be used to dump all of the headers of the ELF binary &lt;code&gt;heapedit&lt;/code&gt; with the command below. Then, we will analyze and explain each section of output from the top to the bottom.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;objdump -x ./heapedit
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Executable and Linkable Format (ELF) files are a common file format for object files, executable binaries, core dumps, and shared libraries. It provides a standardized format for storing executable and object code, symbol information, and other metadata necessary for proper software execution. It may be helpful to first get an overview of an ELF file structure which can be seen in this image:&lt;/p&gt;
@@ -1874,9 +2586,9 @@ Baseboard Management Controllers (BMCs) are hardware components that are often s
     </item>
     <item>
       <title>5 Ways I Bypassed Your Web Application Firewall (WAF)</title>
-      <link>https://ally-petitt.com/en/posts/2023-06-01_5-ways-i-bypassed-your-web-application-firewall--waf--43852a43a1c2/</link>
+      <link>https://ally-petitt.com:443/en/posts/2023-06-01_5-ways-i-bypassed-your-web-application-firewall--waf--43852a43a1c2/</link>
       <pubDate>Thu, 01 Jun 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2023-06-01_5-ways-i-bypassed-your-web-application-firewall--waf--43852a43a1c2/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2023-06-01_5-ways-i-bypassed-your-web-application-firewall--waf--43852a43a1c2/</guid>
       <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;This article will explain the tools and techniques used by web application penetration testers and security researchers to successfully bypass web application firewall (WAF) protections.&lt;/p&gt;
 &lt;p&gt;WAFs are a cybersecurity solution to filter and block malicious web traffic. Common vendors include CloudFlare, AWS, Citrix, Akamai, Radware, Microsoft Azure, and Barracuda.&lt;/p&gt;
@@ -2190,9 +2902,9 @@ The results from WhatWaf are consistent with those of Wafw00f.</p>
     </item>
     <item>
       <title>5 Ways I Found Your Deleted Files</title>
-      <link>https://ally-petitt.com/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</link>
+      <link>https://ally-petitt.com:443/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</link>
       <pubDate>Sat, 13 May 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2023-05-13_5-ways-i-found-your-deleted-files-492407dbd467/</guid>
       <description>&lt;h2 id=&#34;computer-forensics-for-filerecovery&#34;&gt;Computer Forensics for File Recovery&lt;/h2&gt;
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*MnBiAcwiwaFGOOAe.jpg&#34; alt=&#34;&#34;  /&gt;
 
@@ -2624,9 +3336,9 @@ Conclusion</h1>
     </item>
     <item>
       <title>How to Encrypt a Drive in Linux</title>
-      <link>https://ally-petitt.com/en/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/</link>
+      <link>https://ally-petitt.com:443/en/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/</link>
       <pubDate>Fri, 05 May 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2023-05-05_how-to-encrypt-a-drive-in-linux-83b3001744f4/</guid>
       <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;Hey everyone, this is a pretty quick article on LUKS drive encryption on Linux with the &lt;code&gt;cryptsetup&lt;/code&gt; library. By following the steps outlined here, you will be able to encrypt a drive, decrypt it, and mount it. This was done in a Kali Linux VM and commands may vary for other distributions.&lt;/p&gt;
 &lt;p&gt;Disclaimer: This is not an area that I have much experience in so if details are inaccurate, I apologize in advance.&lt;/p&gt;
@@ -2782,9 +3494,9 @@ Next Steps</h1>
     </item>
     <item>
       <title>Snort IPS Quickstart</title>
-      <link>https://ally-petitt.com/en/posts/2023-05-02_snort-ips-quickstart-27559ae01fae/</link>
+      <link>https://ally-petitt.com:443/en/posts/2023-05-02_snort-ips-quickstart-27559ae01fae/</link>
       <pubDate>Tue, 02 May 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2023-05-02_snort-ips-quickstart-27559ae01fae/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2023-05-02_snort-ips-quickstart-27559ae01fae/</guid>
       <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;Snort is an open source Intrusion Prevention System (IPS) that detects malicious network traffic by comparing the network packets to a set of rules, often created by Snort and the community. Snort can be used as a packet sniffer, packet logger, and intrusion prevention system.&lt;/p&gt;
 &lt;p&gt;In this article, I’ll go over some of the first steps of installing, configuring, and running Snort so that new users have a place to branch off of.&lt;/p&gt;
@@ -2962,9 +3674,9 @@ To actually run Snort as a daemon, you would change the <code>-T</code> option t
     </item>
     <item>
       <title>Digging into the Linux Secure Boot Process</title>
-      <link>https://ally-petitt.com/en/posts/2023-04-29_digging-into-the-linux-secure-boot-process-9631a70b158b/</link>
+      <link>https://ally-petitt.com:443/en/posts/2023-04-29_digging-into-the-linux-secure-boot-process-9631a70b158b/</link>
       <pubDate>Sat, 29 Apr 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2023-04-29_digging-into-the-linux-secure-boot-process-9631a70b158b/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2023-04-29_digging-into-the-linux-secure-boot-process-9631a70b158b/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*6T29Pwj4dMhQiPRW.png&#34; alt=&#34;&#34;  /&gt;
 
 &lt;em&gt;Linux Penguin&lt;/em&gt;&lt;/p&gt;
@@ -3204,9 +3916,9 @@ To actually run Snort as a daemon, you would change the <code>-T</code> option t
     </item>
     <item>
       <title>How to Prevent Data Leaks Before they Happen</title>
-      <link>https://ally-petitt.com/en/posts/2023-04-23_how-to-prevent-data-leaks-before-they-happen-3c53997b3744/</link>
+      <link>https://ally-petitt.com:443/en/posts/2023-04-23_how-to-prevent-data-leaks-before-they-happen-3c53997b3744/</link>
       <pubDate>Sun, 23 Apr 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2023-04-23_how-to-prevent-data-leaks-before-they-happen-3c53997b3744/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2023-04-23_how-to-prevent-data-leaks-before-they-happen-3c53997b3744/</guid>
       <description>&lt;p&gt;Data Loss Prevention&lt;/p&gt;
 &lt;h1 id=&#34;what-is-data-loss-prevention&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*65eSMdR110wv_HGg&#34; alt=&#34;&#34;  /&gt;
 
@@ -3326,9 +4038,9 @@ What is Data Loss Prevention?</h1>
     </item>
     <item>
       <title>Restoring Files in /usr/include</title>
-      <link>https://ally-petitt.com/en/posts/2023-04-13_restoring-files-in--usr-include-88622911c3ae/</link>
+      <link>https://ally-petitt.com:443/en/posts/2023-04-13_restoring-files-in--usr-include-88622911c3ae/</link>
       <pubDate>Thu, 13 Apr 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2023-04-13_restoring-files-in--usr-include-88622911c3ae/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2023-04-13_restoring-files-in--usr-include-88622911c3ae/</guid>
       <description>&lt;p&gt;Hi guys, I made a mistake. In my frustration trying to debug my C program, I inadvertently deleted all the files within my &lt;code&gt;/usr/include&lt;/code&gt; folder. I didn’t realize at the time that this was a very important folder! As explained &lt;a href=&#34;https://www.kernel.org/doc/Documentation/kbuild/headers_install.txt&#34;&gt;here&lt;/a&gt;, it stores the Linux kernel’s libc header files! Rookie mistake, but luckily for us, there’s ways to fix it.&lt;/p&gt;
 &lt;p&gt;If your &lt;code&gt;/usr/include&lt;/code&gt; folder is also looking more empty than the shelves during COVID, I come bearing the solution.&lt;/p&gt;
 &lt;h1 id=&#34;getting-kernelheaders&#34;&gt;Getting Kernel Headers&lt;/h1&gt;
@@ -3378,9 +4090,9 @@ I had this installed previously, but since I deleted the files, I need to remove
     </item>
     <item>
       <title>How to Create and Deploy Your Own Cloud Server with NextCloud</title>
-      <link>https://ally-petitt.com/en/posts/2023-04-09_how-to-create-and-deploy-your-own-cloud-server-with-nextcloud-345e185d602a/</link>
+      <link>https://ally-petitt.com:443/en/posts/2023-04-09_how-to-create-and-deploy-your-own-cloud-server-with-nextcloud-345e185d602a/</link>
       <pubDate>Sun, 09 Apr 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2023-04-09_how-to-create-and-deploy-your-own-cloud-server-with-nextcloud-345e185d602a/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2023-04-09_how-to-create-and-deploy-your-own-cloud-server-with-nextcloud-345e185d602a/</guid>
       <description>&lt;h1 id=&#34;why-create-a-cloudserver&#34;&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*-WVjY5h4EpphjjX7&#34; alt=&#34;&#34;  /&gt;
 
 Why Create a Cloud Server?&lt;/h1&gt;
@@ -3548,9 +4260,9 @@ Conclusion</h1>
     </item>
     <item>
       <title>Practical Demonstration: DNS Spoofing &#43; Home Lab</title>
-      <link>https://ally-petitt.com/en/posts/2023-03-28_practical-demonstration--dns-spoofing---home-lab-f7294443fb23/</link>
+      <link>https://ally-petitt.com:443/en/posts/2023-03-28_practical-demonstration--dns-spoofing---home-lab-f7294443fb23/</link>
       <pubDate>Tue, 28 Mar 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2023-03-28_practical-demonstration--dns-spoofing---home-lab-f7294443fb23/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2023-03-28_practical-demonstration--dns-spoofing---home-lab-f7294443fb23/</guid>
       <description>&lt;h2 id=&#34;dns-cache-poisoning-on-home-lab-walkthrough&#34;&gt;DNS Cache Poisoning on Home Lab Walkthrough&lt;/h2&gt;
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*P3ZahJWqz8AFbk9s.png&#34; alt=&#34;Basic DNS cache poisoning attack&#34;  /&gt;
 
@@ -3820,9 +4532,9 @@ Remediation</h1>
     </item>
     <item>
       <title>How I got my OSCP at 16 years old</title>
-      <link>https://ally-petitt.com/en/posts/2023-03-19_how-i-got-my-oscp-at-16-years-old-50ed402d6fd1/</link>
+      <link>https://ally-petitt.com:443/en/posts/2023-03-19_how-i-got-my-oscp-at-16-years-old-50ed402d6fd1/</link>
       <pubDate>Sun, 19 Mar 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2023-03-19_how-i-got-my-oscp-at-16-years-old-50ed402d6fd1/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2023-03-19_how-i-got-my-oscp-at-16-years-old-50ed402d6fd1/</guid>
       <description>&lt;p&gt;Wait, you can do that? The answer is a resounding “yes”. And I’m not the only one who got my OSCP at the age of 16. Meet &lt;a href=&#34;https://www.offsec.com/offsec/meet-mihai-16-year-old-oscp-holder/&#34;&gt;Mihai&lt;/a&gt;, &lt;a href=&#34;https://vanshal.medium.com/my-oscp-journey-9a4041bab24a&#34;&gt;Vanshal&lt;/a&gt;, &lt;a href=&#34;https://grants235.github.io/cybersecurity/oscp/&#34;&gt;Grant&lt;/a&gt;, and &lt;a href=&#34;https://www.reddit.com/r/oscp/comments/swmqs1/aced_it_at_16yrs/?utm_source=share&amp;utm_medium=web2x&amp;context=3&#34;&gt;this person&lt;/a&gt; from Reddit. Admittedly, the number of us is few and far between when compared to the typical demographic of OSCP test-takers. To add to this, I’m a woman and I haven’t seen any other women my age do this. Still, people have done it and it  possible.&lt;/p&gt;
 &lt;p&gt;I present to you, the beautiful:&lt;/p&gt;
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*BQs51p5uCqZyIuYNCVrqGQ.png&#34; alt=&#34;Picture of my OSCP certification&#34;  /&gt;
@@ -4148,9 +4860,9 @@ I’m still deciding on the best ways to allocate my time, but I’m considering
     </item>
     <item>
       <title>Windows Remoting: Difference between psexec, wmiexec, atexec, *exec</title>
-      <link>https://ally-petitt.com/en/posts/2022-12-09_windows-remoting--difference-between-psexec--wmiexec--atexec---exec-bf7d1edb5986/</link>
+      <link>https://ally-petitt.com:443/en/posts/2022-12-09_windows-remoting--difference-between-psexec--wmiexec--atexec---exec-bf7d1edb5986/</link>
       <pubDate>Fri, 09 Dec 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2022-12-09_windows-remoting--difference-between-psexec--wmiexec--atexec---exec-bf7d1edb5986/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2022-12-09_windows-remoting--difference-between-psexec--wmiexec--atexec---exec-bf7d1edb5986/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*2pekupqLLWtBkgpl&#34; alt=&#34;&#34;  /&gt;
 
 &lt;em&gt;&lt;a href=&#34;https://images.pexels.com/photos/3760778/pexels-photo-3760778.jpeg?auto=compress&amp;amp;cs=tinysrgb&amp;amp;w=1260&amp;amp;h=750&amp;amp;dpr=1&#34;&gt;https://images.pexels.com/photos/3760778/pexels-photo-3760778.jpeg?auto=compress&amp;amp;cs=tinysrgb&amp;amp;w=1260&amp;amp;h=750&amp;amp;dpr=1&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
@@ -4314,9 +5026,9 @@ I’m still deciding on the best ways to allocate my time, but I’m considering
     </item>
     <item>
       <title>VPN Troubleshooting: How to fix “Inactivity Timeout ( — ping-restart)”</title>
-      <link>https://ally-petitt.com/en/posts/2022-11-12_vpn-troubleshooting--inactivity-timeout-----ping-restart--a52791c24a50/</link>
+      <link>https://ally-petitt.com:443/en/posts/2022-11-12_vpn-troubleshooting--inactivity-timeout-----ping-restart--a52791c24a50/</link>
       <pubDate>Sat, 12 Nov 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2022-11-12_vpn-troubleshooting--inactivity-timeout-----ping-restart--a52791c24a50/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2022-11-12_vpn-troubleshooting--inactivity-timeout-----ping-restart--a52791c24a50/</guid>
       <description>&lt;p&gt;If your VPN log looks something like this:&lt;/p&gt;
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*1SN24_SvT2cN2X0GeX-DUA.png&#34; alt=&#34;&#34;  /&gt;
 
@@ -4408,9 +5120,9 @@ Note: <code>1.1.1.1</code> is the public DNS resolver from Cloudflare and <code>
     </item>
     <item>
       <title>What the Pen-200 Has Taught Me About Pentesting Methodology</title>
-      <link>https://ally-petitt.com/en/posts/2022-11-02_what-the-pen-200-has-taught-me-about-pentesting-methodology-1fd67760be5c/</link>
+      <link>https://ally-petitt.com:443/en/posts/2022-11-02_what-the-pen-200-has-taught-me-about-pentesting-methodology-1fd67760be5c/</link>
       <pubDate>Wed, 02 Nov 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2022-11-02_what-the-pen-200-has-taught-me-about-pentesting-methodology-1fd67760be5c/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2022-11-02_what-the-pen-200-has-taught-me-about-pentesting-methodology-1fd67760be5c/</guid>
       <description>&lt;p&gt;The Pen-200 is the prerequisite course for the OSCP exam. As such, the writeups for the labs are incredibly difficult to find. As someone who has relied heavily on the accessibility of HTB walkthroughs, I’ve never been in an environment where I wasn’t one Google search away from figuring out the next step in solving a box. Needless to say, 0xdf couldn’t help me much with the Pen-200 labs.&lt;/p&gt;
 &lt;p&gt;The Pen-200 labs were a struggle not because I was incompetent, but because I didn’t have enough practice reaching dead ends. I didn’t spend enough time in rabbit holes, therefore I wouldn’t realize when I was in one. I didn’t know how to search for details that I might have missed on my first look. When trying to solve a box, I learned that sometimes the vulnerability could be found just by Googling a word that I was not entirely familiar with on the&lt;code&gt;nmap&lt;/code&gt; scan.&lt;/p&gt;
 &lt;p&gt;My journey began with referencing writeups on HTB, but when I no longer could, I learned how to use cheatsheets on the internet. Some of my most notable mentions are &lt;a href=&#34;https://book.hacktricks.xyz/welcome/readme&#34;&gt;HackTricks&lt;/a&gt; and &lt;a href=&#34;https://kashz.gitbook.io/kashz-jewels/&#34;&gt;Kashz Jewels&lt;/a&gt;. When I found an open port, I would ensure that I went through every enumeration step that I found on these cheat sheets. It was still a slight crutch, but it did allow me to develop methodologies that I wasn’t getting by relying solely on writeups.&lt;/p&gt;
@@ -4436,9 +5148,9 @@ Key Takeaways</h2>
     </item>
     <item>
       <title>How Did an 18-Year-Old Hack Uber?</title>
-      <link>https://ally-petitt.com/en/posts/2022-09-24_how-did-an-18-year-old-hack-uber--788f092b9dc3/</link>
+      <link>https://ally-petitt.com:443/en/posts/2022-09-24_how-did-an-18-year-old-hack-uber--788f092b9dc3/</link>
       <pubDate>Sat, 24 Sep 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2022-09-24_how-did-an-18-year-old-hack-uber--788f092b9dc3/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2022-09-24_how-did-an-18-year-old-hack-uber--788f092b9dc3/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/0*p8HCs81YRFvhgaR3.jpg&#34; alt=&#34;&#34;  /&gt;
 
 An 18-year-old hacker gained admin access to Uber on September 15, 2022. These are the steps that the hacker took:&lt;/p&gt;
@@ -4508,9 +5220,9 @@ They also created a “Security Updates” page on their <a href="https://www.ub
     </item>
     <item>
       <title>How Companies Respond to Cyber Attacks | The 6 Steps of an Incident Response Plan</title>
-      <link>https://ally-petitt.com/en/posts/2022-07-09_how-companies-respond-to-cyber-attacks---the-6-steps-of-an-incident-response-plan-9c6f4267253e/</link>
+      <link>https://ally-petitt.com:443/en/posts/2022-07-09_how-companies-respond-to-cyber-attacks---the-6-steps-of-an-incident-response-plan-9c6f4267253e/</link>
       <pubDate>Sat, 09 Jul 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2022-07-09_how-companies-respond-to-cyber-attacks---the-6-steps-of-an-incident-response-plan-9c6f4267253e/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2022-07-09_how-companies-respond-to-cyber-attacks---the-6-steps-of-an-incident-response-plan-9c6f4267253e/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*NYCBo5F_MGeRvxzrEm1hsg.png&#34; alt=&#34;&#34;  /&gt;
 &lt;/p&gt;
 &lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
@@ -4746,9 +5458,9 @@ They also created a “Security Updates” page on their <a href="https://www.ub
     </item>
     <item>
       <title>Pentester’s Guide to Performing File Transfers</title>
-      <link>https://ally-petitt.com/en/posts/2022-06-08_pentester-s-guide-to-performing-file-transfers-3c1a6a38dfc8/</link>
+      <link>https://ally-petitt.com:443/en/posts/2022-06-08_pentester-s-guide-to-performing-file-transfers-3c1a6a38dfc8/</link>
       <pubDate>Wed, 08 Jun 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2022-06-08_pentester-s-guide-to-performing-file-transfers-3c1a6a38dfc8/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2022-06-08_pentester-s-guide-to-performing-file-transfers-3c1a6a38dfc8/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*HNC0lT4gPMDU8uH0fyjRyw.png&#34; alt=&#34;&#34;  /&gt;
 &lt;/p&gt;
 &lt;h1 id=&#34;foreword&#34;&gt;Foreword&lt;/h1&gt;
@@ -4878,9 +5590,9 @@ File Transfer With an HTTP Server</h1>
     </item>
     <item>
       <title>Antivirus Evasion: What it is and How to do it</title>
-      <link>https://ally-petitt.com/en/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/</link>
+      <link>https://ally-petitt.com:443/en/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/</link>
       <pubDate>Mon, 30 May 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2022-05-30_antivirus-evasion--what-it-is-and-how-to-do-it-17f98e920704/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*W1qjqIKKNMK9_QYWXGQzRw.png&#34; alt=&#34;picture of a bug&#34;  /&gt;
 &lt;/p&gt;
 &lt;h1 id=&#34;how-does-antivirus-software-actuallywork&#34;&gt;How Does Antivirus Software Actually Work?&lt;/h1&gt;
@@ -5002,9 +5714,9 @@ Command-Line Tools</h2>
     </item>
     <item>
       <title>Kerberos Authentication Explained</title>
-      <link>https://ally-petitt.com/en/posts/2022-05-25_kerberos-authentication-explained-3d45f336bb2c/</link>
+      <link>https://ally-petitt.com:443/en/posts/2022-05-25_kerberos-authentication-explained-3d45f336bb2c/</link>
       <pubDate>Wed, 25 May 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2022-05-25_kerberos-authentication-explained-3d45f336bb2c/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2022-05-25_kerberos-authentication-explained-3d45f336bb2c/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*lPQ16gDtSYYccrc2-iExiA.jpeg&#34; alt=&#34;Kerberos- a three-headed dog&#34;  /&gt;
 
 When first learning Kerberos, it can feel like you’re being chased by the three-headed dog. Not to fear, however, because today I’ll be explaining a high-level overview of Kerberos authentication. Kerberos was designed to provide secure authentication to services over a potentially insecure network. It is used by many organizations to implement single sign-on (SSO).&lt;/p&gt;
@@ -5094,9 +5806,9 @@ When first learning Kerberos, it can feel like you’re being chased by the thre
     </item>
     <item>
       <title>Mustacchio Walkthrough | Try Hack Me | Ally Petitt</title>
-      <link>https://ally-petitt.com/en/posts/2022-02-18_mustacchio-walkthrough---try-hack-me---ally-petitt-6295dfbbfb1b/</link>
+      <link>https://ally-petitt.com:443/en/posts/2022-02-18_mustacchio-walkthrough---try-hack-me---ally-petitt-6295dfbbfb1b/</link>
       <pubDate>Fri, 18 Feb 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2022-02-18_mustacchio-walkthrough---try-hack-me---ally-petitt-6295dfbbfb1b/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2022-02-18_mustacchio-walkthrough---try-hack-me---ally-petitt-6295dfbbfb1b/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*F19asfqgh7o-jFDVwsTizA.png&#34; alt=&#34;&#34;  /&gt;
 &lt;/p&gt;
 &lt;h1 id=&#34;introduction&#34;&gt;&lt;strong&gt;Introduction&lt;/strong&gt;&lt;/h1&gt;
@@ -5340,9 +6052,9 @@ $ /home/joe/live_log</p>
     </item>
     <item>
       <title>About me</title>
-      <link>https://ally-petitt.com/en/about-me/</link>
+      <link>https://ally-petitt.com:443/en/about-me/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/about-me/</guid>
+      <guid>https://ally-petitt.com:443/en/about-me/</guid>
       <description>&lt;p&gt;High school student by day, hacker by night.&lt;/p&gt;
 </description>
       <content:encoded><![CDATA[<p>High school student by day, hacker by night.</p>

@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Troubleshooting on Ally Petitt</title>
-    <link>https://ally-petitt.com/en/tags/troubleshooting/</link>
+    <link>https://ally-petitt.com:443/en/tags/troubleshooting/</link>
     <description>Recent content in Troubleshooting on Ally Petitt</description>
-    <generator>Hugo -- 0.125.4</generator>
+    <generator>Hugo -- 0.128.0</generator>
     <language>en</language>
     <lastBuildDate>Thu, 13 Apr 2023 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://ally-petitt.com/en/tags/troubleshooting/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ally-petitt.com:443/en/tags/troubleshooting/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Restoring Files in /usr/include</title>
-      <link>https://ally-petitt.com/en/posts/2023-04-13_restoring-files-in--usr-include-88622911c3ae/</link>
+      <link>https://ally-petitt.com:443/en/posts/2023-04-13_restoring-files-in--usr-include-88622911c3ae/</link>
       <pubDate>Thu, 13 Apr 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2023-04-13_restoring-files-in--usr-include-88622911c3ae/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2023-04-13_restoring-files-in--usr-include-88622911c3ae/</guid>
       <description>&lt;p&gt;Hi guys, I made a mistake. In my frustration trying to debug my C program, I inadvertently deleted all the files within my &lt;code&gt;/usr/include&lt;/code&gt; folder. I didn’t realize at the time that this was a very important folder! As explained &lt;a href=&#34;https://www.kernel.org/doc/Documentation/kbuild/headers_install.txt&#34;&gt;here&lt;/a&gt;, it stores the Linux kernel’s libc header files! Rookie mistake, but luckily for us, there’s ways to fix it.&lt;/p&gt;
 &lt;p&gt;If your &lt;code&gt;/usr/include&lt;/code&gt; folder is also looking more empty than the shelves during COVID, I come bearing the solution.&lt;/p&gt;
 &lt;h1 id=&#34;getting-kernelheaders&#34;&gt;Getting Kernel Headers&lt;/h1&gt;
@@ -62,9 +62,9 @@ I had this installed previously, but since I deleted the files, I need to remove
     </item>
     <item>
       <title>VPN Troubleshooting: How to fix “Inactivity Timeout ( — ping-restart)”</title>
-      <link>https://ally-petitt.com/en/posts/2022-11-12_vpn-troubleshooting--inactivity-timeout-----ping-restart--a52791c24a50/</link>
+      <link>https://ally-petitt.com:443/en/posts/2022-11-12_vpn-troubleshooting--inactivity-timeout-----ping-restart--a52791c24a50/</link>
       <pubDate>Sat, 12 Nov 2022 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2022-11-12_vpn-troubleshooting--inactivity-timeout-----ping-restart--a52791c24a50/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2022-11-12_vpn-troubleshooting--inactivity-timeout-----ping-restart--a52791c24a50/</guid>
       <description>&lt;p&gt;If your VPN log looks something like this:&lt;/p&gt;
 &lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://cdn-images-1.medium.com/max/800/1*1SN24_SvT2cN2X0GeX-DUA.png&#34; alt=&#34;&#34;  /&gt;
 

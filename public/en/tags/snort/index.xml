@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Snort on Ally Petitt</title>
-    <link>https://ally-petitt.com/en/tags/snort/</link>
+    <link>https://ally-petitt.com:443/en/tags/snort/</link>
     <description>Recent content in Snort on Ally Petitt</description>
-    <generator>Hugo -- 0.125.4</generator>
+    <generator>Hugo -- 0.128.0</generator>
     <language>en</language>
     <lastBuildDate>Tue, 02 May 2023 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://ally-petitt.com/en/tags/snort/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ally-petitt.com:443/en/tags/snort/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Snort IPS Quickstart</title>
-      <link>https://ally-petitt.com/en/posts/2023-05-02_snort-ips-quickstart-27559ae01fae/</link>
+      <link>https://ally-petitt.com:443/en/posts/2023-05-02_snort-ips-quickstart-27559ae01fae/</link>
       <pubDate>Tue, 02 May 2023 00:00:00 +0000</pubDate>
-      <guid>https://ally-petitt.com/en/posts/2023-05-02_snort-ips-quickstart-27559ae01fae/</guid>
+      <guid>https://ally-petitt.com:443/en/posts/2023-05-02_snort-ips-quickstart-27559ae01fae/</guid>
       <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;Snort is an open source Intrusion Prevention System (IPS) that detects malicious network traffic by comparing the network packets to a set of rules, often created by Snort and the community. Snort can be used as a packet sniffer, packet logger, and intrusion prevention system.&lt;/p&gt;
 &lt;p&gt;In this article, I’ll go over some of the first steps of installing, configuring, and running Snort so that new users have a place to branch off of.&lt;/p&gt;
