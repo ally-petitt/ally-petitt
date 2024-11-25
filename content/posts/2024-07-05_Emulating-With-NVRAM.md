@@ -25,7 +25,7 @@ In this article, I’ll walk through one method that I used to hook into the fun
 
 This article aims to walk you through my thought process in approaching this rather than solely offering a copy-paste solution. I have found reading other researcher's thought processes to be helpful in the past and was hoping to pay it forward. As such, my troubleshooting steps and some of my (failed) ideas are included.
 
-**TLDR;** I built an instance of [crosstool-ng](https://github.com/crosstool-ng/crosstool-ng) to create a `armeb-unknown-eabi` toolchain. This was necessary for me to cross-compile [nvram-faker](https://github.com/zcutlip/nvram-faker) in the target architecture: big endian, 32-bit ARM. Nvram-faker allowed us to hijack function calls originally intended for libnvram.so, which is a library used to interface with `/dev/nvram`, through the `LD_PRELOAD` variable. I ended up patching `nvram-faker` in my [own fork](https://github.com/ally-petitt/nvram-faker) to solve dynamic linking issues and solve a bug that caused a segfault.
+**TLDR;** I built an instance of [crosstool-ng](https://github.com/crosstool-ng/crosstool-ng) to create an `armeb-unknown-eabi` toolchain. This was necessary for me to cross-compile [nvram-faker](https://github.com/zcutlip/nvram-faker) in the target architecture: big endian, 32-bit ARM. Nvram-faker allowed us to hijack function calls originally intended for libnvram.so, which is a library used to interface with `/dev/nvram`, through the `LD_PRELOAD` variable. I ended up patching `nvram-faker` in my [own fork](https://github.com/ally-petitt/nvram-faker) to solve dynamic linking issues and solve a bug that caused a segfault.
 
 
 
@@ -77,7 +77,7 @@ Our `httpd` binary does not attempt to access `/dev/nvram`, the NVRAM device fil
 ![Picture of linked libraries on the httpd binary](/images/nvram-1.png)
 *Yes, my Ghidra is in dark mode.*
 
-The `httpd` program imports functions like `nvram_get()` and `nvram_set()` from `libnvram.so` that manage interactions with `/dev/nvram`. If we were able to set our own definitions for what `nvam_get()` and `nvram_set()` do, we can effectively control the values that `httpd` recieves when attempting to interact with the NVRAM through these functions.
+The `httpd` program imports functions like `nvram_get()` and `nvram_set()` from `libnvram.so` that manage interactions with `/dev/nvram`. If we were able to set our own definitions for what `nvam_get()` and `nvram_set()` do, we can effectively control the values that `httpd` receives when attempting to interact with the NVRAM through these functions.
 
 That is what `nvram-faker` does. We can recreate the NVRAM-related procedures called by `httpd` in `nvram-faker.c` and compile them into our own library, `libnvram-faker.so`.
 
@@ -88,7 +88,7 @@ Furthermore, `httpd` dynamically links the `libnvram.so` library with the dynami
 # Building Nvram-Faker
 As previously mentioned, the firmware that I am emulating is big-endian, 32-bit ARM. Since `libnvram-faker.so` will be preloaded into a binary in that firmware, it must match that ARM architecture. This means that I will need to cross-compile our `nvram-faker`.
 
-Cross-compiling requires a cross-compilation toolchain. ARM offsers plenty of [toolchains](https://developer.arm.com/Tools%20and%20Software/GNU%20Toolchain), however, none of them matched what I was looking for, so I decided to use [crosstool-ng](https://github.com/crosstool-ng/crosstool-ng) to compile my own toolchain. You can read their [documentation](https://crosstool-ng.github.io/docs/) for more information on how this works.
+Cross-compiling requires a cross-compilation toolchain. ARM offers plenty of [toolchains](https://developer.arm.com/Tools%20and%20Software/GNU%20Toolchain), however, none of them matched what I was looking for, so I decided to use [crosstool-ng](https://github.com/crosstool-ng/crosstool-ng) to compile my own toolchain. You can read their [documentation](https://crosstool-ng.github.io/docs/) for more information on how this works.
 
 ## Making a Cross-Compilation Toolchain with Crosstool-ng
 I used the following commands to begin building `crosstool-ng`:
@@ -182,7 +182,7 @@ $ find . -name 'crt0.o'
 
 Then, I used `$CFLAGS` such as `-I` and `-L` to include the path `./.build/armeb-unknown-eabi/build/build-libc/armeb-unknown-eabi/newlib/`. I also tried including the `crt0.o` file directly by manually using the `armeb-unkown-eabi-gcc` compiler with `crt0.o` as an input file, but neither of these worked.
 
-I ultimately decided to copy `crt0.o` to the location that the cross-compiler was searching for it at. 
+I ultimately decided to copy `crt0.o` to the location that the cross-compiler was searching for it. 
 
 ```bash
 mkdir -p $HOME/Documents/firmware/crosstool-ng/.build/armeb-unknown-eabi/buildtools/lib/gcc/armeb-unknown-eabi/13.2.0/../../../../armeb-unknown-eabi/lib
@@ -370,7 +370,7 @@ I first attempted to debug using GDB. In QEMU, I used the built-in GDB server to
 sudo chroot . ./qemu-armeb-static -g 1234 -E LD_PRELOAD=/libnvram-faker.so /usr/sbin/httpd
 ```
 
-in another terminal window I modified my `.gdbinit` file to expidite up the process of connecting and debugging to our target application.
+In another terminal window I modified my `.gdbinit` file to expedite the process of connecting and debugging to our target application.
 
 ```bash
 $ cat ~/.gdbinit
@@ -406,7 +406,7 @@ This is where the problems with GDB began. There appeared to be an issue with th
 
 I don’t know if there was a race condition or something else preventing normal execution. If anyone knows why this may have happened, please do let me know since I am quite puzzled by it.
 
-I asked myself the question, “is there another way to do this?”. I realized what I was really looking for was a call stack for when that error message was printed. I got an idea of how I could recreate this through static analysis.
+I asked myself the question, “Is there another way to do this?”. I realized what I was really looking for was a call stack for when that error message was printed. I got an idea of how I could recreate this through static analysis.
 
 #### Attempt 2: Ghidra
 
@@ -438,7 +438,7 @@ As stated in the `nvram-faker` [README](https://github.com/zcutlip/nvram-faker?t
 
 My hypothesis was that since `nvram_set()` was not defined in the `libnvram-faker.so` library that we created, it was being imported from `libnvram.so`. In turn, `FUN_00012420` is called which attempts to open `/dev/nvram` and fails (since the kernel module for `/dev/nvram` does not exist), printing our error message. 
 
-To verify that this is the case, I once again patched `nvram-faker.c`, but this time I implemented a preliminary definition for `nvram_set` and observe whether the error from before is still present.
+To verify that this is the case, I once again patched `nvram-faker.c`, but this time I implemented a preliminary definition for `nvram_set` and observed whether the error from before is still present.
 
 The following is what I added to `nvram-faker.c`:
 
@@ -493,7 +493,7 @@ After a bit of digging, I would discover that `fprintf()` was used for debug and
 
 ### Adding Support for nvram_set
 
-It was originally my intention to add `nvram_set()` support to `nvram-faker.c` in order to fully mimic a real NVRAM interaction, however, an event came up in my personal life that delayed this. I may endeavor to do so in the future when the timing is better, however, for now I have opted to simply create my [own fork](https://github.com/ally-petitt/nvram-faker) with the following improvements on the old one:
+It was originally my intention to add `nvram_set()` support to `nvram-faker.c` to fully mimic a real NVRAM interaction, however, an event came up in my personal life that delayed this. I may endeavor to do so in the future when the timing is better, however, for now I have opted to simply create my [own fork](https://github.com/ally-petitt/nvram-faker) with the following improvements on the old one:
 
 - More informative debug output
 - Resolve segmentation fault in debugging output
@@ -522,9 +522,9 @@ lan1_ifname=wlan0
 
 
 # Conclusion
-This article was quite lengthy and technical compared to what I normally put out. It really started as me wanting to test out a chroot sandbox on a router and escalated into emulating a webserver and needing a way to interface with NVRAM. This was a great exercise that taught me more about cross-compilation, NVRAM, and general troubleshooting. Past me would have been overwhelmed by the amount of errors that I had to work through to get this to work (this article didn't even detail half of them for brevity), so working through this helped to strengthen my perserverance as a researcher.
+This article was quite lengthy and technical compared to what I normally put out. It started as me wanting to test out a chroot sandbox on a router and escalated into emulating a webserver and needing a way to interface with NVRAM. This was a great exercise that taught me more about cross-compilation, NVRAM, and general troubleshooting. One year ago, I would have been overwhelmed by the amount of errors that I encountered while getting this to work (this article detailed less than half of them for brevity), so working through this helped to strengthen my perseverance as a researcher.
 
-Overall, this was an interesting rabbit hole to go down. I hope it made as much sense in text as it did in my head. If any details in here were inaccurate, please feel free to contact me and I will be happy to correct the information in this article.
+Overall, this was an interesting rabbit hole to go down. I hope it made as much sense in the text as it did in my head. If any details here are inaccurate, please feel free to contact me and I will be happy to correct the information in this article.
 
 Thanks for reading!
 
