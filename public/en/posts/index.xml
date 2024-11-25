@@ -170,11 +170,11 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ cat /proc/428477/environ | grep --text -oP &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;PYTHONPATH[^\x00]*&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;# verify our environment variable shows up&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;PYTHONPATH&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;/tmp/needrestart
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;em&gt;Note: Make sure that the python3 binary that you are running is located at a path that follows this regex pattern for &lt;code&gt;needrestart&lt;/code&gt; to recognize it as a valid Python program: &lt;code&gt;^/usr/(local/)?bin/python([23][.\d]*)?$&lt;/code&gt;.&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;Our target binary is famously triggered as the result of a hook in a package manager after actions such as installing a new package. Let&amp;rsquo;s see what happens when I set up a &lt;code&gt;nc&lt;/code&gt; listener and attempt to install &lt;code&gt;nano&lt;/code&gt; using &lt;code&gt;apt&lt;/code&gt;!&lt;/p&gt;
+&lt;p&gt;Now, I will test the exploit by setting up a &lt;code&gt;nc&lt;/code&gt; listener and attempting to install &lt;code&gt;curl&lt;/code&gt; using &lt;code&gt;apt&lt;/code&gt;!&lt;/p&gt;
 &lt;video width=&#34;100%&#34; controls&gt;
     &lt;source src=&#34;https://ally-petitt.com:443/videos/CVE-2024-48990_poc.mp4&#34; type=&#34;video/mp4&#34;&gt;
 &lt;/video&gt;
-&lt;p&gt;It worked! We have successfully identified and exploited the n-day, CVE-2024-48990. In a real-world environment, it is likely that a system administrator or cron job would periodically perform library upgrades on the vulnerable server through a package manager. The package manager, with elevated privileges, would launch call &lt;code&gt;needrestart&lt;/code&gt;, which ends up scanning our attacker-controlled process and ultimately executing our desired Python code as root.&lt;/p&gt;
+&lt;p&gt;It worked! We have successfully identified and exploited the n-day, CVE-2024-48990. In a real-world environment, it is likely that a system administrator or cron job would periodically perform library upgrades on the vulnerable server through a package manager. The package manager, with elevated privileges, would launch &lt;code&gt;needrestart&lt;/code&gt;, which ends up scanning our attacker-controlled process and ultimately executing our desired Python code as root.&lt;/p&gt;
 &lt;p&gt;Thanks for reading!&lt;/p&gt;
 </description>
       <content:encoded><![CDATA[<p><img loading="lazy" src="/images/ubuntu-logo.png" alt="Ubuntu logo"  />
@@ -334,11 +334,11 @@
 </span></span><span style="display:flex;"><span>$ cat /proc/428477/environ | grep --text -oP <span style="color:#e6db74">&#39;PYTHONPATH[^\x00]*&#39;</span> <span style="color:#75715e"># verify our environment variable shows up</span>
 </span></span><span style="display:flex;"><span>PYTHONPATH<span style="color:#f92672">=</span>/tmp/needrestart
 </span></span></code></pre></div><p><em>Note: Make sure that the python3 binary that you are running is located at a path that follows this regex pattern for <code>needrestart</code> to recognize it as a valid Python program: <code>^/usr/(local/)?bin/python([23][.\d]*)?$</code>.</em></p>
-<p>Our target binary is famously triggered as the result of a hook in a package manager after actions such as installing a new package. Let&rsquo;s see what happens when I set up a <code>nc</code> listener and attempt to install <code>nano</code> using <code>apt</code>!</p>
+<p>Now, I will test the exploit by setting up a <code>nc</code> listener and attempting to install <code>curl</code> using <code>apt</code>!</p>
 <video width="100%" controls>
     <source src="/videos/CVE-2024-48990_poc.mp4" type="video/mp4">
 </video>
-<p>It worked! We have successfully identified and exploited the n-day, CVE-2024-48990. In a real-world environment, it is likely that a system administrator or cron job would periodically perform library upgrades on the vulnerable server through a package manager. The package manager, with elevated privileges, would launch call <code>needrestart</code>, which ends up scanning our attacker-controlled process and ultimately executing our desired Python code as root.</p>
+<p>It worked! We have successfully identified and exploited the n-day, CVE-2024-48990. In a real-world environment, it is likely that a system administrator or cron job would periodically perform library upgrades on the vulnerable server through a package manager. The package manager, with elevated privileges, would launch <code>needrestart</code>, which ends up scanning our attacker-controlled process and ultimately executing our desired Python code as root.</p>
 <p>Thanks for reading!</p>
 ]]></content:encoded>
     </item>
