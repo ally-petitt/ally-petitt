@@ -70,10 +70,8 @@ params:
   description: "Ally Petitt Personal Website and Blog"
 
   homeInfoParams:
-    Title: "Welcome to my blog! \U0001F44B"
-    Content: "Thank you for stopping by. I am Ally Petitt, a proud security researcher on the Synack Red Team.\n\n
-    This website harbors the articles that I have written, beginning in 2022 to today covering topics such as offensive security, penetration testing, vulnerability research, and any other topics that I find interesting!\n\n
-    I hope that you enjoy reading my work as much as I have enjoyed writing it!"
+    Title: "Ally Petitt"
+    Content: "I’m a security researcher passionate about uncovering vulnerabilities and exploring the latest in offensive security. On this site, I share insights from the topics I find most interesting, including penetration testing and vulnerability research, with technical deep dives into areas I’m curious about. As I continue to learn and grow in this ever-evolving field, expect new content here quarterly, where I document a portion of my discoveries and share what I’ve learned along the way."
   
   socialIcons:
     - name: github
