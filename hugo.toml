@@ -1,7 +1,7 @@
 baseURL = 'https://ally-petitt.com/'
 languageCode = 'en-us'
 title = 'Ally Petitt'
-theme = 'hugo-PaperMod'
+theme = ['hugo-video', 'hugo-PaperMod']
 
 
 [params]
